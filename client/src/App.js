@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { AuthContext } from "./context/AuthContext";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
+import PrivateRoute from "./hocs/PrivateRoute";
+import UnPrivateRoute from "./hocs/UnPrivateRoute";
+import "antd/dist/antd.css";
 function App() {
+  const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
+    AuthContext
+  );
+
+  console.log(user, isAuthenticated);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <PrivateRoute exact path="/" component={Home} roles={["user", "admin"]} />
+      <UnPrivateRoute exact path="/login" component={Login} />
+      <UnPrivateRoute exact path="/register" component={Register} />
+    </Router>
   );
 }
 

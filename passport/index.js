@@ -34,7 +34,7 @@ passport.use(
       if (err)
         //Error in connection
         return done(err);
-      if (!username)
+      if (!user)
         //No user found
         return done(null, false);
 
