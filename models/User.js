@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     required: true,
   },
+  diary: [{ id: mongoose.Schema.Types.ObjectId }],
 });
 
 UserSchema.pre("save", function (next) {
