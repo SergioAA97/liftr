@@ -1,12 +1,21 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
+
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import Diary from "./components/Diary";
+import Workout from "./components/Workout";
+import Goals from "./components/Goals";
+import News from "./components/News";
 import PrivateRoute from "./hocs/PrivateRoute";
 import UnPrivateRoute from "./hocs/UnPrivateRoute";
-import "antd/dist/antd.css";
+import Model from "./components/utils/Model";
+
+import "antd/dist/antd.less";
+import "./App.less";
+
 function App() {
   const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
     AuthContext
@@ -14,12 +23,69 @@ function App() {
 
   console.log(user, isAuthenticated);
   return (
-    <Router>
-      <PrivateRoute exact path="/" component={Home} roles={["user", "admin"]} />
-      <UnPrivateRoute exact path="/login" component={Login} />
-      <UnPrivateRoute exact path="/register" component={Register} />
-    </Router>
+    <div className="bk-solid">
+      <Router>
+        <PrivateRoute
+          exact
+          path="/"
+          component={HomeView}
+          roles={["user", "admin"]}
+        />
+        <PrivateRoute
+          exact
+          path="/diary"
+          component={DiaryView}
+          roles={["user", "admin"]}
+        />
+        <PrivateRoute
+          exact
+          path="/workout"
+          component={WorkoutView}
+          roles={["user", "admin"]}
+        />
+        <PrivateRoute
+          exact
+          path="/goals"
+          component={GoalsView}
+          roles={["user", "admin"]}
+        />
+        <PrivateRoute
+          exact
+          path="/news"
+          component={NewsView}
+          roles={["user", "admin"]}
+        />
+        <UnPrivateRoute exact path="/login" component={Login} />
+        <UnPrivateRoute exact path="/register" component={Register} />
+      </Router>
+    </div>
   );
 }
 
+const HomeView = () => (
+  <Model>
+    <Home></Home>
+  </Model>
+);
+const DiaryView = () => (
+  <Model>
+    <Diary></Diary>
+  </Model>
+);
+const WorkoutView = () => (
+  <Model>
+    <Workout></Workout>
+  </Model>
+);
+const NewsView = () => (
+  <Model>
+    <News></News>
+  </Model>
+);
+
+const GoalsView = () => (
+  <Model>
+    <Goals></Goals>
+  </Model>
+);
 export default App;

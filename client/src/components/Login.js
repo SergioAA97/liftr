@@ -5,6 +5,7 @@ import AuthService from "../service/AuthService";
 import { Form, Input, Row, Col, Button, Checkbox } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Message from "../components/Message";
+import Logo from "../components/utils/Logo";
 
 const Login = (props) => {
   const [message, setMessage] = useState(null);
@@ -28,10 +29,11 @@ const Login = (props) => {
   };
 
   return (
-    <div style={{ marginTop: "25rem" }}>
+    <div style={{ paddingTop: "2rem", textAlign: "center" }}>
       <Row>
         <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
         <Col xs={20} sm={16} md={12} lg={8} xl={4}>
+          <Logo />
           <LoginForm onFinish={onSubmit} />
         </Col>
         <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
@@ -72,7 +74,7 @@ const LoginForm = ({ onFinish }) => {
       </Form.Item>
       <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
+          <Checkbox style={{ color: "white" }}>Remember me</Checkbox>
         </Form.Item>
 
         <a className="login-form-forgot" href="">
