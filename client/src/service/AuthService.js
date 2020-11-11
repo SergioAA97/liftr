@@ -8,7 +8,12 @@ export default {
       },
     }).then((res) => {
       if (res.status !== 401) return res.json().then((data) => data);
-      else return { isAuthenticated: false, user: { username: "", role: "" } };
+      else
+        return {
+          isAuthenticated: false,
+          user: { username: "", role: "" },
+          message: { msgError: true, msgBody: "Wrong username or password" },
+        };
     });
   },
   register: (user) => {

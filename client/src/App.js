@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Diary from "./components/Diary";
+import NewDiaryEntry from "./components/NewDiaryEntry";
 import Workout from "./components/Workout";
 import Goals from "./components/Goals";
 import News from "./components/News";
@@ -21,7 +22,6 @@ function App() {
     AuthContext
   );
 
-  console.log(user, isAuthenticated);
   return (
     <div className="bk-solid">
       <Router>
@@ -35,6 +35,12 @@ function App() {
           exact
           path="/diary"
           component={DiaryView}
+          roles={["user", "admin"]}
+        />
+        <PrivateRoute
+          exact
+          path="/diary/new"
+          component={NewDiaryEntryView}
           roles={["user", "admin"]}
         />
         <PrivateRoute
@@ -88,4 +94,6 @@ const GoalsView = () => (
     <Goals></Goals>
   </Model>
 );
+
+const NewDiaryEntryView = () => <NewDiaryEntry></NewDiaryEntry>;
 export default App;

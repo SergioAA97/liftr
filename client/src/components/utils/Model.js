@@ -1,25 +1,44 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Avatar, Row, Col } from "antd";
+import AuthService from "../../service/AuthService";
+import { Avatar, Row, Col, Button } from "antd";
 
 import Logo from "../../components/utils/Logo";
 import NavButton from "../utils/NavButton";
 
-import { Layout } from "antd";
+import { Layout, Dropdown, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 
-export default function Model({ children }) {
-  const authContext = useContext(AuthContext);
-  console.log(authContext, authContext.user);
+export default function Model({ children, ...props }) {
+  const { isAuthenticated, user, setIsAuthenticated, setUser } = useContext(
+    AuthContext
+  );
 
   return (
     <Layout style={{ height: "100%" }} className="transparent-bk">
-      <Header className="header transparent-bk" style={{ padding: 0 }}>
+      <Header
+        className="header gradient-primary rounded-corners-bottom"
+        style={{ padding: 0 }}
+      >
         <Row>
-          <Col xs={8} sm={5} md={6} lg={8} xl={10}></Col>
-          <Col xs={8} sm={14} md={12} lg={8} xl={4}>
+          <Col xs={8} sm={5} md={6} lg={8} xl={2}>
+            <Dropdown
+              overlay={
+                <HeaderMenu
+                  setUser={setUser}
+                  setIsAuthenticated={setIsAuthenticated}
+                />
+              }
+              trigger={["click"]}
+            >
+              <div style={{ textAlign: "left", paddingLeft: "1.5rem" }}>
+                <Avatar size={32} icon={<UserOutlined />} />
+              </div>
+            </Dropdown>
+          </Col>
+          <Col xs={8} sm={14} md={12} lg={8} xl={20}>
             <Logo
               fontSize="24pt"
               paddingTop="0"
@@ -27,18 +46,11 @@ export default function Model({ children }) {
               marginRight="0"
             />
           </Col>
-          <Col xs={8} sm={5} md={6} lg={8} xl={10}>
-            <div style={{ textAlign: "right", paddingRight: "1.5rem" }}>
-              <span style={{ color: "white", marginRight: "1.5rem" }}>
-                {authContext.user.username}
-              </span>
-              <Avatar size={32} icon={<UserOutlined />} />
-            </div>
-          </Col>
+          <Col xs={8} sm={5} md={6} lg={8} xl={2}></Col>
         </Row>
       </Header>
       <Layout className="transparent-bk">
-        <Layout style={{ padding: "0 24px 24px" }} className="transparent-bk">
+        <Layout style={{ padding: "0 24px 24px" }} className="">
           <Content
             style={{
               padding: 24,
@@ -56,3 +68,25 @@ export default function Model({ children }) {
     </Layout>
   );
 }
+
+const HeaderMenu = ({ setUser, setIsAuthenticated }) => {
+  function logout() {
+    AuthService.logout().then((data) => {
+      if (data.success) {
+        setIsAuthenticated(false);
+        setUser(data.user);
+      }
+    });
+  }
+
+  return (
+    <Menu>
+      <Menu.Item key="0">
+        {" "}
+        <Button block type="primary" onClick={logout}>
+          Logout
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
+};

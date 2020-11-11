@@ -2,14 +2,31 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import AuthService from "../service/AuthService";
-import { Form, Input, Row, Col, Button, Checkbox } from "antd";
+import { Form, Input, Row, Col, Button, Checkbox, message as Msg } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import Message from "../components/Message";
 import Logo from "../components/utils/Logo";
 
 const Login = (props) => {
   const [message, setMessage] = useState(null);
   const authContext = useContext(AuthContext);
+
+  const error = () => {
+    if (message) {
+      if (message.msgError) {
+        Msg.config({
+          duration: 1,
+          maxCount: 1,
+        });
+        Msg.error({
+          content: "Wrong username or password",
+          className: "",
+          style: {
+            marginTop: "20vh",
+          },
+        });
+      }
+    }
+  };
 
   const onSubmit = (values) => {
     const user = {
@@ -34,16 +51,15 @@ const Login = (props) => {
         <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
         <Col xs={20} sm={16} md={12} lg={8} xl={4}>
           <Logo />
-          <LoginForm onFinish={onSubmit} />
+          <LoginForm onFinish={onSubmit} error={error} />
         </Col>
         <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
       </Row>
-      {message ? <Message message={message} /> : <></>}
     </div>
   );
 };
 
-const LoginForm = ({ onFinish }) => {
+const LoginForm = ({ onFinish, error }) => {
   return (
     <Form
       name="normal_login"
@@ -81,9 +97,13 @@ const LoginForm = ({ onFinish }) => {
           Forgot password
         </a>
       </Form.Item>
-
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+          onClick={error}
+        >
           Log in
         </Button>
         Or <Link to="/register">register now!</Link>

@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
 import AuthService from "../service/AuthService";
-import { Form, Input, Row, Col, Button, Checkbox } from "antd";
+import { Form, Input, Row, Col, Button } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import Message from "../components/Message";
 
 const Register = (props) => {
   const [user, setUser] = useState({ username: "", password: "" });
@@ -49,7 +47,6 @@ const Register = (props) => {
         </Col>
         <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
       </Row>
-      {message ? <Message message={message} /> : <></>}
     </div>
   );
 };

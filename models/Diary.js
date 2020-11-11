@@ -1,31 +1,27 @@
 const mongoose = require("mongoose");
 
 const DiarySchema = new mongoose.Schema({
+  type: {
+    type: String,
+    required: true,
+    enum: ["breakfast", "lunch", "dinner", "snack"],
+  },
   date: {
     type: Date,
     required: true,
-    default: Date.now,
+    default: Date.now(),
   },
-  entries: [
-    {
-      type: {
-        type: String,
-        required: true,
-        enum: ["breakfast", "lunch", "dinner", "snack"],
-      },
-      item: {
-        ref: { type: String },
-        quantity: {
-          type: Number,
-          required: true,
-        },
-        unit: {
-          type: String,
-          required: true,
-        },
-      },
+  item: {
+    ref: { type: mongoose.Schema.Types.ObjectId, ref: "Food" },
+    quantity: {
+      type: Number,
+      required: true,
     },
-  ],
+    unit: {
+      type: String,
+      required: true,
+    },
+  },
 });
 
 module.exports = mongoose.model("Diary", DiarySchema);

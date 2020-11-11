@@ -1,13 +1,9 @@
 import React from "react";
 import { Row, Space } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faRunning,
-  faHamburger,
-  faRss,
-  faHome,
-  faSignal,
-} from "@fortawesome/free-solid-svg-icons";
+import iHome from "../../img/static/home-solid.svg";
+import iWorkout from "../../img/static/dumbbell-solid.svg";
+import iGoal from "../../img/static/bullseye-solid.svg";
+import iFood from "../../img/static/hamburger-solid.svg";
 
 import { Layout } from "antd";
 import { Link } from "react-router-dom";
@@ -16,11 +12,11 @@ const { Footer } = Layout;
 
 export default function NavButton(props) {
   const iconStyle = { color: "white", cursor: "pointer", fontSize: "18pt" };
+  const textStyle = { color: "white", fontWeight: 800 };
   return (
     <Footer
-      className=""
+      className="gradient-primary rounded-corners-top"
       style={{
-        background: "#0e185c",
         position: "fixed",
         left: 0,
         bottom: 0,
@@ -31,20 +27,21 @@ export default function NavButton(props) {
     >
       <Row justify="center">
         <Space size={40}>
-          <Link to="/workout">
-            <FontAwesomeIcon icon={faRunning} style={iconStyle} />
-          </Link>
-          <Link to="/diary">
-            <FontAwesomeIcon icon={faHamburger} style={iconStyle} />
-          </Link>
           <Link to="/">
-            <FontAwesomeIcon icon={faHome} style={iconStyle} />
+            <img src={iHome} style={iconStyle} />
+            <div style={textStyle}>Home</div>
           </Link>
           <Link to="/goals">
-            <FontAwesomeIcon icon={faSignal} style={iconStyle} />
+            <img src={iGoal} style={iconStyle} />
+            <div style={textStyle}>Goals</div>
           </Link>
-          <Link to="/news">
-            <FontAwesomeIcon icon={faRss} style={iconStyle} />
+          <Link to="/workout">
+            <img src={iWorkout} style={iconStyle} />
+            <div style={textStyle}>Workout</div>
+          </Link>
+          <Link to="/diary">
+            <img src={iFood} style={iconStyle} />
+            <div style={textStyle}>Food</div>
           </Link>
         </Space>
       </Row>

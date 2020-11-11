@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import DiaryService from "../service/DiaryService.js";
 import { Card, Divider, Button, Row, Col } from "antd";
+import { Link } from "react-router-dom";
 import { Typography } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +11,6 @@ const { Title } = Typography;
 
 export default function Diary() {
   const authContext = useContext(AuthContext);
-  console.log(authContext, authContext.user);
 
   const text = "Some text";
 
@@ -80,6 +81,8 @@ export default function Diary() {
     },
   ];
 
+  DiaryService.getToday().then((x) => console.log(x));
+
   return (
     <>
       <>
@@ -96,11 +99,11 @@ export default function Diary() {
       </>
       <>
         <Divider plain>Add</Divider>
-        <Button
-          block
-          type="text"
-          icon={<FontAwesomeIcon icon={faPlus} />}
-        ></Button>
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <Link to="/diary/new">
+            <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
+          </Link>
+        </div>
       </>
     </>
   );
