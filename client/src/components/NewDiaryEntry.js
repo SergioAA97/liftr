@@ -59,11 +59,15 @@ export default function NewDiaryEntry(props) {
   };
 
   return (
-    <>
+    <div>
       <Button
         style={{ margin: "2rem 2rem" }}
         shape="circle"
-        icon={<ArrowLeftOutlined style={{ width: "100%", height: "100%" }} />}
+        icon={
+          <ArrowLeftOutlined
+            style={{ width: "100%", height: "100%", color: "white" }}
+          />
+        }
         onClick={goBack}
       />
       <Row style={{ marginTop: "2rem" }}>
@@ -96,7 +100,7 @@ export default function NewDiaryEntry(props) {
           {food && <EntryForm food={food} />}
         </Col>
       </Row>
-    </>
+    </div>
   );
 }
 
@@ -109,13 +113,6 @@ const EntryForm = ({ food }) => {
   return (
     <>
       <Form>
-        <b>Time of day</b>
-        <Select defaultValue="breakfast" style={{ width: "100%" }}>
-          <Option value="breakfast">Breakfast</Option>
-          <Option value="lunch">Lunch</Option>
-          <Option value="dinner">Dinner</Option>
-          <Option value="snacks">Snacks</Option>
-        </Select>
         <b>Quantity</b>
         <Input addonAfter="/ 100 (g)" defaultValue="0 (g)" />
         <Row>
@@ -183,6 +180,7 @@ const FoodSearch = ({ onSearch, onChange }) => {
       placeholder="Input food name"
       onChange={onChange}
       onSearch={onSearch}
+      className="inv-font"
     />
   );
 };

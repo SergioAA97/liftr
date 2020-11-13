@@ -17,7 +17,7 @@ export default function Model({ children, ...props }) {
   );
 
   return (
-    <Layout style={{ height: "100%" }} className="transparent-bk">
+    <Layout style={{ height: "100%" }} className="white-bk">
       <Header
         className="header gradient-primary rounded-corners-bottom"
         style={{ padding: 0 }}
@@ -44,16 +44,16 @@ export default function Model({ children, ...props }) {
               paddingTop="0"
               marginLeft="0"
               marginRight="0"
+              white
             />
           </Col>
           <Col xs={8} sm={5} md={6} lg={8} xl={2}></Col>
         </Row>
       </Header>
-      <Layout className="transparent-bk">
-        <Layout style={{ padding: "0 24px 24px" }} className="">
+      <Layout>
+        <Layout className="white-bk">
           <Content
             style={{
-              padding: 24,
               margin: 0,
               minHeight: 280,
             }}

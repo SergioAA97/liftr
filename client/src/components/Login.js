@@ -47,13 +47,11 @@ const Login = (props) => {
 
   return (
     <div style={{ paddingTop: "2rem", textAlign: "center" }}>
-      <Row>
-        <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
-        <Col xs={20} sm={16} md={12} lg={8} xl={4}>
+      <Row justify="center">
+        <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={4}>
           <Logo />
           <LoginForm onFinish={onSubmit} error={error} />
         </Col>
-        <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
       </Row>
     </div>
   );
@@ -63,7 +61,7 @@ const LoginForm = ({ onFinish, error }) => {
   return (
     <Form
       name="normal_login"
-      className="login-form"
+      className="login-form "
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
@@ -90,7 +88,7 @@ const LoginForm = ({ onFinish, error }) => {
       </Form.Item>
       <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox style={{ color: "white" }}>Remember me</Checkbox>
+          <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
         <a className="login-form-forgot" href="">
@@ -106,7 +104,7 @@ const LoginForm = ({ onFinish, error }) => {
         >
           Log in
         </Button>
-        Or <Link to="/register">register now!</Link>
+        {"  "}Or <Link to="/register">register now!</Link>
       </Form.Item>
     </Form>
   );

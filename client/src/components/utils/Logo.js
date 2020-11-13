@@ -5,6 +5,7 @@ export default function Logo({
   paddingTop = "10vh",
   marginLeft = "-100%",
   marginRight = "-100%",
+  white = false,
   ...props
 }) {
   const logoStyle = {
@@ -17,7 +18,7 @@ export default function Logo({
     marginRight: marginRight,
     textAlign: "center",
     paddingTop: paddingTop,
-    color: "white",
+    color: white ? "white" : "#4A34D4",
   };
 
   return (

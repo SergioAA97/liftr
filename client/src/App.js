@@ -9,7 +9,6 @@ import Diary from "./components/Diary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
 import Workout from "./components/Workout";
 import Goals from "./components/Goals";
-import News from "./components/News";
 import PrivateRoute from "./hocs/PrivateRoute";
 import UnPrivateRoute from "./hocs/UnPrivateRoute";
 import Model from "./components/utils/Model";
@@ -39,7 +38,7 @@ function App() {
         />
         <PrivateRoute
           exact
-          path="/diary/new"
+          path="/diary/new/:type"
           component={NewDiaryEntryView}
           roles={["user", "admin"]}
         />
@@ -53,12 +52,6 @@ function App() {
           exact
           path="/goals"
           component={GoalsView}
-          roles={["user", "admin"]}
-        />
-        <PrivateRoute
-          exact
-          path="/news"
-          component={NewsView}
           roles={["user", "admin"]}
         />
         <UnPrivateRoute exact path="/login" component={Login} />
@@ -81,11 +74,6 @@ const DiaryView = () => (
 const WorkoutView = () => (
   <Model>
     <Workout></Workout>
-  </Model>
-);
-const NewsView = () => (
-  <Model>
-    <News></News>
   </Model>
 );
 
