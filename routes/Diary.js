@@ -13,7 +13,7 @@ diaryRouter.get("/today", (req, res) => {
   User.findById({ _id: req.user._id })
     .populate({
       path: "entries",
-      match: { date: { $gte: start, $lt: end } },
+      match: { created: { $gte: start, $lt: end } },
       populate: {
         path: "item.ref",
         model: "Food",
@@ -34,49 +34,42 @@ diaryRouter.get("/today", (req, res) => {
 
 diaryRouter.post("/post", (req, res) => {
   const entry = new Diary(req.body);
-  entry.save((err) => {
-    if (err)
-      res
-        .status(500)
-        .json({ message: { msgBody: "Error has occured", msgError: true } });
-    else {
-      req.user.entries.push(entry);
-      req.user.save((err) => {
-        if (err)
-          res.status(500).json({
-            message: { msgBody: "Error has occured", msgError: true },
+      entry.save((err) => {
+        if (err){
+          res
+            .status(500)
+            .json({ message: { msgBody: "Error has occured", msgError: true } })
+          console.log(err)
+        }
+        else {
+          req.user.entries.push(entry);
+          req.user.save((err) => {
+            if (err)
+              res.status(500).json({
+                message: { msgBody: "Error has occured", msgError: true },
+              });
+            else
+              res.status(200).json({
+                message: {
+                  msgBody: "Successfully created entry",
+                  msgError: false,
+                },
+              });
           });
-        else
-          res.status(200).json({
-            message: {
-              msgBody: "Successfully created entry",
-              msgError: false,
-            },
-          });
+        }
       });
-    }
-  });
 });
 
 diaryRouter.post("/searchFood", (req, res) => {
   const { query, pageSize = 10 } = req.body;
-  fetch(
-    "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=h3h3hQgOLhYzTE7KfgUc2TlwLlNdEXiSDhNm3ODi&pageSize=" +
-      pageSize.toString() +
-      "&query=" +
-      query,
-    {
-      headers: {
-        Accept: "application/json",
-      },
+  const food = Food.find({ $text: { $search: query } }, {score: {$meta: "textScore"}},(err, doc) => {
+    if(err)
+      res.status(500).json({
+        message: { msgBody: "Error has ocurred finding food", msgError: true}
+      })
+    else{
+      res.send(doc);
     }
-  ).then((response) => {
-    if (response.status === 200) {
-      response.json().then((data) => {
-        const foods = data.foods;
-        res.send(foods);
-      });
-    }
-  });
+  }).sort({score: {$meta: "textScore"}}).limit(15)
 });
 module.exports = diaryRouter;

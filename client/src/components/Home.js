@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
-import FoodService from "../service/FoodService";
 import { Row, Col } from "antd";
 import CustomIcon from "./utils/CustomIcon";
 import { BlockCard } from "./utils/Layout-Components";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  FoodService.openDB();
+  
 
   return (
     <div>

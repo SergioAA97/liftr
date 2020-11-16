@@ -1,87 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import DiaryService from "../service/DiaryService.js";
 import { Card, Divider, Button, Row, Col } from "antd";
 import { Link } from "react-router-dom";
-import { Typography } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const { Title } = Typography;
 
 export default function Diary() {
   const authContext = useContext(AuthContext);
+  const [entries, setEntries] = useState(null);
 
-  const text = "Some text";
+  let entry = {
+    lastModified: Date.now(),
+    type: "breakfast",
+    created: Date.now(),
+    item: {
+      ref: "5f8432090792da5170ea08d5",
+      quantity: 120
+    },
+  }
 
-  const entries = [
-    {
-      type: "Breakfast",
-      item: {
-        ref: "Banana",
-        quantity: 120,
-        unit: "gr",
-      },
-    },
-    {
-      type: "Breakfast",
-      item: {
-        ref: "Milk",
-        quantity: 8,
-        unit: "fl. oz.",
-      },
-    },
-    {
-      type: "Breakfast",
-      item: {
-        ref: "Granola",
-        quantity: 200,
-        unit: "gr",
-      },
-    },
-    {
-      type: "Lunch",
-      item: {
-        ref: "Ground Beef",
-        quantity: 120,
-        unit: "gr",
-      },
-    },
-    {
-      type: "Lunch",
-      item: {
-        ref: "White Potatoes",
-        quantity: 200,
-        unit: "gr",
-      },
-    },
-    {
-      type: "Lunch",
-      item: {
-        ref: "Wine (White)",
-        quantity: 200,
-        unit: "ml",
-      },
-    },
-    {
-      type: "Dinner",
-      item: {
-        ref: "Tuna",
-        quantity: 120,
-        unit: "gr",
-      },
-    },
-    {
-      type: "Dinner",
-      item: {
-        ref: "Lettuce",
-        quantity: 150,
-        unit: "gr",
-      },
-    },
-  ];
+  useEffect(() => {
+    // DiaryService.postEntry(entry);
+    if (!entries)
+      DiaryService.getToday().then((x) => setEntries(x));
+  })
 
-  DiaryService.getToday().then((x) => console.log(x));
 
   return (
     <>
@@ -99,14 +44,6 @@ export default function Diary() {
           <DiarySection name="Snacks" data={entries} />
         </SectionCol>
       </Row>
-      <>
-        <Divider plain>Add</Divider>
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <Link to="/diary/new/breakfast">
-            <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
-          </Link>
-        </div>
-      </>
     </>
   );
 }
@@ -127,7 +64,21 @@ const DiarySection = ({ name = "Breakfast", data }) => {
   const cardStyle = {
     borderRadius: "7px",
   };
-  const entries = data.filter((x) => x.type === name);
+
+  let entries, totalEnergy = 0;
+
+  if (data) {
+    entries = data.entries.filter((x) => x.type.toLowerCase() === name.toLowerCase());
+    entries.forEach(e => {
+      let energy = e.item.ref.energy * (e.item.quantity / 100);
+      e.item.energy = energy;
+      totalEnergy += energy;
+    });
+  } else {
+    entries = [];
+  }
+
+
   return (
     <>
       {
@@ -137,20 +88,33 @@ const DiarySection = ({ name = "Breakfast", data }) => {
             style={cardStyle}
             title={name}
             className="gradient-primary"
+            extra={totalEnergy + " kcal"}
           >
-            {entries.map((x) => (
-              <Row key={key++}>
-                <Col span={8}>
-                  <b>{x.item.ref}</b>
-                </Col>
-                <Col span={8} offset={8} style={{ textAlign: "right" }}>
-                  {x.item.quantity} - {x.item.unit}
-                </Col>
-              </Row>
-            ))}
+            {entries.map((x) => {
+              let energy = x.item.ref.energy * (x.item.quantity / 100)
+              energy = (Number.isInteger(energy)) ? energy : energy.toFixed(1)
+              return (
+                <Row key={key++}>
+                  <Col span={10}>
+                    <b>{x.item.ref.description}</b>
+                    <p>{x.item.quantity} {"(g)"}</p>
+                  </Col>
+                  <Col span={8} offset={6} style={{ textAlign: "right" }}>
+                    {energy} - {"kcal"}
+                  </Col>
+                </Row>
+              )
+            })}
+            <Divider plain>Add</Divider>
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <Link to={"/diary/new/" + name.toLowerCase()}>
+                <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
+              </Link>
+            </div>
           </Card>
         </div>
       }
+
     </>
   );
 };

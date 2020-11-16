@@ -42,7 +42,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>
@@ -75,7 +75,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>
@@ -108,7 +108,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>
@@ -141,7 +141,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>
@@ -174,7 +174,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>
@@ -207,7 +207,7 @@ export default function CustomIcon({
         >
           <feOffset dy="3" input="SourceAlpha" />
           <feGaussianBlur stdDeviation="2.5" result="b" />
-          <feFlood flood-opacity="0.188" />
+          <feFlood floodOpacity="0.188" />
           <feComposite operator="in" in2="b" />
           <feComposite in="SourceGraphic" />
         </filter>

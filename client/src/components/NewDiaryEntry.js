@@ -13,10 +13,11 @@ import {
   Button,
   Select,
 } from "antd";
-import { PlusOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { PlusOutlined, ArrowLeftOutlined, CheckOutlined } from "@ant-design/icons";
 import { AuthContext } from "../context/AuthContext";
 import DiaryService from "../service/DiaryService";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import UtilService from "../service/UtilService"
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -86,7 +87,7 @@ export default function NewDiaryEntry(props) {
                 onChange={onFoodChange}
               />
               <Divider plain>Results</Divider>
-              {data.length == 0 && empty && (
+              {data.length === 0 && empty && (
                 <Empty
                   style={{ color: "white" }}
                   description={<>No results</>}
@@ -105,31 +106,55 @@ export default function NewDiaryEntry(props) {
 }
 
 const EntryForm = ({ food }) => {
-  const filter = [1087, 1089, 1003, 1004, 1005, 1008, 2000, 1079, 1093];
-  const nutrients = food.foodNutrients.filter(
-    (x) => filter.indexOf(x.nutrientId) !== -1
-  );
+
+  let nutrients = UtilService.initializeNutrients(food)
+  console.log(nutrients)
+
+
+  let { type } = useParams();
+  let history = useHistory();
+
+  const onFinish = (data) => {
+    const {quantity} = data;
+    let entry = {
+      type,
+      created: Date.now(),
+      lastModified: Date.now(),
+      item: {
+        ref: food._id,
+        quantity
+      }
+    }
+    DiaryService.postEntry(entry).then(history.push("/diary"));
+  }
 
   return (
     <>
-      <Form>
+      <Form onFinish={onFinish}>
         <b>Quantity</b>
-        <Input addonAfter="/ 100 (g)" defaultValue="0 (g)" />
+        <Form.Item
+        name="quantity"
+        rules={[{ required: true, message: "Please enter a quantity!" }]}
+      >
+        <Input addonAfter="(g)" placeholder="0" />
+        </Form.Item>
         <Row>
-          <Col felx={2}>
+          <Col flex={2}>
             <b>Name: </b>
             {food.description}
           </Col>
           <Col style={{ textAlign: "right" }} flex={3}>
             <b>Brand: </b>
-            {food.brandOwner}
+            {(food.brandOwner) ? food.brandOwner : "N/A"}
           </Col>
         </Row>
-        {nutrients.map((x) => (
-          <div key={x.nutrientName}>
-            <b>{x.nutrientName}</b> - {x.value} ({x.unitName})
-          </div>
-        ))}
+        {nutrients.map(({name,unit,value}) => (<div>
+            <b>{UtilService.capitalize(name)}</b> - {value} ({unit})
+          </div>)
+        )}
+        <Button type="primary" shape="round" htmlType="submit" icon={<CheckOutlined />} >
+          Done
+        </Button>
       </Form>
     </>
   );
@@ -141,16 +166,14 @@ const FoodResults = ({ data, onFoodClick }) => {
     <>
       <Space direction="vertical" style={{ width: "100%" }}>
         {data.map((item) => {
-          const energyItem = item.foodNutrients.find(
-            (x) => x.nutrientId === 1008
-          );
-          const energy = energyItem.value;
-          const unit = energyItem.unitName;
+          const energy = item.energy;
+
           return (
             <Card
               bordered={false}
               key={key++}
               actions={[<PlusOutlined onClick={() => onFoodClick(item)} />]}
+              className="inv-font"
             >
               <Row>
                 <Col span={16}>
@@ -161,7 +184,7 @@ const FoodResults = ({ data, onFoodClick }) => {
                 </Col>
                 <Col span={8} style={{ textAlign: "right" }}>
                   <p style={{ marginBottom: "0.2rem" }}>
-                    {energy} - {unit.toLowerCase()}
+                    {energy} - {"kcal"}
                   </p>
                   <p>(100 - g)</p>
                 </Col>

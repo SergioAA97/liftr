@@ -100,7 +100,6 @@ const LoginForm = ({ onFinish, error }) => {
           type="primary"
           htmlType="submit"
           className="login-form-button"
-          onClick={error}
         >
           Log in
         </Button>

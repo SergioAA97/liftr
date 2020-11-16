@@ -6,9 +6,9 @@ const DiarySchema = new mongoose.Schema({
     required: true,
     enum: ["breakfast", "lunch", "dinner", "snack"],
   },
-  date: {
+  created: {
     type: Date,
-    required: true,
+    required: false,
     default: Date.now(),
   },
   item: {
@@ -16,11 +16,12 @@ const DiarySchema = new mongoose.Schema({
     quantity: {
       type: Number,
       required: true,
-    },
-    unit: {
-      type: String,
-      required: true,
-    },
+    }
+  },
+  lastModified: {
+    type: Date,
+    required: false,
+    default: Date.now(),
   },
 });
 

@@ -1,0 +1,66 @@
+  const entries = [
+    {
+      type: "Breakfast",
+      item: {
+        ref: "Banana",
+        quantity: 120,
+        unit: "gr",
+      },
+    },
+    {
+      type: "Breakfast",
+      item: {
+        ref: "Milk",
+        quantity: 8,
+        unit: "fl. oz.",
+      },
+    },
+    {
+      type: "Breakfast",
+      item: {
+        ref: "Granola",
+        quantity: 200,
+        unit: "gr",
+      },
+    },
+    {
+      type: "Lunch",
+      item: {
+        ref: "Ground Beef",
+        quantity: 120,
+        unit: "gr",
+      },
+    },
+    {
+      type: "Lunch",
+      item: {
+        ref: "White Potatoes",
+        quantity: 200,
+        unit: "gr",
+      },
+    },
+    {
+      type: "Lunch",
+      item: {
+        ref: "Wine (White)",
+        quantity: 200,
+        unit: "ml",
+      },
+    },
+    {
+      type: "Dinner",
+      item: {
+        ref: "Tuna",
+        quantity: 120,
+        unit: "gr",
+      },
+    },
+    {
+      type: "Dinner",
+      item: {
+        ref: "Lettuce",
+        quantity: 150,
+        unit: "gr",
+      },
+    },
+  ];
