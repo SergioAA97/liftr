@@ -34,42 +34,72 @@ diaryRouter.get("/today", (req, res) => {
 
 diaryRouter.post("/post", (req, res) => {
   const entry = new Diary(req.body);
-      entry.save((err) => {
-        if (err){
-          res
-            .status(500)
-            .json({ message: { msgBody: "Error has occured", msgError: true } })
-          console.log(err)
-        }
-        else {
-          req.user.entries.push(entry);
-          req.user.save((err) => {
-            if (err)
-              res.status(500).json({
-                message: { msgBody: "Error has occured", msgError: true },
-              });
-            else
-              res.status(200).json({
-                message: {
-                  msgBody: "Successfully created entry",
-                  msgError: false,
-                },
-              });
+  entry.save((err) => {
+    if (err) {
+      res
+        .status(500)
+        .json({ message: { msgBody: "Error has occured", msgError: true } });
+      console.log(err);
+    } else {
+      req.user.entries.push(entry);
+      req.user.save((err) => {
+        if (err)
+          res.status(500).json({
+            message: { msgBody: "Error has occured", msgError: true },
           });
-        }
+        else
+          res.status(200).json({
+            message: {
+              msgBody: "Successfully created entry",
+              msgError: false,
+            },
+          });
       });
+    }
+  });
 });
 
 diaryRouter.post("/searchFood", (req, res) => {
   const { query, pageSize = 10 } = req.body;
-  const food = Food.find({ $text: { $search: query } }, {score: {$meta: "textScore"}},(err, doc) => {
-    if(err)
-      res.status(500).json({
-        message: { msgBody: "Error has ocurred finding food", msgError: true}
-      })
-    else{
-      res.send(doc);
+  const food = Food.aggregate(
+    [
+      {
+        $match: {
+          description: { $regex: query, $options: "gi" },
+        },
+      },
+      {
+        $addFields: {
+          index: {
+            $indexOfCP: [
+              {
+                $toLower: "$description",
+              },
+              query,
+            ],
+          },
+        },
+      },
+      {
+        $sort: {
+          index: 1,
+        },
+      },
+      { $limit: pageSize },
+    ],
+    (err, doc) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({
+          message: {
+            msgBody: "Error has ocurred finding food",
+            msgError: true,
+          },
+        });
+      } else {
+        res.send(doc);
+      }
     }
-  }).sort({score: {$meta: "textScore"}}).limit(15)
+  );
 });
 module.exports = diaryRouter;

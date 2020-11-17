@@ -13,11 +13,15 @@ import {
   Button,
   Select,
 } from "antd";
-import { PlusOutlined, ArrowLeftOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  ArrowLeftOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
 import { AuthContext } from "../context/AuthContext";
 import DiaryService from "../service/DiaryService";
 import { useHistory, useParams } from "react-router-dom";
-import UtilService from "../service/UtilService"
+import UtilService from "../service/UtilService";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -106,37 +110,35 @@ export default function NewDiaryEntry(props) {
 }
 
 const EntryForm = ({ food }) => {
-
-  let nutrients = UtilService.initializeNutrients(food)
-  console.log(nutrients)
-
+  let nutrients = UtilService.initializeNutrients(food);
+  console.log(nutrients);
 
   let { type } = useParams();
   let history = useHistory();
 
   const onFinish = (data) => {
-    const {quantity} = data;
+    const { quantity } = data;
     let entry = {
       type,
       created: Date.now(),
       lastModified: Date.now(),
       item: {
         ref: food._id,
-        quantity
-      }
-    }
+        quantity,
+      },
+    };
     DiaryService.postEntry(entry).then(history.push("/diary"));
-  }
+  };
 
   return (
     <>
       <Form onFinish={onFinish}>
         <b>Quantity</b>
         <Form.Item
-        name="quantity"
-        rules={[{ required: true, message: "Please enter a quantity!" }]}
-      >
-        <Input addonAfter="(g)" placeholder="0" />
+          name="quantity"
+          rules={[{ required: true, message: "Please enter a quantity!" }]}
+        >
+          <Input addonAfter="(g)" placeholder="0" />
         </Form.Item>
         <Row>
           <Col flex={2}>
@@ -145,14 +147,20 @@ const EntryForm = ({ food }) => {
           </Col>
           <Col style={{ textAlign: "right" }} flex={3}>
             <b>Brand: </b>
-            {(food.brandOwner) ? food.brandOwner : "N/A"}
+            {food.brandOwner ? food.brandOwner : "N/A"}
           </Col>
         </Row>
-        {nutrients.map(({name,unit,value}) => (<div>
+        {nutrients.map(({ name, unit, value }) => (
+          <div>
             <b>{UtilService.capitalize(name)}</b> - {value} ({unit})
-          </div>)
-        )}
-        <Button type="primary" shape="round" htmlType="submit" icon={<CheckOutlined />} >
+          </div>
+        ))}
+        <Button
+          type="primary"
+          shape="round"
+          htmlType="submit"
+          icon={<CheckOutlined />}
+        >
           Done
         </Button>
       </Form>

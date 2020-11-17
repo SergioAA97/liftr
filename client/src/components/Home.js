@@ -5,8 +5,6 @@ import { BlockCard } from "./utils/Layout-Components";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  
-
   return (
     <div>
       {" "}
@@ -18,9 +16,9 @@ export default function Home() {
 
 const TodaysStats = (props) => (
   <BlockCard title="Today´s stats">
-    <CustomIcon text="1000" subText="kcal" foodIcon></CustomIcon>
-    <CustomIcon text="66" subText="min" runningIcon></CustomIcon>
-    <CustomIcon text="10.000" subText="steps" stepsIcon></CustomIcon>
+    <CustomIcon text="1000" subText="kcal consumed" block foodIcon></CustomIcon>
+    <CustomIcon text="66" subText="min" block runningIcon></CustomIcon>
+    <CustomIcon text="10.000" subText="steps" block stepsIcon></CustomIcon>
   </BlockCard>
 );
 

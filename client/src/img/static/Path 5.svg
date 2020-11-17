@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="55" height="55" viewBox="0 0 55 55">
+  <defs>
+    <filter id="Path_5" x="0" y="0" width="55" height="55" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Path_5)">
+    <path id="Path_5-2" data-name="Path 5" d="M18.5,8.874a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744Zm0,0a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744ZM18.5,0A18.5,18.5,0,1,0,37,18.5,18.5,18.5,0,0,0,18.5,0ZM10.507,29.945a4.358,4.358,0,1,1,4.362-4.36,4.358,4.358,0,0,1-4.362,4.36ZM18.5,15.775a4.358,4.358,0,1,1,4.362-4.36,4.358,4.358,0,0,1-4.362,4.36Zm8,14.17a4.358,4.358,0,1,1,4.358-4.358A4.358,4.358,0,0,1,26.5,29.945Zm-8-21.071a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744Z" transform="translate(9 6)" fill="#4834d4"/>
+  </g>
+</svg>

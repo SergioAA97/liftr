@@ -11,7 +11,11 @@ export default function CustomIcon({
   workoutIcon = null,
   drumStickIcon = null,
   goalIcon = null,
+  proteinIcon = null,
+  carbIcon = null,
+  fatIcon = null,
   height = "1rem",
+  block = false,
   ...props
 }) {
   const textStyle = {
@@ -22,6 +26,7 @@ export default function CustomIcon({
   const subTextStyle = {
     fontSize: "14px",
     fontWeight: "800",
+    display: block ? "block" : "inline",
   };
 
   const FoodSvg = () => (
@@ -222,12 +227,145 @@ export default function CustomIcon({
     </svg>
   );
 
+  const ProteinSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="55"
+      height="50"
+      viewBox="0 0 55 55"
+    >
+      <defs>
+        <filter
+          id="Path_4"
+          x="7.964"
+          y="23.043"
+          width="23.086"
+          height="23.086"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+        <filter
+          id="Path_5"
+          x="0"
+          y="0"
+          width="55"
+          height="50"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur-2" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur-2" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g id="Group_105" data-name="Group 105" transform="translate(-95.5 -165)">
+        <g transform="matrix(1, 0, 0, 1, 95.5, 162.5)" filter="url(#Path_4)">
+          <path
+            id="Path_4-2"
+            data-name="Path 4"
+            d="M30.486,76.033a2.54,2.54,0,1,1-.744-1.8,2.543,2.543,0,0,1,.744,1.8Z"
+            transform="translate(-8.44 -44.45)"
+            fill={inv ? "#FFF" : "#4834D4"}
+          />
+        </g>
+        <g transform="matrix(1, 0, 0, 1, 95.5, 162.5)" filter="url(#Path_5)">
+          <path
+            id="Path_5-2"
+            data-name="Path 5"
+            d="M18.5,8.874a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744Zm0,0a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744ZM18.5,0A18.5,18.5,0,1,0,37,18.5,18.5,18.5,0,0,0,18.5,0ZM10.507,29.945a4.358,4.358,0,1,1,4.362-4.36,4.358,4.358,0,0,1-4.362,4.36ZM18.5,15.775a4.358,4.358,0,1,1,4.362-4.36,4.358,4.358,0,0,1-4.362,4.36Zm8,14.17a4.358,4.358,0,1,1,4.358-4.358A4.358,4.358,0,0,1,26.5,29.945Zm-8-21.071a2.54,2.54,0,1,0,1.8.744,2.543,2.543,0,0,0-1.8-.744Z"
+            transform="translate(9 6)"
+            fill={inv ? "#FFF" : "#4834D4"}
+          />
+        </g>
+      </g>
+    </svg>
+  );
+
+  const FatSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="51.922"
+      height="51.923"
+      viewBox="0 0 51.922 51.923"
+    >
+      <defs>
+        <filter
+          id="Asset_4"
+          x="0"
+          y="0"
+          width="51.922"
+          height="51.923"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Asset_4)">
+        <path
+          id="Asset_4-2"
+          data-name="Asset 4"
+          d="M30.509,6.751H3.412a16.961,16.961,0,0,1,27.1,0ZM16.96,33.916a16.941,16.941,0,0,0,13.548-6.756H3.412A16.941,16.941,0,0,0,16.96,33.916ZM31.653,8.475H2.268a16.987,16.987,0,0,0,0,16.961H5.174v-.647a.862.862,0,1,1,1.725,0v.647H8.673V23.927a.862.862,0,0,1,1.725,0v1.509h1.771V20.19a.862.862,0,0,1,1.725,0v5.246h1.774V17.6a.862.862,0,0,1,1.725,0v7.834h1.774V22.777a.862.862,0,0,1,1.725,0v2.659h1.771V20.765a.862.862,0,0,1,1.725,0v4.671h1.774V22.49a.862.862,0,0,1,1.725,0v2.947h3.769a16.987,16.987,0,0,0,0-16.961Z"
+          transform="translate(9 6.01)"
+          fill={inv ? "#FFF" : "#4834D4"}
+        />
+      </g>
+    </svg>
+  );
+
+  const CarbSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="52"
+      height="51.972"
+      viewBox="0 0 52 51.972"
+    >
+      <defs>
+        <filter
+          id="Carbs"
+          x="0"
+          y="0"
+          width="52"
+          height="51.972"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Carbs)">
+        <path
+          id="Carbs-2"
+          data-name="Carbs"
+          d="M31.073,7.439,27,11.525,25.771,10.3l4.247-4.25A16.95,16.95,0,0,0,17.862,0V6.028H16.134V0A16.939,16.939,0,0,0,3.981,6.051l4.244,4.241L7,11.525,2.923,7.439a17,17,0,1,0,28.15,0ZM17,11.214s2.593,6.339,2.593,7.779a2.593,2.593,0,0,1-5.186,0C14.4,17.576,17,11.214,17,11.214Zm0,20.457A14.694,14.694,0,0,1,2.3,16.976H7.778a9.22,9.22,0,1,0,18.44,0h5.474A14.694,14.694,0,0,1,17,31.671Z"
+          transform="translate(9 6)"
+          fill={inv ? "#FFF" : "#4834D4"}
+        />
+      </g>
+    </svg>
+  );
+
   const FoodIcon = (props) => <Icon component={FoodSvg} {...props} />;
   const RunningIcon = (props) => <Icon component={RunningSvg} {...props} />;
   const StepsIcon = (props) => <Icon component={StepsSvg} {...props} />;
   const WorkoutIcon = (props) => <Icon component={WorkoutSvg} {...props} />;
   const DrumStickIcon = (props) => <Icon component={DrumStickSvg} {...props} />;
   const GoalIcon = (props) => <Icon component={GoalSvg} {...props} />;
+  const ProteinIcon = (props) => <Icon component={ProteinSvg} {...props} />;
+  const FatIcon = (props) => <Icon component={FatSvg} {...props} />;
+  const CarbIcon = (props) => <Icon component={CarbSvg} {...props} />;
 
   return (
     <div {...props}>
@@ -237,6 +375,9 @@ export default function CustomIcon({
       {workoutIcon && <WorkoutIcon />}
       {drumStickIcon && <DrumStickIcon />}
       {goalIcon && <GoalIcon />}
+      {proteinIcon && <ProteinIcon />}
+      {fatIcon && <FatIcon />}
+      {carbIcon && <CarbIcon />}
       {(text || subText) && (
         <div style={{ textAlign: "center", marginTop: "-0.6rem" }}>
           {text && <span style={textStyle}>{text} </span>}{" "}

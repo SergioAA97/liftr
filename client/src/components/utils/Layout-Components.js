@@ -14,10 +14,10 @@ export const BlockCard = ({ title, inv = false, children }) => {
     divClass = divClass + "gradient-primary inv-font";
   }
 
-  let span = Math.ceil(24/children.length);
+  let span = Math.ceil(24 / children.length);
   let xsSpan = span;
   let mdSpan = span - 1;
-  let lgSpan = span - 5;
+  let lgSpan = span - 4;
 
   let key = 0;
 
@@ -28,7 +28,11 @@ export const BlockCard = ({ title, inv = false, children }) => {
       </h2>
       <Row justify="center" style={{ marginTop: "1rem" }}>
         {children &&
-          children.map((child) => <Col key={key++} xs={xsSpan} md={mdSpan} lg={lgSpan} >{child}</Col>)}
+          children.map((child) => (
+            <Col key={key++} xs={xsSpan} md={mdSpan} lg={lgSpan}>
+              {child}
+            </Col>
+          ))}
       </Row>
     </div>
   );
