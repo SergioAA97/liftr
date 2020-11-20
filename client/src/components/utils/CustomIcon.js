@@ -14,16 +14,20 @@ export default function CustomIcon({
   proteinIcon = null,
   carbIcon = null,
   fatIcon = null,
-  height = "1rem",
   block = false,
+  textStyle = {},
+  subTextStyle = {},
+  iconStyle = {},
+  height = "3rem",
+  width = "3em",
   ...props
 }) {
-  const textStyle = {
+  textStyle = {
     fontSize: "20px",
     fontWeight: "800",
   };
 
-  const subTextStyle = {
+  subTextStyle = {
     fontSize: "14px",
     fontWeight: "800",
     display: block ? "block" : "inline",
@@ -32,8 +36,8 @@ export default function CustomIcon({
   const FoodSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="54"
-      height="50"
+      width={width}
+      height={height}
       viewBox="0 0 49.577 45.255"
     >
       <defs>
@@ -65,8 +69,8 @@ export default function CustomIcon({
   const RunningSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="43"
-      height="50"
+      width={width}
+      height={height}
       viewBox="0 0 38.421 43.825"
     >
       <defs>
@@ -98,8 +102,8 @@ export default function CustomIcon({
   const StepsSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="57"
-      height="50"
+      width={width}
+      height={height}
       viewBox="0 0 47.246 40.797"
     >
       <defs>
@@ -131,8 +135,8 @@ export default function CustomIcon({
   const WorkoutSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="58.221"
-      height="45.255"
+      width={width}
+      height={height}
       viewBox="0 0 58.221 45.255"
     >
       <defs>
@@ -164,8 +168,8 @@ export default function CustomIcon({
   const DrumStickSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="44.024"
-      height="44.03"
+      width={width}
+      height={height}
       viewBox="0 0 44.024 44.03"
     >
       <defs>
@@ -197,8 +201,8 @@ export default function CustomIcon({
   const GoalSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="45.255"
-      height="45.255"
+      width={width}
+      height={height}
       viewBox="0 0 45.255 45.255"
     >
       <defs>
@@ -230,8 +234,8 @@ export default function CustomIcon({
   const ProteinSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="55"
-      height="50"
+      width={width}
+      height={height}
       viewBox="0 0 55 55"
     >
       <defs>
@@ -290,8 +294,8 @@ export default function CustomIcon({
   const FatSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="51.922"
-      height="51.923"
+      width={width}
+      height={height}
       viewBox="0 0 51.922 51.923"
     >
       <defs>
@@ -325,8 +329,8 @@ export default function CustomIcon({
   const CarbSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="52"
-      height="51.972"
+      width={width}
+      height={height}
       viewBox="0 0 52 51.972"
     >
       <defs>
@@ -357,15 +361,33 @@ export default function CustomIcon({
     </svg>
   );
 
-  const FoodIcon = (props) => <Icon component={FoodSvg} {...props} />;
-  const RunningIcon = (props) => <Icon component={RunningSvg} {...props} />;
-  const StepsIcon = (props) => <Icon component={StepsSvg} {...props} />;
-  const WorkoutIcon = (props) => <Icon component={WorkoutSvg} {...props} />;
-  const DrumStickIcon = (props) => <Icon component={DrumStickSvg} {...props} />;
-  const GoalIcon = (props) => <Icon component={GoalSvg} {...props} />;
-  const ProteinIcon = (props) => <Icon component={ProteinSvg} {...props} />;
-  const FatIcon = (props) => <Icon component={FatSvg} {...props} />;
-  const CarbIcon = (props) => <Icon component={CarbSvg} {...props} />;
+  const FoodIcon = (props) => (
+    <Icon height={height} width={width} component={FoodSvg} {...props} />
+  );
+  const RunningIcon = (props) => (
+    <Icon height={height} width={width} component={RunningSvg} {...props} />
+  );
+  const StepsIcon = (props) => (
+    <Icon height={height} width={width} component={StepsSvg} {...props} />
+  );
+  const WorkoutIcon = (props) => (
+    <Icon height={height} width={width} component={WorkoutSvg} {...props} />
+  );
+  const DrumStickIcon = (props) => (
+    <Icon height={height} width={width} component={DrumStickSvg} {...props} />
+  );
+  const GoalIcon = (props) => (
+    <Icon height={height} width={width} component={GoalSvg} {...props} />
+  );
+  const ProteinIcon = (props) => (
+    <Icon height={height} width={width} component={ProteinSvg} {...props} />
+  );
+  const FatIcon = (props) => (
+    <Icon height={height} width={width} component={FatSvg} {...props} />
+  );
+  const CarbIcon = (props) => (
+    <Icon height={height} width={width} component={CarbSvg} {...props} />
+  );
 
   return (
     <div {...props}>

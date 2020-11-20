@@ -7,6 +7,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import FoodDiary from "./components/FoodDiary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
+import EditDiaryEntry from "./components/EditDiaryEntry";
 import Workout from "./components/Workout";
 import Goals from "./components/Goals";
 import PrivateRoute from "./hocs/PrivateRoute";
@@ -41,6 +42,12 @@ function App() {
             exact
             path="/diary/new/:type"
             component={NewDiaryEntryView}
+            roles={["user", "admin"]}
+          />
+          <PrivateRoute
+            exact
+            path="/diary/edit"
+            component={EditDiaryEntryView}
             roles={["user", "admin"]}
           />
           <PrivateRoute
@@ -86,4 +93,6 @@ const GoalsView = () => (
 );
 
 const NewDiaryEntryView = () => <NewDiaryEntry></NewDiaryEntry>;
+const EditDiaryEntryView = () => <EditDiaryEntry></EditDiaryEntry>;
+
 export default App;

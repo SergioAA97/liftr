@@ -20,6 +20,8 @@ module.exports = {
               "@success-color": "#2ECC71",
               "@input-color": "#fff",
               "@primary-color": "#4A34D4",
+              "@btn-default-bg": "#FFF",
+              "@btn-danger-bg": "#E74C3C",
             },
             javascriptEnabled: true,
           },

@@ -19,7 +19,8 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import { AuthContext } from "../context/AuthContext";
-import DiaryService from "../service/DiaryService";
+import FoodDiaryService from "../service/FoodDiaryService";
+import CustomIcon from "./utils/CustomIcon";
 import { useHistory, useParams } from "react-router-dom";
 import UtilService from "../service/UtilService";
 
@@ -40,7 +41,7 @@ export default function NewDiaryEntry(props) {
   };
 
   const SearchFood = (searchText) => {
-    DiaryService.foodSearch({ query: searchText }).then((res) => {
+    FoodDiaryService.foodSearch({ query: searchText }).then((res) => {
       if (res.length === 0) setEmpty(true);
       else setEmpty(false);
       return setData(res);
@@ -60,13 +61,14 @@ export default function NewDiaryEntry(props) {
   };
 
   const goBack = () => {
-    history.push("/diary");
+    history.goBack();
   };
 
   return (
     <div>
       <Button
         style={{ margin: "2rem 2rem" }}
+        type="primary"
         shape="circle"
         icon={
           <ArrowLeftOutlined
@@ -127,7 +129,7 @@ const EntryForm = ({ food }) => {
         quantity,
       },
     };
-    DiaryService.postEntry(entry).then(history.push("/diary"));
+    FoodDiaryService.postEntry(entry).then(history.push("/diary"));
   };
 
   return (
@@ -181,20 +183,24 @@ const FoodResults = ({ data, onFoodClick }) => {
               bordered={false}
               key={key++}
               actions={[<PlusOutlined onClick={() => onFoodClick(item)} />]}
-              className="inv-font"
+              className="inv-font gradient-primary result-card"
             >
               <Row>
                 <Col span={16}>
                   <p style={{ marginBottom: "0.2rem" }}>
                     <b>{item.description}</b>
                   </p>
-                  <p>{item.brandOwner}</p>
-                </Col>
-                <Col span={8} style={{ textAlign: "right" }}>
                   <p style={{ marginBottom: "0.2rem" }}>
                     {energy} - {"kcal"}
                   </p>
                   <p>(100 - g)</p>
+                </Col>
+                <Col span={8} style={{ textAlign: "right" }}>
+                  <NutrientGraph
+                    carbs={item.carbohydrate}
+                    protein={item.protein}
+                    fat={item.fat}
+                  />
                 </Col>
               </Row>
             </Card>
@@ -211,7 +217,72 @@ const FoodSearch = ({ onSearch, onChange }) => {
       placeholder="Input food name"
       onChange={onChange}
       onSearch={onSearch}
-      className="inv-font"
+      className="inv-font gradient-primary rounded-corners"
     />
+  );
+};
+
+const NutrientGraph = ({ carbs = 0, protein = 0, fat = 0 }) => {
+  let sum = carbs + protein + fat;
+  const percentages = {
+    carbPer: +((carbs * 100) / sum).toFixed(2),
+    proPer: +((protein * 100) / sum).toFixed(2),
+    fatPer: +((fat * 100) / sum).toFixed(2),
+  };
+  const barContainerStyle = {
+    height: "3rem",
+  };
+  const barStyle = {
+    margin: "auto",
+    borderLeft: "6px solid white",
+    height: "3rem",
+    position: "absolute",
+    marginLeft: "-3px",
+  };
+  const colStyle = {
+    display: "flex",
+    flexDirection: "column-reverse",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "9px",
+  };
+  const carbBarStyle = {
+    ...barStyle,
+    height: +((2.7 * percentages.carbPer) / 100).toString() + "rem",
+  };
+  const protBarStyle = {
+    ...barStyle,
+    height: +((2.7 * percentages.proPer) / 100).toString() + "rem",
+  };
+  const fatBarStyle = {
+    ...barStyle,
+    height: +((2.7 * percentages.fatPer) / 100).toString() + "rem",
+  };
+
+  console.log(percentages);
+  return (
+    <Row justify="end">
+      <Col style={colStyle}>
+        {carbs.toFixed(0)} g
+        <div style={barContainerStyle}>
+          <div style={carbBarStyle}></div>
+        </div>
+        <CustomIcon block carbIcon inv height="2rem" width="2rem" />
+      </Col>
+      <Col style={colStyle}>
+        {fat.toFixed(0)} g
+        <div style={barContainerStyle}>
+          <div style={fatBarStyle}></div>
+        </div>
+        <CustomIcon block fatIcon inv height="2rem" width="2rem" />
+      </Col>
+      <Col style={colStyle}>
+        {protein.toFixed(0)} g
+        <div style={barContainerStyle}>
+          <div style={protBarStyle}></div>
+        </div>
+        <CustomIcon block proteinIcon inv height="2rem" width="2rem" />
+      </Col>
+    </Row>
   );
 };

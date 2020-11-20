@@ -54,7 +54,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color:rgb(72, 52, 212);
+  background-color: rgb(72, 52, 212);
+}
+.rounded-corners {
+  border-radius: 7px;
 }
 
 .rounded-corners-bottom {
@@ -65,7 +68,8 @@ body {
   border-radius: 7px 7px 0px 0px;
 }
 
-.gradient-primary {
+.gradient-primary,
+.gradient-primary ul {
   background: rgb(72, 52, 212);
   background: linear-gradient(
     90deg,
@@ -86,6 +90,53 @@ body {
 .inv-font h2,
 .inv-font h3,
 .inv-font h4,
-.inv-font h5 {
+.inv-font h5,
+.inv-font a,
+.inv-font li,
+.inv-font li a {
   color: white !important;
+}
+
+.li-hover li:hover {
+  background-color: #7361e4 !important;
+}
+
+.pointer-cursor {
+  cursor: pointer;
+}
+
+input {
+  background: rgb(72, 52, 212);
+  background: linear-gradient(
+    90deg,
+    rgba(72, 52, 212, 1) 0%,
+    rgba(36, 26, 106, 1) 100%
+  ) !important;
+  border-radius: 7px;
+  border-color: transparent !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+span,
+ul,
+li ::before {
+  border-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  outline-color: transparent !important;
+}
+
+.padding-bottom-0 {
+  padding-bottom: 0;
+}
+
+.result-card div {
+  padding-bottom: 0;
+}
+.result-card ul,
+.result-card ul > li {
+  margin-top: 0;
 }

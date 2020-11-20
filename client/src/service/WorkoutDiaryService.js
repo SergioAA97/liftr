@@ -1,4 +1,4 @@
-import DBService from './DBService'
+import DBService from "./DBService";
 
 export default {
   getToday: () => {
@@ -10,35 +10,31 @@ export default {
     });
   },
   getAll: (callback) => {
-    
     fetch("/diary/today", {
       method: "get",
-    }).then((res) => {
-      if (res.status !== 401) return res.json().then((data) => callback(data));
-      else return { message: { msgBody: "Unauthorized" }, msgError: true };
     })
-    .catch(function(error){
-      
-    })
-
-
+      .then((res) => {
+        if (res.status !== 401)
+          return res.json().then((data) => callback(data));
+        else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      })
+      .catch(function (error) {});
   },
   getEntry: (id, callback) => {
-    DBService.db({dbName: "foodDb",osName: "food"},(db) => {
-      let tr = db.transaction("food","readwrite");
+    DBService.db({ dbName: "foodDb", osName: "food" }, (db) => {
+      let tr = db.transaction("food", "readwrite");
       let osFood = tr.objectStore("food");
 
       let req = osFood.get(id);
 
-      req.onsuccess = function(){
+      req.onsuccess = function () {
         callback(req.result);
-      }
+      };
 
-      req.onerror = function(){
-        console.log("Error",req.error);
-      }
-
-    })
+      req.onerror = function () {
+        console.log("Error", req.error);
+      };
+    });
   },
   postEntry: (entry) => {
     return fetch("/diary/post", {
@@ -47,14 +43,13 @@ export default {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then((response) => {
-      if (response.status !== 401) {
-        return response.json().then((data) => data);
-      } else return { message: { msgBody: "Unauthorized" }, msgError: true };
     })
-    .catch(function(error){
-      
-    })
+      .then((response) => {
+        if (response.status !== 401) {
+          return response.json().then((data) => data);
+        } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      })
+      .catch(function (error) {});
   },
   foodSearch: (searchText) => {
     return fetch("/diary/searchFood", {
@@ -66,8 +61,8 @@ export default {
     }).then((res) => {
       if (res.status !== 401) {
         return res.json().then((data) => {
-          console.log(data)
-          return data
+          console.log(data);
+          return data;
         });
       } else return { message: { msgBody: "Unauthorized" }, msgError: true };
     });

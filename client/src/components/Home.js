@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import { Row, Col } from "antd";
+import { Menu, Dropdown } from "antd";
+// import { DownOutlined } from '@ant-design/icons';
 import CustomIcon from "./utils/CustomIcon";
 import { BlockCard } from "./utils/Layout-Components";
 import { Link } from "react-router-dom";
@@ -30,9 +31,9 @@ const QuickActions = (props) => {
       <Link to="/">
         <CustomIcon text="New Workout" workoutIcon inv></CustomIcon>
       </Link>
-      <Link to="/">
+      <Dropdown overlay={AddFoodOverlay} className="pointer-cursor">
         <CustomIcon text="Add Food" drumStickIcon inv></CustomIcon>
-      </Link>
+      </Dropdown>
       <Link to="/">
         <CustomIcon text="Add Goal" goalIcon inv></CustomIcon>
       </Link>
@@ -41,3 +42,20 @@ const QuickActions = (props) => {
 };
 
 const NewsFeed = () => {};
+
+const AddFoodOverlay = (
+  <Menu className="inv-font li-hover">
+    <Menu.Item>
+      <Link to="/diary/new/breakfast">Breakfast</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to="/diary/new/lunch">Lunch</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to="/diary/new/dinner">Dinner</Link>
+    </Menu.Item>
+    <Menu.Item>
+      <Link to="/diary/new/snack">Snack</Link>
+    </Menu.Item>
+  </Menu>
+);

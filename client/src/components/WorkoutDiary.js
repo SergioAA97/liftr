@@ -1,28 +1,21 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import FooDiaryService from "../service/FoodDiaryService.js";
+import WorkoutDiaryService from "../service/WorkoutDiaryService.js";
 import { Card, Divider, Button, Row, Col } from "antd";
-import { EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CustomIcon from "./utils/CustomIcon";
 import { BlockCard } from "./utils/Layout-Components";
 
-export default function FoodDiary() {
+export default function WorkoutDiary() {
   const authContext = useContext(AuthContext);
   const [entries, setEntries] = useState(null);
   const [stats, setStats] = useState({});
-  let history = useHistory();
-
-  const editEntry = ({ _id }) => {
-    history.push("/diary/edit/", { id: _id });
-  };
 
   useEffect(() => {
-    // DiaryService.postEntry(entry);
-    if (!entries) FooDiaryService.getToday().then((x) => setEntries(x.entries));
+    if (!entries)
+      WorkoutDiaryService.getToday().then((x) => setEntries(x.entries));
     if (entries && Object.keys(stats).length === 0) {
       let stat = {
         energyGoal: 2400,
@@ -39,15 +32,18 @@ export default function FoodDiary() {
         stat = {
           ...stat,
           energy: stat.energy + x.item.energy,
-          protein:
+          protein: (
             parseFloat(stat.protein) +
-            parseFloat(x.item.ref.protein * (x.item.quantity / 100)),
-          fat:
+            parseFloat(x.item.ref.protein * (x.item.quantity / 100))
+          ).toPrecision(2),
+          fat: (
             parseFloat(stat.fat) +
-            parseFloat(x.item.ref.fat * (x.item.quantity / 100)),
-          carbs:
+            parseFloat(x.item.ref.fat * (x.item.quantity / 100))
+          ).toPrecision(2),
+          carbs: (
             parseFloat(stat.carbs) +
-            parseFloat(x.item.ref.carbohydrate * (x.item.quantity / 100)),
+            parseFloat(x.item.ref.carbohydrate * (x.item.quantity / 100))
+          ).toPrecision(2),
         };
         console.log(x, stat);
       });
@@ -62,43 +58,38 @@ export default function FoodDiary() {
     <>
       <BlockCard title="Quick Stats">
         <CustomIcon
-          text={+(energyGoal - energy).toFixed(2)}
+          text={(energyGoal - energy).toPrecision(4)}
           subText="kcal left"
           block
           foodIcon
         ></CustomIcon>
         <CustomIcon
-          text={+protein.toFixed(2) + " g"}
+          text={protein + " g"}
           subText="protein"
           block
           proteinIcon
         ></CustomIcon>
         <CustomIcon
-          text={+carbs.toFixed(2) + " g"}
+          text={carbs + " g"}
           subText="carbs"
           block
           carbIcon
         ></CustomIcon>
-        <CustomIcon
-          text={+fat.toFixed(2) + " g"}
-          subText="fat"
-          block
-          fatIcon
-        ></CustomIcon>
+        <CustomIcon text={fat + " g"} subText="fat" block fatIcon></CustomIcon>
       </BlockCard>
 
       <Row justify="space-around">
         <SectionCol>
-          <DiarySection name="Breakfast" data={entries} editEntry={editEntry} />
+          <DiarySection name="Breakfast" data={entries} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Lunch" data={entries} editEntry={editEntry} />
+          <DiarySection name="Lunch" data={entries} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Dinner" data={entries} editEntry={editEntry} />
+          <DiarySection name="Dinner" data={entries} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Snacks" data={entries} editEntry={editEntry} />
+          <DiarySection name="Snacks" data={entries} />
         </SectionCol>
       </Row>
     </>
@@ -111,7 +102,7 @@ const SectionCol = ({ children }) => (
   </Col>
 );
 
-const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
+const DiarySection = ({ name = "Breakfast", data }) => {
   let key = 1;
   const containerStyle = {
     paddingTop: "1rem",
@@ -145,27 +136,21 @@ const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
             style={cardStyle}
             title={name}
             className="gradient-primary"
-            extra={+totalEnergy.toFixed(2) + " kcal"}
+            extra={totalEnergy + " kcal"}
           >
             {entries.map((x) => {
               let energy = x.item.ref.energy * (x.item.quantity / 100);
               energy = Number.isInteger(energy) ? energy : energy.toFixed(1);
               return (
-                <Row key={key++} align="middle">
+                <Row key={key++}>
                   <Col span={10}>
                     <b>{x.item.ref.description}</b>
                     <p>
                       {x.item.quantity} {"(g)"}
                     </p>
                   </Col>
-                  <Col span={6} offset={6} style={{ textAlign: "right" }}>
+                  <Col span={8} offset={6} style={{ textAlign: "right" }}>
                     {energy} - {"kcal"}
-                  </Col>
-                  <Col span={2} offset={0} style={{ textAlign: "center" }}>
-                    <EditOutlined
-                      style={{ fontSize: "1.25rem" }}
-                      onClick={() => editEntry(x)}
-                    />
                   </Col>
                 </Row>
               );
