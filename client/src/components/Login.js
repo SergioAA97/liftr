@@ -68,9 +68,10 @@ const LoginForm = ({ onFinish, error }) => {
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your Username!" }]}
+        className = "gradient-primary"
       >
         <Input
-          prefix={<UserOutlined className="site-form-item-icon" />}
+          prefix={<UserOutlined className="site-form-item-icon bk-primary" />}
           placeholder="Username"
           name="username"
         />
@@ -78,9 +79,10 @@ const LoginForm = ({ onFinish, error }) => {
       <Form.Item
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
+        className = "gradient-primary"
       >
         <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
+          prefix={<LockOutlined className="site-form-item-icon bk-primary" />}
           type="password"
           name="password"
           placeholder="Password"

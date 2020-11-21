@@ -17,7 +17,7 @@ export const BlockCard = ({ title, inv = false, children }) => {
   let span = Math.ceil(24 / children.length);
   let xsSpan = span;
   let mdSpan = span - 1;
-  let lgSpan = span - 4;
+  let lgSpan = span - 2;
 
   let key = 0;
 

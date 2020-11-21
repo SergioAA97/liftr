@@ -19,6 +19,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import { AuthContext } from "../context/AuthContext";
+import { DiaryContext } from "../context/DiaryContext";
 import FoodDiaryService from "../service/FoodDiaryService";
 import CustomIcon from "./utils/CustomIcon";
 import { useHistory, useParams } from "react-router-dom";
@@ -113,7 +114,7 @@ export default function NewDiaryEntry(props) {
 
 const EntryForm = ({ food }) => {
   let nutrients = UtilService.initializeNutrients(food);
-  console.log(nutrients);
+  const diaryContext = useContext(DiaryContext);
 
   let { type } = useParams();
   let history = useHistory();
@@ -129,7 +130,10 @@ const EntryForm = ({ food }) => {
         quantity,
       },
     };
-    FoodDiaryService.postEntry(entry).then(history.push("/diary"));
+    FoodDiaryService.postEntry(entry).then((x) => {
+      diaryContext.refreshEntries();
+      history.push("/diary")
+    });
   };
 
   return (
@@ -161,6 +165,7 @@ const EntryForm = ({ food }) => {
           type="primary"
           shape="round"
           htmlType="submit"
+          block
           icon={<CheckOutlined />}
         >
           Done

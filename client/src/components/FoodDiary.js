@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
+import {DiaryContext} from "../context/DiaryContext"
 import { AuthContext } from "../context/AuthContext";
-import FooDiaryService from "../service/FoodDiaryService.js";
 import { Card, Divider, Button, Row, Col } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -12,58 +12,31 @@ import { BlockCard } from "./utils/Layout-Components";
 
 export default function FoodDiary() {
   const authContext = useContext(AuthContext);
-  const [entries, setEntries] = useState(null);
-  const [stats, setStats] = useState({});
+  const diaryContext = useContext(DiaryContext);
+  
+  const {foodEntries, stats} = diaryContext;
+
   let history = useHistory();
 
   const editEntry = ({ _id }) => {
     history.push("/diary/edit/", { id: _id });
   };
 
-  useEffect(() => {
-    // DiaryService.postEntry(entry);
-    if (!entries) FooDiaryService.getToday().then((x) => setEntries(x.entries));
-    if (entries && Object.keys(stats).length === 0) {
-      let stat = {
-        energyGoal: 2400,
-        protein: 0,
-        proteinGoal: 180,
-        carbs: 0,
-        carbsGoal: 200,
-        fat: 0,
-        fatGoal: 75,
-        energy: 0,
-      };
-
-      entries.map((x) => {
-        stat = {
-          ...stat,
-          energy: stat.energy + x.item.energy,
-          protein:
-            parseFloat(stat.protein) +
-            parseFloat(x.item.ref.protein * (x.item.quantity / 100)),
-          fat:
-            parseFloat(stat.fat) +
-            parseFloat(x.item.ref.fat * (x.item.quantity / 100)),
-          carbs:
-            parseFloat(stat.carbs) +
-            parseFloat(x.item.ref.carbohydrate * (x.item.quantity / 100)),
-        };
-        console.log(x, stat);
-      });
-
-      setStats(stat);
-    }
-  }, [entries]);
-
+  
   let { energy = 0, protein = 0, fat = 0, carbs = 0, energyGoal = 0 } = stats;
 
   return (
     <>
       <BlockCard title="Quick Stats">
         <CustomIcon
-          text={+(energyGoal - energy).toFixed(2)}
-          subText="kcal left"
+          text={+(energyGoal - energy).toFixed(2) + " kcal"}
+          subText="left"
+          block
+          goalIcon
+        ></CustomIcon>
+        <CustomIcon
+          text={energy.toFixed(2) + " kcal"}
+          subText="consumed"
           block
           foodIcon
         ></CustomIcon>
@@ -89,16 +62,16 @@ export default function FoodDiary() {
 
       <Row justify="space-around">
         <SectionCol>
-          <DiarySection name="Breakfast" data={entries} editEntry={editEntry} />
+          <DiarySection name="Breakfast" data={foodEntries} editEntry={editEntry} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Lunch" data={entries} editEntry={editEntry} />
+          <DiarySection name="Lunch" data={foodEntries} editEntry={editEntry} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Dinner" data={entries} editEntry={editEntry} />
+          <DiarySection name="Dinner" data={foodEntries} editEntry={editEntry} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Snacks" data={entries} editEntry={editEntry} />
+          <DiarySection name="Snack" data={foodEntries} editEntry={editEntry} />
         </SectionCol>
       </Row>
     </>
@@ -128,9 +101,7 @@ const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
   if (data) {
     entries = data.filter((x) => x.type.toLowerCase() === name.toLowerCase());
     entries.forEach((e) => {
-      let energy = e.item.ref.energy * (e.item.quantity / 100);
-      e.item.energy = energy;
-      totalEnergy += energy;
+      totalEnergy += e.item.energy;
     });
   } else {
     entries = [];
@@ -163,7 +134,7 @@ const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
                   </Col>
                   <Col span={2} offset={0} style={{ textAlign: "center" }}>
                     <EditOutlined
-                      style={{ fontSize: "1.25rem" }}
+                      style={{ fontSize: "1rem", marginLeft: "0.2rem"}}
                       onClick={() => editEntry(x)}
                     />
                   </Col>

@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const { Footer } = Layout;
 
 export default function NavButton(props) {
-  const iconStyle = { color: "white", cursor: "pointer", fontSize: "18pt" };
+  const iconStyle = { color: "white", cursor: "pointer", height: "2rem" };
   const textStyle = { color: "white", fontWeight: 800 };
   return (
     <Footer
@@ -23,6 +23,8 @@ export default function NavButton(props) {
         width: "100%",
         textAlign: "center",
         color: "white",
+        height: "5rem",
+        padding: "0.5rem"
       }}
     >
       <Row justify="center">

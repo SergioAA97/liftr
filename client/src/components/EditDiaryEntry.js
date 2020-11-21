@@ -19,7 +19,7 @@ import {
   CheckOutlined,
   DeleteFilled,
 } from "@ant-design/icons";
-import { AuthContext } from "../context/AuthContext";
+import { DiaryContext } from "../context/DiaryContext";
 import FoodDiaryService from "../service/FoodDiaryService";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 import UtilService from "../service/UtilService";
@@ -57,7 +57,10 @@ export default function EditDiaryEntry(props) {
   });
 
   const deleteEntry = () => {
-    FoodDiaryService.deleteEntry(entry._id).then(history.push("/diary"));
+    FoodDiaryService.deleteEntry(entry._id).then(() => {
+
+      history.push("/diary")
+    });
   };
 
   const goBack = () => {
@@ -121,6 +124,7 @@ export default function EditDiaryEntry(props) {
 
 const EntryForm = ({ food, quantity, entry }) => {
   let nutrients = UtilService.initializeNutrients(food);
+  const diaryContext = useContext(DiaryContext);
   let history = useHistory();
   let initalValues = {
     quantity,
@@ -129,7 +133,10 @@ const EntryForm = ({ food, quantity, entry }) => {
   const onFinish = (data, entry) => {
     const { quantity } = data;
     entry.item.quantity = quantity;
-    FoodDiaryService.postEntry(entry).then(history.push("/diary"));
+    FoodDiaryService.postEntry(entry).then(() => {
+      diaryContext.refreshEntries();
+      history.push("/diary")
+    });
   };
 
   return (

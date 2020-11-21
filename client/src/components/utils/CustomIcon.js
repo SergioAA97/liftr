@@ -402,7 +402,7 @@ export default function CustomIcon({
       {carbIcon && <CarbIcon />}
       {(text || subText) && (
         <div style={{ textAlign: "center", marginTop: "-0.6rem" }}>
-          {text && <span style={textStyle}>{text} </span>}{" "}
+          {typeof text !== "undefined" && <span style={textStyle}>{text} </span>}{" "}
           {subText && <span style={subTextStyle}>{subText}</span>}
         </div>
       )}

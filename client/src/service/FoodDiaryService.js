@@ -1,5 +1,3 @@
-import DBService from "./DBService";
-
 export default {
   getToday: () => {
     return fetch("/diary/today", {
@@ -46,7 +44,7 @@ export default {
           return response.json().then((data) => data);
         } else return { message: { msgBody: "Unauthorized" }, msgError: true };
       })
-      .catch(function (error) {});
+      .catch(function (error) {console.log(error)});
   },
   deleteEntry: (id) => {
     return fetch("/diary/delete?id=" + id, {

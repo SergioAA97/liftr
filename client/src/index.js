@@ -2,12 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import AuthProvider from "./context/AuthContext";
+import DiaryProvider from "./context/DiaryContext";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
+      <DiaryProvider>
       <App />
+      </DiaryProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")

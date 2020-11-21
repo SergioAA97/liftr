@@ -26,14 +26,13 @@ diaryRouter.get("/today", (req, res) => {
           err: err,
         });
       else {
-        console.log(doc);
         res.status(200).json({ entries: doc.entries, authenticated: true });
       }
     });
 });
 
 diaryRouter.get("/entry", (req, res) => {
-  console.log(req.query.id);
+
   if (typeof req.query.id === "string") {
     if (req.query.id.length > 1) {
       User.findById({ _id: req.user._id })
@@ -52,7 +51,6 @@ diaryRouter.get("/entry", (req, res) => {
               err: err,
             });
           else {
-            console.log(doc);
             res.status(200).json({ entry: doc.entries, authenticated: true });
           }
         });
@@ -65,7 +63,7 @@ diaryRouter.get("/entry", (req, res) => {
 });
 
 diaryRouter.get("/delete", async (req, res) => {
-  console.log(req.query.id);
+
   if (typeof req.query.id === "string") {
     if (req.query.id.length > 1) {
       try {
@@ -75,7 +73,7 @@ diaryRouter.get("/delete", async (req, res) => {
           .status(200)
           .json({ msg: "Entry deleted succesfully", authenticated: true });
       } catch (error) {
-        console.log(error);
+
         res.status(500).json({
           msg: { msgBody: "error has occured", msgError: true },
           err: error,
@@ -91,7 +89,6 @@ diaryRouter.get("/delete", async (req, res) => {
 
 diaryRouter.post("/post", async (req, res) => {
   const { item, _id, quantity } = req.body;
-  console.log(item, quantity);
   if (_id) {
     try {
       let entry = await Diary.findById(_id);
@@ -125,6 +122,7 @@ diaryRouter.post("/post", async (req, res) => {
         },
       });
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         message: { msgBody: "Error has occured", msgError: true },
       });
