@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Space } from "antd";
 
 export const BlockCard = ({ title, inv = false, children }) => {
   let divStyle = {
@@ -9,14 +9,20 @@ export const BlockCard = ({ title, inv = false, children }) => {
     paddingBottom: "1.3rem",
   };
 
+  let colStyle = {
+    paddingTop: "1rem",
+    paddingBottom: "1rem",
+  };
+
   let divClass = "";
   if (inv) {
     divClass = divClass + "gradient-primary inv-font";
   }
 
   let span = Math.ceil(24 / children.length);
-  let xsSpan = span;
-  let mdSpan = span - 1;
+  let xsSpan = span + 4;
+  let smSpan = span;
+  let mdSpan = span;
   let lgSpan = span - 2;
 
   let key = 0;
@@ -29,7 +35,14 @@ export const BlockCard = ({ title, inv = false, children }) => {
       <Row justify="center" style={{ marginTop: "1rem" }}>
         {children &&
           children.map((child) => (
-            <Col key={key++} xs={xsSpan} md={mdSpan} lg={lgSpan}>
+            <Col
+              key={key++}
+              xs={xsSpan}
+              sm={smSpan}
+              md={mdSpan}
+              lg={lgSpan}
+              style={colStyle}
+            >
               {child}
             </Col>
           ))}

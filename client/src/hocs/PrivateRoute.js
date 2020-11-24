@@ -1,10 +1,16 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import DiaryProvider from "../context/DiaryContext";
 
-const PrivateRoute = ({ component: Component, roles, ...rest }) => {
+const PrivateRoute = ({
+  component: Component,
+  roles,
+  diaryContext = null,
+  ...rest
+}) => {
   const { isAuthenticated, user } = useContext(AuthContext);
-  
+
   return (
     <Route
       {...rest}
@@ -20,7 +26,16 @@ const PrivateRoute = ({ component: Component, roles, ...rest }) => {
           return (
             <Redirect to={{ pathname: "/", state: { from: props.location } }} />
           );
-        return <Component {...props} />;
+
+        if (diaryContext) {
+          return (
+            <DiaryProvider>
+              <Component {...props} />
+            </DiaryProvider>
+          );
+        } else {
+          return <Component {...props} />;
+        }
       }}
     />
   );

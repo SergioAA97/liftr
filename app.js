@@ -39,6 +39,13 @@ app.use(
   diaryRouter
 );
 
+const workoutRouter = require("./routes/Workout");
+app.use(
+  "/workout",
+  passport.authenticate("jwt", { session: false }),
+  workoutRouter
+);
+
 app.listen(PORT, () => {
   console.log(`Express server started on ${PORT}`);
 });

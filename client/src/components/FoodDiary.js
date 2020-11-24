@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import {DiaryContext} from "../context/DiaryContext"
+import { DiaryContext } from "../context/DiaryContext";
 import { AuthContext } from "../context/AuthContext";
-import { Card, Divider, Button, Row, Col } from "antd";
+import { Row, Col } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CustomIcon from "./utils/CustomIcon";
+import { DiarySection as Section } from "./utils/Diary-components";
 import { BlockCard } from "./utils/Layout-Components";
 
 export default function FoodDiary() {
   const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
-  
-  const {foodEntries, stats} = diaryContext;
+
+  const { foodEntries, foodStats } = diaryContext;
 
   let history = useHistory();
 
@@ -22,8 +20,13 @@ export default function FoodDiary() {
     history.push("/diary/edit/", { id: _id });
   };
 
-  
-  let { energy = 0, protein = 0, fat = 0, carbs = 0, energyGoal = 0 } = stats;
+  let {
+    energy = 0,
+    protein = 0,
+    fat = 0,
+    carbs = 0,
+    energyGoal = 0,
+  } = foodStats;
 
   return (
     <>
@@ -62,13 +65,21 @@ export default function FoodDiary() {
 
       <Row justify="space-around">
         <SectionCol>
-          <DiarySection name="Breakfast" data={foodEntries} editEntry={editEntry} />
+          <DiarySection
+            name="Breakfast"
+            data={foodEntries}
+            editEntry={editEntry}
+          />
         </SectionCol>
         <SectionCol>
           <DiarySection name="Lunch" data={foodEntries} editEntry={editEntry} />
         </SectionCol>
         <SectionCol>
-          <DiarySection name="Dinner" data={foodEntries} editEntry={editEntry} />
+          <DiarySection
+            name="Dinner"
+            data={foodEntries}
+            editEntry={editEntry}
+          />
         </SectionCol>
         <SectionCol>
           <DiarySection name="Snack" data={foodEntries} editEntry={editEntry} />
@@ -86,70 +97,44 @@ const SectionCol = ({ children }) => (
 
 const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
   let key = 1;
-  const containerStyle = {
-    paddingTop: "1rem",
-    paddingBottom: "1rem",
-  };
-
-  const cardStyle = {
-    borderRadius: "7px",
-  };
-
   let entries,
     totalEnergy = 0;
 
   if (data) {
-    entries = data.filter((x) => x.type.toLowerCase() === name.toLowerCase());
-    entries.forEach((e) => {
-      totalEnergy += e.item.energy;
-    });
+    console.log(data);
+    if (data.length !== 0) {
+      entries = data.filter((x) => x.type.toLowerCase() === name.toLowerCase());
+    }
   } else {
-    entries = [];
+    entries = null;
   }
 
   return (
-    <>
-      {
-        <div style={containerStyle} className="inv-font">
-          <Card
-            bordered={false}
-            style={cardStyle}
-            title={name}
-            className="gradient-primary"
-            extra={+totalEnergy.toFixed(2) + " kcal"}
-          >
-            {entries.map((x) => {
-              let energy = x.item.ref.energy * (x.item.quantity / 100);
-              energy = Number.isInteger(energy) ? energy : energy.toFixed(1);
-              return (
-                <Row key={key++} align="middle">
-                  <Col span={10}>
-                    <b>{x.item.ref.description}</b>
-                    <p>
-                      {x.item.quantity} {"(g)"}
-                    </p>
-                  </Col>
-                  <Col span={6} offset={6} style={{ textAlign: "right" }}>
-                    {energy} - {"kcal"}
-                  </Col>
-                  <Col span={2} offset={0} style={{ textAlign: "center" }}>
-                    <EditOutlined
-                      style={{ fontSize: "1rem", marginLeft: "0.2rem"}}
-                      onClick={() => editEntry(x)}
-                    />
-                  </Col>
-                </Row>
-              );
-            })}
-            <Divider plain>Add</Divider>
-            <div style={{ width: "100%", textAlign: "center" }}>
-              <Link to={"/diary/new/" + name.toLowerCase()}>
-                <FontAwesomeIcon icon={faPlus} style={{ color: "white" }} />
-              </Link>
-            </div>
-          </Card>
-        </div>
-      }
-    </>
+    <Section extra={+totalEnergy.toFixed(2) + " kcal"} path="diary" name={name}>
+      {entries &&
+        entries.map((x) => {
+          let energy = x.item.ref.energy * (x.item.quantity / 100);
+          energy = Number.isInteger(energy) ? energy : energy.toFixed(1);
+          return (
+            <Row key={key++} align="middle">
+              <Col span={10}>
+                <b>{x.item.ref.description}</b>
+                <p>
+                  {x.item.quantity} {"(g)"}
+                </p>
+              </Col>
+              <Col span={6} offset={6} style={{ textAlign: "right" }}>
+                {energy} - {"kcal"}
+              </Col>
+              <Col span={2} offset={0} style={{ textAlign: "center" }}>
+                <EditOutlined
+                  style={{ fontSize: "1rem", marginLeft: "0.2rem" }}
+                  onClick={() => editEntry(x)}
+                />
+              </Col>
+            </Row>
+          );
+        })}
+    </Section>
   );
 };

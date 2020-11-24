@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
+import DiaryProvider from "./context/DiaryContext";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import FoodDiary from "./components/FoodDiary";
+import WorkoutDiary from "./components/WorkoutDiary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
 import EditDiaryEntry from "./components/EditDiaryEntry";
 import Workout from "./components/Workout";
@@ -31,30 +33,49 @@ function App() {
             path="/"
             component={HomeView}
             roles={["user", "admin"]}
+            diaryContext
           />
           <PrivateRoute
             exact
             path="/diary"
             component={FoodDiaryView}
             roles={["user", "admin"]}
+            diaryContext
           />
           <PrivateRoute
             exact
             path="/diary/new/:type"
-            component={NewDiaryEntryView}
+            component={NewFoodDiaryEntryView}
             roles={["user", "admin"]}
+            diaryContext
           />
           <PrivateRoute
             exact
             path="/diary/edit"
-            component={EditDiaryEntryView}
+            component={EditFoodDiaryEntryView}
             roles={["user", "admin"]}
+            diaryContext
           />
           <PrivateRoute
             exact
             path="/workout"
             component={WorkoutView}
             roles={["user", "admin"]}
+            diaryContext
+          />
+          <PrivateRoute
+            exact
+            path="/workout/new/:type"
+            component={NewWorkoutDiaryEntryView}
+            roles={["user", "admin"]}
+            diaryContext
+          />
+          <PrivateRoute
+            exact
+            path="/workout/edit/"
+            component={EditWorkoutDiaryEntryView}
+            roles={["user", "admin"]}
+            diaryContext
           />
           <PrivateRoute
             exact
@@ -80,9 +101,11 @@ const FoodDiaryView = () => (
     <FoodDiary></FoodDiary>
   </Model>
 );
+const DiaryContext = () => <DiaryProvider></DiaryProvider>;
+
 const WorkoutView = () => (
   <Model>
-    <Workout></Workout>
+    <WorkoutDiary></WorkoutDiary>
   </Model>
 );
 
@@ -92,7 +115,18 @@ const GoalsView = () => (
   </Model>
 );
 
-const NewDiaryEntryView = () => <NewDiaryEntry></NewDiaryEntry>;
-const EditDiaryEntryView = () => <EditDiaryEntry></EditDiaryEntry>;
+const NewFoodDiaryEntryView = () => <NewDiaryEntry mode="food"></NewDiaryEntry>;
+
+const EditFoodDiaryEntryView = () => (
+  <EditDiaryEntry mode="food"></EditDiaryEntry>
+);
+
+const NewWorkoutDiaryEntryView = () => (
+  <NewDiaryEntry mode="exercise"></NewDiaryEntry>
+);
+
+const EditWorkoutDiaryEntryView = () => (
+  <EditDiaryEntry mode="exercise"></EditDiaryEntry>
+);
 
 export default App;

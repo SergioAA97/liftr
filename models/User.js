@@ -18,6 +18,8 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   entries: [{ type: mongoose.Schema.Types.ObjectId, ref: "Diary" }],
+  sessions: [{ type: mongoose.Schema.Types.ObjectId, ref: "WorkoutSession" }],
+  workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workout" }],
 });
 
 UserSchema.pre("save", function (next) {

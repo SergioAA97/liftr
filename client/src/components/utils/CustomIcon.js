@@ -14,6 +14,7 @@ export default function CustomIcon({
   proteinIcon = null,
   carbIcon = null,
   fatIcon = null,
+  heartIcon = null,
   block = false,
   textStyle = {},
   subTextStyle = {},
@@ -361,6 +362,41 @@ export default function CustomIcon({
     </svg>
   );
 
+  const HeartSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 48.506 44.931"
+    >
+      <defs>
+        <filter
+          id="Path_8"
+          x="0"
+          y="0"
+          width="48.506"
+          height="44.931"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood flood-opacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Path_8)">
+        <path
+          id="Path_8-2"
+          data-name="Path 8"
+          d="M22.4,30a7.222,7.222,0,0,0-4.511,1.559,10.275,10.275,0,0,0-2.639,3.174,10.274,10.274,0,0,0-2.639-3.174A7.222,7.222,0,0,0,8.1,30C3.484,30,0,33.778,0,38.789,0,44.2,4.346,47.906,10.925,53.513c1.117.952,2.384,2.031,3.7,3.182a.954.954,0,0,0,1.255,0c1.316-1.151,2.583-2.23,3.7-3.183,6.579-5.606,10.925-9.31,10.925-14.723C30.506,33.778,27.022,30,22.4,30Z"
+          transform="translate(9 -24)"
+          fill={inv ? "#FFF" : "#4834D4"}
+        />
+      </g>
+    </svg>
+  );
+
   const FoodIcon = (props) => (
     <Icon height={height} width={width} component={FoodSvg} {...props} />
   );
@@ -389,6 +425,8 @@ export default function CustomIcon({
     <Icon height={height} width={width} component={CarbSvg} {...props} />
   );
 
+  const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
+
   return (
     <div {...props}>
       {foodIcon && <FoodIcon />}
@@ -400,9 +438,12 @@ export default function CustomIcon({
       {proteinIcon && <ProteinIcon />}
       {fatIcon && <FatIcon />}
       {carbIcon && <CarbIcon />}
+      {heartIcon && <HeartIcon />}
       {(text || subText) && (
         <div style={{ textAlign: "center", marginTop: "-0.6rem" }}>
-          {typeof text !== "undefined" && <span style={textStyle}>{text} </span>}{" "}
+          {typeof text !== "undefined" && (
+            <span style={textStyle}>{text} </span>
+          )}{" "}
           {subText && <span style={subTextStyle}>{subText}</span>}
         </div>
       )}
