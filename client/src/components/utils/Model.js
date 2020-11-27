@@ -17,7 +17,7 @@ export default function Model({ children, ...props }) {
   );
 
   return (
-    <Layout style={{ height: "100%" }} className="white-bk">
+    <Layout style={{ height: "100%" }} className="bk-white">
       <Header
         className="header gradient-primary rounded-corners-bottom"
         style={{ padding: 0 }}
@@ -51,7 +51,7 @@ export default function Model({ children, ...props }) {
         </Row>
       </Header>
       <Layout>
-        <Layout className="white-bk">
+        <Layout className="bk-white">
           <Content
             style={{
               margin: 0,

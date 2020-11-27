@@ -8,6 +8,21 @@ export default ({ children }) => {
   const [foodStats, setFoodStats] = useState(null);
   const [exerEntries, setExerEntries] = useState([{}]);
   const [exerStats, setExerStats] = useState(null);
+  const [workoutProgram, setWorkoutProgram] = useState({ name: "Workout 1" });
+  const [availablePrograms, setAvailablePrograms] = useState([
+    {
+      name: "Workout 1",
+      tags: ["Weights", "Beginner"],
+      description: "This is an example workout",
+      exercises: [
+        { exercise: "Name", exerciseType: "Aerobic", majorMuscle: "Chest" },
+        { exercise: "Name2", exerciseType: "Aerobic", majorMuscle: "Chest" },
+        { exercise: "Name3", exerciseType: "Aerobic", majorMuscle: "Chest" },
+      ],
+    },
+    { name: "Workout 2" },
+    { name: "Workout 3" },
+  ]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const calculateItemEnergy = (entries) => {
@@ -88,6 +103,9 @@ export default ({ children }) => {
               setExerEntries,
               exerStats,
               setExerStats,
+              workoutProgram,
+              setWorkoutProgram,
+              availablePrograms,
             }}
           >
             {children}

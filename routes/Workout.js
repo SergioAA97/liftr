@@ -41,6 +41,38 @@ workoutRouter.get("/today", (req, res) => {
     });
 });
 
+workoutRouter.get("/previous", (req, res) => {
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+  User.findById({ _id: req.user._id })
+    .populate({
+      path: "sessions",
+      match: { timeStart: { $lt: end } },
+      mode: "WorkoutSession",
+      populate: [
+        {
+          path: "items",
+          model: "WorkoutEntry",
+        },
+        {
+          path: "workout",
+          model: "Workout",
+        },
+      ],
+    })
+    .exec((err, doc) => {
+      if (err)
+        res.status(500).json({
+          msg: { msgBody: "error has occured", msgError: true },
+          err: err,
+        });
+      else {
+        console.log(doc);
+        res.status(200).json({ sessions: doc.sessions, authenticated: true });
+      }
+    });
+});
+
 workoutRouter.get("/entry", (req, res) => {
   if (typeof req.query.id === "string") {
     if (req.query.id.length > 1) {

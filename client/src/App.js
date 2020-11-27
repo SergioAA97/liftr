@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
-import DiaryProvider from "./context/DiaryContext";
-
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
@@ -10,7 +8,6 @@ import FoodDiary from "./components/FoodDiary";
 import WorkoutDiary from "./components/WorkoutDiary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
 import EditDiaryEntry from "./components/EditDiaryEntry";
-import Workout from "./components/Workout";
 import Goals from "./components/Goals";
 import PrivateRoute from "./hocs/PrivateRoute";
 import UnPrivateRoute from "./hocs/UnPrivateRoute";
@@ -82,6 +79,7 @@ function App() {
             path="/goals"
             component={GoalsView}
             roles={["user", "admin"]}
+            diaryContext
           />
           <UnPrivateRoute exact path="/login" component={Login} />
           <UnPrivateRoute exact path="/register" component={Register} />
@@ -101,7 +99,6 @@ const FoodDiaryView = () => (
     <FoodDiary></FoodDiary>
   </Model>
 );
-const DiaryContext = () => <DiaryProvider></DiaryProvider>;
 
 const WorkoutView = () => (
   <Model>
