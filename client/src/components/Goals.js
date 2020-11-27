@@ -105,11 +105,24 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
     return 10 * mass + 6.25 * height - 5 * age + remainder;
   };
 
-  const finalTDEE = ({ mass, height, age, gender, actityLevel }) => {
-    console.log(calculateBMR({ mass, height, age, gender }));
+  const getObjectiveMultiplier = (goal) => {
+    switch (goal){
+      case "maintain":
+          return 1;
+      case "cut":
+        return 0.75;
+      case "gain":
+        return 1.1;
+      default:
+        return 1;
+    }
+  }
+
+  const finalTDEE = ({ mass, height, age, gender, activityLevel }) => {
     return (
-      calculateBMR({ mass, height, age, gender }) *
-      getActivityMultiplier(actityLevel)
+      (calculateBMR({ mass, height, age, gender }) *
+      getActivityMultiplier(activityLevel)) *
+      getObjectiveMultiplier(goal)
     );
   };
 
@@ -135,9 +148,9 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
   };
 
   const onSumbit = (values) => {
-    console.log({ ...values, gender, height, mass, activityLevel, age });
+    console.log({ gender, height, mass, activityLevel, age });
     console.log(
-      finalTDEE({ ...values, gender, height, mass, activityLevel, age })
+      finalTDEE({ gender, height, mass, activityLevel, age })
     );
   };
 

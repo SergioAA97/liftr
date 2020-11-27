@@ -98,4 +98,18 @@ userRouter.get(
   }
 );
 
+userRouter.post(
+  "/workoutPreferences",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.isAuthenticated()) {
+      const { _id, username, role } = req.user;
+      const token = signToken(_id);
+      res.cookie("access_token", token, { httpOnly: true, sameSite: true });
+      console.log(`User ${username} has logged in`);
+      res.status(200).json({ isAuthenticated: true, user: { username, role } });
+    }
+  }
+);
+
 module.exports = userRouter;

@@ -7,7 +7,6 @@ import { HeartFilled, PlayCircleOutlined } from "@ant-design/icons";
 import { EditOutlined } from "@ant-design/icons";
 import { DiarySection as Section } from "./utils/Diary-components";
 import { Typography } from "antd";
-1;
 import CustomIcon from "./utils/CustomIcon";
 
 const { Title } = Typography;
