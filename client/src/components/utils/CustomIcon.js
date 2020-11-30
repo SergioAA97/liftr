@@ -424,8 +424,8 @@ export default function CustomIcon({
   const CarbIcon = (props) => (
     <Icon height={height} width={width} component={CarbSvg} {...props} />
   );
-
   const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
+  
 
   return (
     <div {...props}>

@@ -4,10 +4,11 @@ const WorkoutSessionSchema = new mongoose.Schema({
   timeStart: {
     type: Date,
     required: true,
-    default: Date.now(),
   },
   timeEnd: {
     type: Date,
+    required: true,
+    default: Date.now(),
   },
   items: [
     {

@@ -162,6 +162,7 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
         ["goal"]: goal,
         ["mass"]: mass,
       }}
+      className="inv"
     >
       <Form.Item label="Goal" name="goal">
         <Select onChange={onGoalChange}>

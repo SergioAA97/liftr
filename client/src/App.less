@@ -31,8 +31,18 @@
   color: white;
 }
 
-.ant-form-item-label > label {
-  color: white;
+.ant-form.inv * > * > label{
+  color: white !important;
+}
+
+.ant-form-item .ant-mentions, .ant-form-item textarea.ant-input{
+  background: rgb(72, 52, 212);
+  background: linear-gradient(
+    90deg,
+    rgba(72, 52, 212, 1) 0%,
+    rgba(36, 26, 106, 1) 100%
+  ) !important;
+
 }
 
 .ant-select-item-option-disabled {
@@ -51,6 +61,10 @@
     rgba(36, 26, 106, 1) 100%
   ) !important;
 }
+
+.ant-switch-checked > span{
+  color: white;
+} 
 
 .ant-switch.inv {
   background: white !important;
@@ -74,12 +88,66 @@
   border-width: 2px;
 }
 
+.ant-select-arrow{
+  color: white;
+}
+
+.ant-tree-select-dropdown .ant-select-tree-list-holder-inner .ant-select-tree-treenode{
+  color: white;
+}
+
+.ant-select-tree .ant-select-tree-node-content-wrapper.ant-select-tree-node-selected{
+  background-color: #644eec !important;
+}
+
+.ant-select-tree .ant-select-tree-node-content-wrapper:hover{
+  background-color: #644eec !important;
+}
+
 .li-hover li:hover {
   background-color: #4f38e0 !important;
 }
 
+.ant-cascader-menu-item:hover{
+  background-color: #644eec !important;
+}
+
+.ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled), .ant-cascader-menu-item-active:not(.ant-cascader-menu-item-disabled):hover{
+  background-color: #644eec !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled){
+  background-color: #644eec !important;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+  color: white;
+}
+
+.ant-cascader-menu-item{
+  color:white;
+}
+
+.ant-cascader-menu-item > * > * > svg{
+  fill:white;
+}
+
+.ant-switch-inner{
+  color: rgb(72, 52, 212);
+}
+
 .pointer-cursor {
   cursor: pointer;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector{
+  background: rgb(72, 52, 212);
+  background: linear-gradient(
+    90deg,
+    rgba(72, 52, 212, 1) 0%,
+    rgba(36, 26, 106, 1) 100%
+  ) !important;
+  border-radius: 7px;
 }
 
 input {
@@ -112,4 +180,22 @@ li ::before {
 .result-card ul,
 .result-card ul > li {
   margin-top: 0;
+}
+
+
+.dynamic-delete-button {
+  margin: 0 8px;
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all 0.3s;
+}
+.dynamic-delete-button:hover {
+  color: #777;
+}
+.dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

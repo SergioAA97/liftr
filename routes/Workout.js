@@ -5,27 +5,17 @@ const WorkoutEntry = require("../models/WorkoutEntry");
 const workoutRouter = express.Router();
 const Exercise = require("../models/Exercise");
 const User = require("../models/User");
-const fetch = require("node-fetch");
 
-workoutRouter.get("/today", (req, res) => {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
+workoutRouter.get("/all", (req, res) => {
   User.findById({ _id: req.user._id })
     .populate({
-      path: "sessions",
-      match: { timeStart: { $gte: start, $lt: end } },
-      mode: "WorkoutSession",
+      path: "workouts",
+      model: "Workout",
       populate: [
         {
-          path: "items",
-          model: "WorkoutEntry",
-        },
-        {
-          path: "workout",
-          model: "Workout",
-        },
+          path: "exercises",
+          model: "Exercise",
+        }
       ],
     })
     .exec((err, doc) => {
@@ -36,7 +26,7 @@ workoutRouter.get("/today", (req, res) => {
         });
       else {
         console.log(doc);
-        res.status(200).json({ sessions: doc.sessions, authenticated: true });
+        res.status(200).json({ workouts: doc.workouts, authenticated: true });
       }
     });
 });
@@ -170,7 +160,7 @@ workoutRouter.post("/post/session", async (req, res) => {
 });
 
 workoutRouter.post("/post/workout", async (req, res) => {
-  const { _id, type, name, description, exercises, def } = req.body;
+  const { _id, type, name, description, idMap, def } = req.body;
   if (_id) {
     try {
       let entry = await Workout.findById(_id);
@@ -193,7 +183,10 @@ workoutRouter.post("/post/workout", async (req, res) => {
     }
   } else {
     try {
-      const entry = new Workout({ ...req.body });
+      const entry = new Workout({name, description, def, type});
+      idMap.forEach(e => {
+        entry.exercises.push(e);
+      });
       const ret = await entry.save();
       req.user.workouts.push(entry);
       const save = await req.user.save();
@@ -212,13 +205,13 @@ workoutRouter.post("/post/workout", async (req, res) => {
   }
 });
 
-workoutRouter.post("/searchFood", (req, res) => {
+workoutRouter.post("/searchExercise", (req, res) => {
   const { query, pageSize = 10 } = req.body;
-  const food = Food.aggregate(
+  const exercise = Exercise.aggregate(
     [
       {
         $match: {
-          description: { $regex: query, $options: "gi" },
+          exercise: { $regex: query, $options: "gi" },
         },
       },
       {
@@ -245,7 +238,7 @@ workoutRouter.post("/searchFood", (req, res) => {
         console.log(err);
         res.status(500).json({
           message: {
-            msgBody: "Error has ocurred finding food",
+            msgBody: "Error has ocurred finding exercise",
             msgError: true,
           },
         });
@@ -255,4 +248,20 @@ workoutRouter.post("/searchFood", (req, res) => {
     }
   );
 });
+
+workoutRouter.get("/exercises", async (req, res) => {
+  try {
+    const doc = await Exercise.find({})
+    res.send(doc)
+  } catch(error){
+    console.log(error);
+    res.status(500).json({
+      message: {
+        msgBody: "Error has ocurred getting exercises",
+        msgError: true,
+      },
+    });
+  }   
+});
+
 module.exports = workoutRouter;

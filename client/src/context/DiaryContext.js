@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import FoodDiaryService from "../service/FoodDiaryService.js";
+import WorkoutDiaryService from "../service/WorkoutDiaryService.js";
 
 export const DiaryContext = createContext();
 
@@ -31,8 +32,8 @@ export default ({ children }) => {
     );
   };
 
-  const fetchEntries = () => {
-    FoodDiaryService.getToday().then((data) => {
+  const fetchFoodEntries = () => {
+    return FoodDiaryService.getToday().then((data) => {
       let foodEntries = data.entries;
       console.log(data);
       if (foodEntries) {
@@ -69,21 +70,34 @@ export default ({ children }) => {
 
         setFoodStats(statObj);
         setFoodEntries(foodEntries);
-        setIsLoaded(true);
       } else {
         setFoodStats({});
         setFoodEntries([]);
-        setIsLoaded(true);
       }
     });
   };
 
-  const refreshEntries = () => {
-    fetchEntries();
+  const fetchWorkouts = () => {
+    return WorkoutDiaryService.getAll().then((data) => {
+      console.log(data);
+    });
   };
 
+  const refreshEntries = () => {
+    fetchAll();
+  };
+
+  const fetchAll = () => {
+    fetchWorkouts().then(val =>{
+      return fetchFoodEntries();
+    }).then(val => {
+      setIsLoaded(true);
+    })
+  }
+
   useEffect(() => {
-    fetchEntries();
+    fetchAll();
+
   }, []);
 
   if (foodEntries && isLoaded) {

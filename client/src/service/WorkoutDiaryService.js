@@ -1,5 +1,3 @@
-import DBService from "./DBService";
-
 export default {
   getToday: () => {
     return fetch("/diary/today", {
@@ -9,32 +7,16 @@ export default {
       else return { message: { msgBody: "Unauthorized" }, msgError: true };
     });
   },
-  getAll: (callback) => {
-    fetch("/diary/today", {
+  getAll: () => {
+    return fetch("/workout/all", {
       method: "get",
     })
       .then((res) => {
         if (res.status !== 401)
-          return res.json().then((data) => callback(data));
+          return res.json().then((data) => data);
         else return { message: { msgBody: "Unauthorized" }, msgError: true };
       })
       .catch(function (error) {});
-  },
-  getEntry: (id, callback) => {
-    DBService.db({ dbName: "foodDb", osName: "food" }, (db) => {
-      let tr = db.transaction("food", "readwrite");
-      let osFood = tr.objectStore("food");
-
-      let req = osFood.get(id);
-
-      req.onsuccess = function () {
-        callback(req.result);
-      };
-
-      req.onerror = function () {
-        console.log("Error", req.error);
-      };
-    });
   },
   postEntry: (entry) => {
     return fetch("/diary/post", {
@@ -51,8 +33,23 @@ export default {
       })
       .catch(function (error) {});
   },
-  foodSearch: (searchText) => {
-    return fetch("/diary/searchFood", {
+  postWorkout: (workout) => {
+    return fetch("/workout/post/workout", {
+      method: "post",
+      body: JSON.stringify({...workout, def: false}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status !== 401) {
+          return response.json().then((data) => data);
+        } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      })
+      .catch(function (error) {});
+  },
+  exerciseSearch: (searchText) => {
+    return fetch("/workout/searchExercise", {
       method: "post",
       body: JSON.stringify(searchText),
       headers: {
@@ -61,10 +58,37 @@ export default {
     }).then((res) => {
       if (res.status !== 401) {
         return res.json().then((data) => {
-          console.log(data);
           return data;
         });
       } else return { message: { msgBody: "Unauthorized" }, msgError: true };
     });
   },
+  getMuscleGroups: () =>{
+    return fetch("/workout/exerciseMuscles", {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status !== 401) {
+        return res.json().then((data) => {
+          return data;
+        });
+      } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+    });
+  },
+  getExercises: () =>{
+    return fetch("/workout/exercises", {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status !== 401) {
+        return res.json().then((data) => {
+          return data;
+        });
+      } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+    });
+  }
 };

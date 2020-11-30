@@ -20,6 +20,10 @@ const WorkoutSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  }
 });
 
 module.exports = mongoose.model("Workout", WorkoutSchema);
