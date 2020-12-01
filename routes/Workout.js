@@ -8,16 +8,26 @@ const User = require("../models/User");
 
 workoutRouter.get("/all", (req, res) => {
   User.findById({ _id: req.user._id })
-    .populate({
-      path: "workouts",
-      model: "Workout",
-      populate: [
-        {
-          path: "exercises",
-          model: "Exercise",
-        }
-      ],
-    })
+    .populate([
+      {
+        path: "workouts",
+        model: "Workout",
+        populate: [
+          {
+            path: "exercises",
+            model: "Exercise",
+          },
+        ],
+      },
+      {
+        path: "sessions",
+        model: "WorkoutSession",
+        populate: {
+          path: "workout",
+          model: "Workout",
+        },
+      },
+    ])
     .exec((err, doc) => {
       if (err)
         res.status(500).json({
@@ -26,7 +36,13 @@ workoutRouter.get("/all", (req, res) => {
         });
       else {
         console.log(doc);
-        res.status(200).json({ workouts: doc.workouts, authenticated: true });
+        res
+          .status(200)
+          .json({
+            sessions: doc.sessions,
+            workouts: doc.workouts,
+            authenticated: true,
+          });
       }
     });
 });
@@ -183,8 +199,8 @@ workoutRouter.post("/post/workout", async (req, res) => {
     }
   } else {
     try {
-      const entry = new Workout({name, description, def, type});
-      idMap.forEach(e => {
+      const entry = new Workout({ name, description, def, type });
+      idMap.forEach((e) => {
         entry.exercises.push(e);
       });
       const ret = await entry.save();
@@ -251,9 +267,9 @@ workoutRouter.post("/searchExercise", (req, res) => {
 
 workoutRouter.get("/exercises", async (req, res) => {
   try {
-    const doc = await Exercise.find({})
-    res.send(doc)
-  } catch(error){
+    const doc = await Exercise.find({});
+    res.send(doc);
+  } catch (error) {
     console.log(error);
     res.status(500).json({
       message: {
@@ -261,7 +277,7 @@ workoutRouter.get("/exercises", async (req, res) => {
         msgError: true,
       },
     });
-  }   
+  }
 });
 
 module.exports = workoutRouter;

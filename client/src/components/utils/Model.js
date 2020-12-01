@@ -11,13 +11,19 @@ import { UserOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 
-export default function Model({ children, ...props }) {
+export default function Model({ children, gradient = false, ...props }) {
   const { isAuthenticated, user, setIsAuthenticated, setUser } = useContext(
     AuthContext
   );
 
+  let classNames = "bk-white";
+
+  if (gradient) {
+    classNames = "gradient-primary";
+  }
+
   return (
-    <Layout style={{ height: "100%" }} className="bk-white">
+    <Layout style={{ height: "100vh" }} className={classNames}>
       <Header
         className="header gradient-primary rounded-corners-bottom"
         style={{ padding: 0 }}
@@ -51,7 +57,7 @@ export default function Model({ children, ...props }) {
         </Row>
       </Header>
       <Layout>
-        <Layout className="bk-white">
+        <Layout className={classNames}>
           <Content
             style={{
               margin: 0,

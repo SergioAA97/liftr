@@ -9,6 +9,7 @@ import WorkoutDiary from "./components/WorkoutDiary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
 import EditDiaryEntry from "./components/EditDiaryEntry";
 import Goals from "./components/Goals";
+import WorkoutSession from "./components/WorkoutSession";
 import PrivateRoute from "./hocs/PrivateRoute";
 import UnPrivateRoute from "./hocs/UnPrivateRoute";
 import Model from "./components/utils/Model";
@@ -22,70 +23,75 @@ function App() {
   );
 
   return (
-    <div className="bk-solid">
-      <Router>
-        <Switch>
-          <PrivateRoute
-            exact
-            path="/"
-            component={HomeView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/diary"
-            component={FoodDiaryView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/diary/new/:type"
-            component={NewFoodDiaryEntryView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/diary/edit"
-            component={EditFoodDiaryEntryView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/workout"
-            component={WorkoutView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/workout/new/:type"
-            component={NewWorkoutDiaryEntryView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/workout/edit/"
-            component={EditWorkoutDiaryEntryView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <PrivateRoute
-            exact
-            path="/goals"
-            component={GoalsView}
-            roles={["user", "admin"]}
-            diaryContext
-          />
-          <UnPrivateRoute exact path="/login" component={Login} />
-          <UnPrivateRoute exact path="/register" component={Register} />
-        </Switch>
-      </Router>
-    </div>
+    <Router>
+      <Switch>
+        <PrivateRoute
+          exact
+          path="/"
+          component={HomeView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/diary"
+          component={FoodDiaryView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/diary/new/:type"
+          component={NewFoodDiaryEntryView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/diary/edit"
+          component={EditFoodDiaryEntryView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/workout"
+          component={WorkoutView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/workout/new/:type"
+          component={NewWorkoutDiaryEntryView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/workout/edit/"
+          component={EditWorkoutDiaryEntryView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/goals"
+          component={GoalsView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <PrivateRoute
+          exact
+          path="/workout/session/"
+          component={WorkoutSessionView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
+        <UnPrivateRoute exact path="/login" component={Login} />
+        <UnPrivateRoute exact path="/register" component={Register} />
+      </Switch>
+    </Router>
   );
 }
 
@@ -109,6 +115,12 @@ const WorkoutView = () => (
 const GoalsView = () => (
   <Model>
     <Goals></Goals>
+  </Model>
+);
+
+const WorkoutSessionView = () => (
+  <Model gradient>
+    <WorkoutSession></WorkoutSession>
   </Model>
 );
 

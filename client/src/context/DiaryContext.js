@@ -10,20 +10,8 @@ export default ({ children }) => {
   const [exerEntries, setExerEntries] = useState([{}]);
   const [exerStats, setExerStats] = useState(null);
   const [workoutProgram, setWorkoutProgram] = useState({ name: "Workout 1" });
-  const [availablePrograms, setAvailablePrograms] = useState([
-    {
-      name: "Workout 1",
-      tags: ["Weights", "Beginner"],
-      description: "This is an example workout",
-      exercises: [
-        { exercise: "Name", exerciseType: "Aerobic", majorMuscle: "Chest" },
-        { exercise: "Name2", exerciseType: "Aerobic", majorMuscle: "Chest" },
-        { exercise: "Name3", exerciseType: "Aerobic", majorMuscle: "Chest" },
-      ],
-    },
-    { name: "Workout 2" },
-    { name: "Workout 3" },
-  ]);
+  const [availableWorkouts, setAvailableWorkouts] = useState();
+  const [previousSessions, setPreviousSessions] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
 
   const calculateItemEnergy = (entries) => {
@@ -35,7 +23,7 @@ export default ({ children }) => {
   const fetchFoodEntries = () => {
     return FoodDiaryService.getToday().then((data) => {
       let foodEntries = data.entries;
-      console.log(data);
+      // console.log(data);
       if (foodEntries) {
         calculateItemEnergy(foodEntries);
         var statObj = {
@@ -80,6 +68,8 @@ export default ({ children }) => {
   const fetchWorkouts = () => {
     return WorkoutDiaryService.getAll().then((data) => {
       console.log(data);
+      setAvailableWorkouts(data.workouts);
+      setPreviousSessions(data.sessions);
     });
   };
 
@@ -88,16 +78,17 @@ export default ({ children }) => {
   };
 
   const fetchAll = () => {
-    fetchWorkouts().then(val =>{
-      return fetchFoodEntries();
-    }).then(val => {
-      setIsLoaded(true);
-    })
-  }
+    fetchWorkouts()
+      .then((val) => {
+        return fetchFoodEntries();
+      })
+      .then((val) => {
+        setIsLoaded(true);
+      });
+  };
 
   useEffect(() => {
     fetchAll();
-
   }, []);
 
   if (foodEntries && isLoaded) {
@@ -119,7 +110,10 @@ export default ({ children }) => {
               setExerStats,
               workoutProgram,
               setWorkoutProgram,
-              availablePrograms,
+              availableWorkouts,
+              setAvailableWorkouts,
+              previousSessions,
+              setPreviousSessions,
             }}
           >
             {children}
