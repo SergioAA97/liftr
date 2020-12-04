@@ -14,7 +14,7 @@ workoutRouter.get("/all", (req, res) => {
         model: "Workout",
         populate: [
           {
-            path: "exercises",
+            path: "exercises.ref",
             model: "Exercise",
           },
         ],
@@ -36,13 +36,11 @@ workoutRouter.get("/all", (req, res) => {
         });
       else {
         console.log(doc);
-        res
-          .status(200)
-          .json({
-            sessions: doc.sessions,
-            workouts: doc.workouts,
-            authenticated: true,
-          });
+        res.status(200).json({
+          sessions: doc.sessions,
+          workouts: doc.workouts,
+          authenticated: true,
+        });
       }
     });
 });

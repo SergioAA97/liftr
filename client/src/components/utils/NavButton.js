@@ -15,7 +15,7 @@ export default function NavButton(props) {
   const textStyle = { color: "white", fontWeight: 800 };
   return (
     <Footer
-      className="gradient-primary rounded-corners-top"
+      className="gradient-primary"
       style={{
         position: "fixed",
         left: 0,
@@ -24,7 +24,7 @@ export default function NavButton(props) {
         textAlign: "center",
         color: "white",
         height: "5rem",
-        padding: "1rem"
+        padding: "1rem",
       }}
     >
       <Row justify="center">

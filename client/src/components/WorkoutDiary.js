@@ -118,7 +118,9 @@ export default function WorkoutDiary() {
           New Workout
         </Title>
         <Row justify="space-around">
-          <NewWorkoutForm />
+          <Col span={24}>
+            <NewWorkoutForm />
+          </Col>
         </Row>
       </div>
     </>

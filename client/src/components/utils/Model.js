@@ -23,11 +23,19 @@ export default function Model({ children, gradient = false, ...props }) {
   }
 
   return (
-    <Layout style={{ height: "100vh" }} className={classNames}>
-      <Header
-        className="header gradient-primary rounded-corners-bottom"
-        style={{ padding: 0 }}
-      >
+    <Layout style={{ minHeight: "100vh", position: "relative" }}>
+      <div
+        className={classNames}
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          zIndex: "-100",
+        }}
+      ></div>
+      <Header className="header gradient-primary " style={{ padding: 0 }}>
         <Row>
           <Col xs={8} sm={5} md={6} lg={8} xl={2}>
             <Dropdown

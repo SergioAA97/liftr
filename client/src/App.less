@@ -144,6 +144,29 @@
   color: rgb(72, 52, 212);
 }
 
+.ant-modal {
+  color: white;
+}
+
+.ant-modal-title {
+  color: white;
+}
+
+.ant-modal-content,
+.ant-modal-header {
+  background: rgb(72, 52, 212);
+  background: linear-gradient(
+    90deg,
+    rgba(72, 52, 212, 1) 0%,
+    rgba(36, 26, 106, 1) 100%
+  ) !important;
+}
+
+.ant-modal-close-x {
+  color: white;
+  fill: white;
+}
+
 .pointer-cursor {
   cursor: pointer;
 }
@@ -158,13 +181,22 @@
   border-radius: 7px;
 }
 
-input {
+.ant-input {
   background: rgb(72, 52, 212);
   background: linear-gradient(
     90deg,
     rgba(72, 52, 212, 1) 0%,
     rgba(36, 26, 106, 1) 100%
   ) !important;
+  border-radius: 7px;
+  border-color: transparent !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.ant-input.transparent {
+  background: rgba(0, 0, 0, 0);
+  background-image: none !important;
   border-radius: 7px;
   border-color: transparent !important;
   padding-top: 0.25rem !important;
