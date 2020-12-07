@@ -1,12 +1,4 @@
 export default {
-  getToday: () => {
-    return fetch("/diary/today", {
-      method: "get",
-    }).then((res) => {
-      if (res.status !== 401) return res.json().then((data) => data);
-      else return { message: { msgBody: "Unauthorized" }, msgError: true };
-    });
-  },
   getAll: () => {
     return fetch("/workout/all", {
       method: "get",
@@ -18,10 +10,9 @@ export default {
       })
       .catch(function (error) {});
   },
-  postEntry: (entry) => {
-    return fetch("/diary/post", {
-      method: "post",
-      body: JSON.stringify(entry),
+  getWorkout: (id) => {
+    return fetch("/workout/getWorkout?id="+id, {
+      method: "get",
       headers: {
         "Content-Type": "application/json",
       },
@@ -37,6 +28,21 @@ export default {
     return fetch("/workout/post/workout", {
       method: "post",
       body: JSON.stringify({...workout, def: false}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status !== 401) {
+          return response.json().then((data) => data);
+        } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      })
+      .catch(function (error) {});
+  },
+  postSession: (session) => {
+    return fetch("/workout/post/session", {
+      method: "post",
+      body: JSON.stringify({...session}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -90,5 +96,16 @@ export default {
         });
       } else return { message: { msgBody: "Unauthorized" }, msgError: true };
     });
-  }
+  },
+  deleteWorkout: (id) => {
+    return fetch("/workout/delete?id=" + id, {
+      method: "get",
+    })
+      .then((response) => {
+        if (response.status !== 401) {
+          return response.json().then((data) => data);
+        } else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      })
+      .catch(function (error) {});
+  },
 };

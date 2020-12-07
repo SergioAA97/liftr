@@ -10,7 +10,6 @@ const { TextArea } = Input;
 export default function NewWorkoutForm() {
   const [options, setOptions] = useState(null);
   const [type, setType] = useState("Aerobic");
-  const [reps, onRepsChange] = useState(0);
   const history = useHistory();
 
   const onFinish = (values) => {
@@ -25,7 +24,13 @@ export default function NewWorkoutForm() {
       }
       return false;
     });
-    const idMap = exerciseData.map((x) => x.id);
+    let idMap;
+    if (type !== "Anaerobic") {
+      idMap = exerciseData.map((x) => ({ ref: x.id }));
+    } else {
+      idMap = exerciseData.map((x, idx) => ({ ref: x.id, sets: (exercises[idx].sets) ? parseInt(exercises[idx].sets) : 1 }));
+    }
+    console.log(idMap)
     WorkoutDiaryService.postWorkout({ name, description, idMap, type }).then(
       (val) => {
         console.log("New workout created:", val);
@@ -96,7 +101,7 @@ export default function NewWorkoutForm() {
                     fieldKey={[field.fieldKey, "exercise"]}
                     label={"Exercise " + (index + 1).toString()}
                     style={{ flexGrow: 2 }}
-                    // rules={[{ required: true, message: 'Missing first name' }]}
+                  // rules={[{ required: true, message: 'Missing first name' }]}
                   >
                     <AutoComplete
                       options={options.filter((o) => o.type === type)}
@@ -111,20 +116,21 @@ export default function NewWorkoutForm() {
                     />
                   </Form.Item>
                   {type === "Anaerobic" && (
-                    <Form.Item
-                      {...field}
-                      name={[field.name, "reps"]}
-                      fieldKey={[field.fieldKey, "exercise"]}
-                      label={"Reps"}
-                      style={{ flexGrow: 1, maxWidth: "20%" }}
+                    <>
+                      <Form.Item
+                        {...field}
+                        name={[field.name, "sets"]}
+                        fieldKey={[field.fieldKey, "sets"]}
+                        label={"Sets"}
+                        style={{ flexGrow: 1, maxWidth: "20%", padding: "0rem 0.25rem" }}
                       // rules={[{ required: true, message: 'Missing first name' }]}
-                    >
-                      <Input
-                        className="inv-font rounded-corners"
-                        defaultValue={1}
-                        onChange={onRepsChange}
-                      />
-                    </Form.Item>
+                      >
+                        <Input
+                          className="inv-font rounded-corners"
+                          defaultValue={1}
+                        />
+                      </Form.Item>
+                    </>
                   )}
 
                   <MinusCircleOutlined onClick={() => remove(field.name)} />
@@ -145,9 +151,11 @@ export default function NewWorkoutForm() {
         }}
       </Form.List>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
+        <div className="text-center">
+          <Button type="primary" htmlType="submit">
+            Create
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   );

@@ -62,20 +62,6 @@ function App() {
         />
         <PrivateRoute
           exact
-          path="/workout/new/:type"
-          component={NewWorkoutDiaryEntryView}
-          roles={["user", "admin"]}
-          diaryContext
-        />
-        <PrivateRoute
-          exact
-          path="/workout/edit/"
-          component={EditWorkoutDiaryEntryView}
-          roles={["user", "admin"]}
-          diaryContext
-        />
-        <PrivateRoute
-          exact
           path="/goals"
           component={GoalsView}
           roles={["user", "admin"]}

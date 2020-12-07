@@ -3,4 +3,4 @@
 - Formulario de registro inicial mejorado
 - Mejorar busqueda alimentos
 - Añadir más ejercicios
-
+- Workouts que son def tienen que estar disponibles para todos los usuarios

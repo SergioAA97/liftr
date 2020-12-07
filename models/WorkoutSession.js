@@ -10,12 +10,16 @@ const WorkoutSessionSchema = new mongoose.Schema({
     required: true,
     default: Date.now(),
   },
-  items: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "WorkoutEntry",
-    },
-  ],
+  items: [{
+      duration: Number,
+      repetitions: Number,
+      weight: Number,
+      exercise: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Exercise",
+        required: true,
+      },
+  }],
   workout: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Workout",

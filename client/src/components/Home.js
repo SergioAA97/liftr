@@ -28,7 +28,7 @@ const QuickActions = (props) => {
   const textStyle = { color: "white", fontWeight: 800, fontSize: "" };
   return (
     <BlockCard title="Quick Actions" inv>
-      <Link to="/">
+      <Link to="/workout">
         <CustomIcon text="New Workout" workoutIcon inv></CustomIcon>
       </Link>
       <Dropdown overlay={AddFoodOverlay} className="pointer-cursor">
