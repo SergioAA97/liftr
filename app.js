@@ -46,6 +46,9 @@ app.use(
   workoutRouter
 );
 
+const goalRouter = require("./routes/Goal");
+app.use("/goal", passport.authenticate("jwt", { session: false }), goalRouter);
+
 app.listen(PORT, () => {
   console.log(`Express server started on ${PORT}`);
 });

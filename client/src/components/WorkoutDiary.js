@@ -2,10 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
 import { AuthContext } from "../context/AuthContext";
-import { List, Space, Row, Col, Divider } from "antd";
+import {
+  List,
+  Space,
+  Row,
+  Col,
+  Divider,
+  Modal,
+  Button,
+  Descriptions,
+} from "antd";
 import NewWorkoutForm from "./NewWorkoutForm";
 import EditWorkoutForm from "./EditWorkoutForm";
-import { FullscreenOutlined, PlayCircleOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  FullscreenOutlined,
+  PlayCircleOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
 import { EditOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
 import CustomIcon from "./utils/CustomIcon";
@@ -31,6 +46,7 @@ export default function WorkoutDiary() {
 
   const [newWorkoutVisible, setNewWorkoutVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const containerStyle = {
     padding: "2rem",
@@ -41,7 +57,7 @@ export default function WorkoutDiary() {
   let history = useHistory();
 
   const editEntry = (workout) => {
-    console.log(workout)
+    console.log(workout);
     if (selectedWorkout) {
       if (selectedWorkout._id === workout._id) {
         setSelectedWorkout(null);
@@ -51,15 +67,18 @@ export default function WorkoutDiary() {
     } else {
       setSelectedWorkout(workout);
     }
-
   };
 
   const deleteEntry = (workout) => {
-    WorkoutDiaryService.deleteWorkout(workout._id).then(x => history.go(0));
+    WorkoutDiaryService.deleteWorkout(workout._id).then((x) => history.go(0));
   };
 
   const onClickPlay = (workout) => {
     history.push("/workout/session", { ...workout });
+  };
+
+  const showModal = () => {
+    setModalVisible(true);
   };
 
   return (
@@ -75,28 +94,41 @@ export default function WorkoutDiary() {
             let deleteButton = () => <></>;
             if (selectedWorkout) {
               if (selectedWorkout._id === item._id) {
-                deleteButton = () => <DeleteOutlined
-                  style={{ fontSize: "15pt", marginRight: "2rem" }}
-                  onClick={() => deleteEntry(item)}
-                />
+                deleteButton = () => (
+                  <DeleteOutlined
+                    style={{ fontSize: "15pt", marginRight: "2rem" }}
+                    onClick={() => deleteEntry(item)}
+                  />
+                );
               }
             }
             let avatar = () => <> </>;
-            if(item.type){
-              avatar = () => item.type === "Aerobic"
-              ? React.createElement(CardioAvatar)
-              : React.createElement(WeightAvatar)
+            if (item.type) {
+              avatar = () =>
+                item.type === "Aerobic"
+                  ? React.createElement(CardioAvatar)
+                  : React.createElement(WeightAvatar);
             }
             return (
               <List.Item>
                 <List.Item.Meta
-                  avatar={
-                    avatar()
+                  avatar={avatar()}
+                  title={
+                    <>
+                      {item.def && (
+                        <span>
+                          <HeartOutlined /> -
+                        </span>
+                      )}
+                      {" " + item.name}
+                    </>
                   }
-                  title={<a href="">{item.name}</a>}
                   description={
                     <Row justify="space-between">
-                      <Col>{item.description}</Col>
+                      <Col>
+                        <p>{item.description}</p>
+                        <p></p>
+                      </Col>
                       <Col>
                         {deleteButton()}
                         <EditOutlined
@@ -112,41 +144,44 @@ export default function WorkoutDiary() {
                   }
                 />
               </List.Item>
-            )
+            );
           }}
         />
-        {!newWorkoutVisible && !selectedWorkout &&
+        {!newWorkoutVisible && !selectedWorkout && (
           <Row justify="center" className="text-center">
             <Col span={16} className="mb-1">
               <Divider>Add</Divider>
-              <PlusOutlined onClick={() => setNewWorkoutVisible(true)} style={{ cursor: "pointer" }} />
+              <PlusOutlined
+                onClick={() => setNewWorkoutVisible(true)}
+                style={{ cursor: "pointer" }}
+              />
             </Col>
           </Row>
-        }
-        {newWorkoutVisible && !selectedWorkout &&
+        )}
+        {newWorkoutVisible && !selectedWorkout && (
           <>
             <Title level={3} className="text-center">
               New Workout
-          </Title>
+            </Title>
             <Row justify="space-around">
               <Col span={24}>
                 <NewWorkoutForm />
               </Col>
             </Row>
           </>
-        }
-        {selectedWorkout &&
+        )}
+        {selectedWorkout && (
           <>
             <Title level={3} className="text-center">
               Edit Workout
-          </Title>
+            </Title>
             <Row justify="space-around">
               <Col span={24}>
                 <EditWorkoutForm workout={selectedWorkout} />
               </Col>
             </Row>
           </>
-        }
+        )}
         <Title level={3} className="text-center">
           Previous sessions
         </Title>
@@ -156,7 +191,7 @@ export default function WorkoutDiary() {
           renderItem={(item) => {
             const ts = new Date(item.timeStart);
             const te = new Date(item.timeEnd);
-            if(item.workout){
+            if (item.workout) {
               return (
                 <List.Item>
                   <List.Item.Meta
@@ -176,7 +211,14 @@ export default function WorkoutDiary() {
                           </i>
                         </Col>
                         <Col>
-                          <FullscreenOutlined style={{ fontSize: "15pt" }} />
+                          <FullscreenOutlined
+                            onClick={showModal}
+                            style={{ fontSize: "15pt" }}
+                          />
+                          <DescriptionSessionModal
+                            session={item}
+                            visibleState={[modalVisible, setModalVisible]}
+                          />
                         </Col>
                       </Row>
                     }
@@ -184,11 +226,62 @@ export default function WorkoutDiary() {
                 </List.Item>
               );
             }
-           
           }}
         />
-
       </div>
     </>
   );
 }
+
+const DescriptionSessionModal = ({ session, visibleState }) => {
+  const [visible, setVisible] = visibleState;
+  const handleOk = () => {
+    setVisible(false);
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      title={session.title}
+      onOk={handleOk}
+      footer={
+        <Button type="primary" onClick={handleOk}>
+          Ok
+        </Button>
+      }
+    >
+      <Descriptions title={session.title} className="inv-font" bordered>
+        <Descriptions.Item label="Workout Name" span={4}>
+          {session.workout.name}
+        </Descriptions.Item>
+        <Descriptions.Item label="Start Time" span={2}>
+          {new Date(session.timeStart).toLocaleString()}
+        </Descriptions.Item>
+        <Descriptions.Item label="End Time" span={2}>
+          {new Date(session.timeEnd).toLocaleString()}
+        </Descriptions.Item>
+        <Descriptions.Item label="Workout Type" span={4}>
+          {session.workout.type}
+        </Descriptions.Item>
+        <Descriptions.Item label="Exercise Log" span={4}>
+          {session.items.map((x, idx) => (
+            <div key={x.exercise.exercise + idx.toString()}>
+              <p>
+                <b>Set {idx.toString()}</b> - {x.exercise.exercise}
+              </p>
+              <ul>
+                {x.exercise.exerciseType === "Aerobic" && <li>{x.duration}</li>}
+                {x.exercise.exerciseType === "Anaerobic" && (
+                  <>
+                    <li>Reps: {x.repetitions}</li>
+                    <li>Weight: {x.weight} Kg</li>
+                  </>
+                )}
+              </ul>
+            </div>
+          ))}
+        </Descriptions.Item>
+      </Descriptions>
+    </Modal>
+  );
+};

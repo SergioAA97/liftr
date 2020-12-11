@@ -11,11 +11,13 @@ import {
   Select,
   Slider,
   Switch,
+  Statistic,
   Button,
+  Space,
 } from "antd";
 import {
   PlusOutlined,
-  EditOutlined,
+  DeliveredProcedureOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
 import { DiaryContext } from "../context/DiaryContext";
@@ -71,6 +73,7 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
   const [activityLevel, setActivityLevel] = useState(4);
   const [goal, setGoal] = useState("mantain");
   const [age, setAge] = useState(23);
+  const [result, setResult] = useState();
 
   function activityLevelFormatter(value) {
     if (value < 2) {
@@ -106,9 +109,9 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
   };
 
   const getObjectiveMultiplier = (goal) => {
-    switch (goal){
+    switch (goal) {
       case "maintain":
-          return 1;
+        return 1;
       case "cut":
         return 0.75;
       case "gain":
@@ -116,12 +119,12 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
       default:
         return 1;
     }
-  }
+  };
 
   const finalTDEE = ({ mass, height, age, gender, activityLevel }) => {
     return (
-      (calculateBMR({ mass, height, age, gender }) *
-      getActivityMultiplier(activityLevel)) *
+      calculateBMR({ mass, height, age, gender }) *
+      getActivityMultiplier(activityLevel) *
       getObjectiveMultiplier(goal)
     );
   };
@@ -149,9 +152,14 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
 
   const onSumbit = (values) => {
     console.log({ gender, height, mass, activityLevel, age });
-    console.log(
-      finalTDEE({ gender, height, mass, activityLevel, age })
-    );
+    console.log(finalTDEE({ gender, height, mass, activityLevel, age }));
+    let finalTdee = finalTDEE({ gender, height, mass, activityLevel, age });
+    let finalBmr = calculateBMR({ mass, height, age, gender });
+    setResult({
+      tdee: finalTdee,
+      bmr: finalBmr,
+      activityMultiplier: getActivityMultiplier(activityLevel),
+    });
   };
 
   return (
@@ -212,11 +220,63 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
           <span style={{ padding: "0rem 0.5rem" }}>{"😱"}</span>
         </div>
       </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
+      {!result && (
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            style={{ padding: "0rem 1rem" }}
+          >
+            Calculate
+          </Button>
+        </Form.Item>
+      )}
+      {result && (
+        <>
+          <Row justify="space-around" align="middle" className="text-center">
+            <Col xs={24} sm={12} md={8}>
+              <Statistic
+                title={<b>Daily calories (TDEE)</b>}
+                value={result.tdee}
+                suffix={<p> kcal</p>}
+                precision={2}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <Statistic
+                title={<b>BMR</b>}
+                value={result.bmr}
+                suffix={<p> kcal</p>}
+                precision={2}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+              <Statistic
+                title={<b>Activity Multiplier</b>}
+                value={result.activityMultiplier}
+                prefix={<p>x</p>}
+              />
+            </Col>
+          </Row>
+          <Row justify="center" className="text-center">
+            <Col flex={1}>
+              <Button
+                icon={
+                  <DeliveredProcedureOutlined
+                    key="edit"
+                    style={{ display: "inline" }}
+                  />
+                }
+                type="primary"
+                size="large"
+              >
+                <b> Save</b>
+              </Button>
+            </Col>
+          </Row>
+        </>
+      )}
     </Form>
   );
 };
@@ -226,12 +286,7 @@ const CoreGoals = ({ title, children }) => {
     <Card
       style={{ width: "100%" }}
       className="inv-font gradient-primary rounded-corners"
-      actions={[
-        <>
-          <EditOutlined key="edit" style={{ display: "inline" }} /> Recalculate
-        </>,
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
+      actions={[<></>, <EllipsisOutlined key="ellipsis" />]}
       title={title}
     >
       {children}

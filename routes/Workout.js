@@ -21,10 +21,13 @@ workoutRouter.get("/all", (req, res) => {
       {
         path: "sessions",
         model: "WorkoutSession",
-        populate: {
-          path: "workout",
-          model: "Workout",
-        },
+        populate: [
+          {
+            path: "workout",
+            model: "Workout",
+          },
+          { path: "items.exercise", model: "Exercise" },
+        ],
       },
     ])
     .exec((err, doc) => {
@@ -35,10 +38,20 @@ workoutRouter.get("/all", (req, res) => {
         });
       else {
         console.log(doc);
-        res.status(200).json({
-          sessions: doc.sessions,
-          workouts: doc.workouts,
-          authenticated: true,
+        Workout.find({ def: true }).then((defWorkouts, error) => {
+          if (error) {
+            res.status(500).json({
+              msg: { msgBody: "error has occured", msgError: true },
+              err: err,
+            });
+          }
+          console.log(defWorkouts);
+          let mergedWorkouts = [...defWorkouts, ...doc.workouts];
+          res.status(200).json({
+            sessions: doc.sessions,
+            workouts: mergedWorkouts,
+            authenticated: true,
+          });
         });
       }
     });
@@ -83,14 +96,16 @@ workoutRouter.get("/delete", async (req, res) => {
         const { id } = req.query;
         const entry = await Workout.deleteOne({ _id: id });
         const user = await User.findById(req.user._id);
-        user.workouts.pull({_id: id})
-        const sessions = await WorkoutSession.find({"_id": {"$in": user.sessions}});
-        if(sessions){
+        user.workouts.pull({ _id: id });
+        const sessions = await WorkoutSession.find({
+          _id: { $in: user.sessions },
+        });
+        if (sessions) {
           console.log(sessions);
         }
         for (let idx = 0; idx < sessions.length; idx++) {
           const e = sessions[idx];
-          if(e.workout === id){
+          if (e.workout === id) {
             await WorkoutSession.findByIdAndDelete(e);
           }
         }
@@ -99,7 +114,7 @@ workoutRouter.get("/delete", async (req, res) => {
           .status(200)
           .json({ msg: "Workout deleted succesfully", authenticated: true });
       } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({
           msg: { msgBody: "error has occured", msgError: true },
           err: error,
@@ -139,9 +154,9 @@ workoutRouter.post("/post/session", async (req, res) => {
 });
 
 workoutRouter.get("/getWorkout", async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
-    const doc = await Workout.find({_id: id});
+    const doc = await Workout.find({ _id: id });
     res.send(doc);
   } catch (error) {
     console.log(error);
@@ -158,7 +173,7 @@ workoutRouter.post("/post/workout", async (req, res) => {
   const { _id, type, name, description, idMap, def } = req.body;
   if (_id) {
     try {
-      let update = { name, description, idMap};
+      let update = { name, description, idMap };
       let entry = await Workout.findById(_id);
       entry.name = name;
       entry.description = description;
