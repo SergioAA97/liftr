@@ -3,11 +3,49 @@ const Diary = require("../models/Diary");
 const goalRouter = express.Router();
 const User = require("../models/User");
 
+goalRouter.post("/saveCore", async (req,res) => {
+  try {
+    const {calories, protein, fat, carbohydrates} = req.body;
+    const user = await User.findOneAndUpdate({ _id: req.user._id },{goals: {
+      carbohydrates,
+      fat,
+      protein,
+      calories,
+    }});
+    res.status(200).json({
+      customGoals: user.customGoals.filter((x) => x.active),
+      goals: user.goals,
+      authenticated: true,
+    });
+  }catch(err){
+    res.status(500).json({
+      msg: { msgBody: "error has occured", msgError: true },
+      err: err,
+    });
+  }
+})
+
 goalRouter.get("/today", async (req, res) => {
   try {
     const user = await User.findById({ _id: req.user._id });
     res.status(200).json({
       customGoals: user.customGoals.filter((x) => x.active),
+      goals: user.goals,
+      authenticated: true,
+    });
+  } catch (err) {
+    res.status(500).json({
+      msg: { msgBody: "error has occured", msgError: true },
+      err: err,
+    });
+  }
+});
+
+goalRouter.get("/getAll", async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.user._id });
+    res.status(200).json({
+      customGoals: user.customGoals,
       goals: user.goals,
       authenticated: true,
     });

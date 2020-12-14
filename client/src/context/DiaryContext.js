@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import FoodDiaryService from "../service/FoodDiaryService.js";
+import GoalService from "../service/GoalService.js";
 import WorkoutDiaryService from "../service/WorkoutDiaryService.js";
 
 export const DiaryContext = createContext();
@@ -12,6 +13,8 @@ export default ({ children }) => {
   const [workoutProgram, setWorkoutProgram] = useState({ name: "Workout 1" });
   const [availableWorkouts, setAvailableWorkouts] = useState();
   const [previousSessions, setPreviousSessions] = useState();
+  const [goals, setGoals] = useState();
+  const [customGoals, setCustomGoals] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
 
   const calculateItemEnergy = (entries) => {
@@ -73,6 +76,14 @@ export default ({ children }) => {
     });
   };
 
+  const fetchGoals = () => {
+    return GoalService.getAll().then((data) => {
+      console.log(data);
+      setGoals(data.goals);
+      setCustomGoals(data.customGoals);
+    });
+  };
+
   const refreshEntries = () => {
     fetchAll();
   };
@@ -80,7 +91,9 @@ export default ({ children }) => {
   const fetchAll = () => {
     fetchWorkouts()
       .then((val) => {
-        return fetchFoodEntries();
+        fetchFoodEntries().then(() =>{
+          return fetchGoals();
+        });
       })
       .then((val) => {
         setIsLoaded(true);

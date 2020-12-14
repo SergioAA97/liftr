@@ -1,0 +1,28 @@
+export default {
+  saveCoreGoals: (values) => {
+    return fetch("/goal/saveCore",{
+      method: "post",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res,err) => {
+      if(!err){
+        if (res.status !== 401) return res.json().then((data) => data);
+        else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      }else{
+        return { message: { msgBody: "Error" }, msgError: true };
+      }
+    });
+  },
+  getAll: () => {
+    return fetch("/goal/getAll").then((res,err) => {
+      if(!err){
+        if (res.status !== 401) return res.json().then((data) => data);
+        else return { message: { msgBody: "Unauthorized" }, msgError: true };
+      }else{
+        return { message: { msgBody: "Error" }, msgError: true };
+      }
+    });
+  },
+};

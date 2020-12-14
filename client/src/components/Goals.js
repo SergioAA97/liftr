@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import CustomIcon from "./utils/CustomIcon"
 import {
   Row,
   Col,
@@ -19,9 +20,11 @@ import {
   PlusOutlined,
   DeliveredProcedureOutlined,
   EllipsisOutlined,
+  RollbackOutlined
 } from "@ant-design/icons";
 import { DiaryContext } from "../context/DiaryContext";
 import { SliderCard, SwitchCard } from "./utils/Layout-Components";
+import GoalService from "../service/GoalService";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -29,7 +32,7 @@ const { Option } = Select;
 export default function Goals() {
   const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
-  const { workoutProgram, setWorkoutProgram, availablePrograms } = diaryContext;
+  const { workoutProgram, setWorkoutProgram, availablePrograms, goals, customGoals } = diaryContext;
 
   const handleChange = (value) => {
     console.log(value);
@@ -129,6 +132,20 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
     );
   };
 
+  const getMacros = (goal) => {
+    //[protein,fat,carbs] 
+    switch (goal) {
+      case "maintain":
+        return [0.3, 0.25, 0.45];
+      case "cut":
+        return [0.4, 0.2, 0.4];
+      case "gain":
+        return [0.25, 0.2, 0.55];
+      default:
+        return [0.3, 0.25, 0.45];
+    }
+  }
+
   const onChangeGender = (checked) => {
     setGender(checked ? 1 : 0);
     setGenderLabel(checked ? "Female" : "Male");
@@ -150,15 +167,34 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
     setGoal(value);
   };
 
+  const onReset = () => {
+    setResult(null);
+  }
+
+  const onSave = async () => {
+    try{
+      const {carbohydrates, fat, protein, tdee} = result;
+      await GoalService.saveCoreGoals({calories: tdee, carbohydrates, fat, protein});
+      onReset();
+    }catch(err){
+      console.error(err);
+    }
+  }
+
   const onSumbit = (values) => {
     console.log({ gender, height, mass, activityLevel, age });
     console.log(finalTDEE({ gender, height, mass, activityLevel, age }));
     let finalTdee = finalTDEE({ gender, height, mass, activityLevel, age });
     let finalBmr = calculateBMR({ mass, height, age, gender });
+    let protein, fat, carbohydrates;
+    const [proteinMul, fatMul, carbMul] = getMacros(goal);
     setResult({
       tdee: finalTdee,
       bmr: finalBmr,
       activityMultiplier: getActivityMultiplier(activityLevel),
+      carbohydrates: Math.round((finalTdee*carbMul)/4),
+      fat: Math.round((finalTdee*fatMul)/9),
+      protein: Math.round((finalTdee*proteinMul)/4),
     });
   };
 
@@ -259,7 +295,33 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
               />
             </Col>
           </Row>
-          <Row justify="center" className="text-center">
+          <Row justify="space-around" align="middle" className="text-center">
+            <Col xs={24} sm={12} md={8}>
+              <Statistic
+                title={<b>Protein <CustomIcon inv proteinIcon /></b>}
+                value={result.protein}
+                suffix={<p> g</p>}
+                precision={0}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+            <Statistic
+                title={<b>Fat <CustomIcon inv fatIcon /></b>}
+                value={result.fat}
+                suffix={<p> g</p>}
+                precision={0}
+              />
+            </Col>
+            <Col xs={24} sm={12} md={8}>
+            <Statistic
+                title={<b>Carbohydrates <CustomIcon inv carbIcon /></b>}
+                value={result.carbohydrates}
+                suffix={<p> g</p>}
+                precision={0}
+              />
+            </Col>
+          </Row>
+          <Row justify="center" className="text-center mt-1">
             <Col flex={1}>
               <Button
                 icon={
@@ -268,10 +330,26 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms }) => {
                     style={{ display: "inline" }}
                   />
                 }
+                onClick={onSave}
                 type="primary"
                 size="large"
               >
                 <b> Save</b>
+              </Button>
+            </Col>
+            <Col flex={1}>
+              <Button
+                icon={
+                  <RollbackOutlined
+                    key="rollback"
+                    style={{ display: "inline" }}
+                  />
+                }
+                onClick={onReset}
+                type="primary"
+                size="large"
+              >
+                <b> Reset</b>
               </Button>
             </Col>
           </Row>

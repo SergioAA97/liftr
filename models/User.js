@@ -20,14 +20,13 @@ const UserSchema = new mongoose.Schema({
   entries: [{ type: mongoose.Schema.Types.ObjectId, ref: "Diary" }],
   sessions: [{ type: mongoose.Schema.Types.ObjectId, ref: "WorkoutSession" }],
   workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workout" }],
-  goals: [
-    {
-      calories: mongoose.Schema.Types.Number,
-      protein: mongoose.Schema.Types.Number,
-      carbohydrates: mongoose.Schema.Types.Number,
-      fat: mongoose.Schema.Types.Number,
-    },
-  ],
+  goals: 
+  {
+    calories: mongoose.Schema.Types.Number,
+    protein: mongoose.Schema.Types.Number,
+    carbohydrates: mongoose.Schema.Types.Number,
+    fat: mongoose.Schema.Types.Number,
+  },
   customGoals: [
     {
       name: {
