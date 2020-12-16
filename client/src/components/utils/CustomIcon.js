@@ -7,6 +7,8 @@ export default function CustomIcon({
   foodIcon = null,
   inv = false,
   runningIcon = null,
+  scaleIcon = null,
+  watchIcon = null,
   stepsIcon = null,
   workoutIcon = null,
   drumStickIcon = null,
@@ -63,6 +65,111 @@ export default function CustomIcon({
           transform="translate(7.5 -27.5)"
           fill={inv ? "#FFF" : "#4834D4"}
         />
+      </g>
+    </svg>
+  );
+
+  const WatchSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 52.017 52.017"
+    >
+      <defs>
+        <filter
+          id="Union_1"
+          x="0"
+          y="0"
+          width="52.017"
+          height="52.017"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Union_1)">
+        <path
+          id="Union_1-2"
+          data-name="Union 1"
+          d="M-4262,1230.009A17.026,17.026,0,0,1-4244.992,1213a17.026,17.026,0,0,1,17.009,17.008,17.027,17.027,0,0,1-17.009,17.009A17.027,17.027,0,0,1-4262,1230.009Zm2.635,0a14.391,14.391,0,0,0,14.373,14.374,14.393,14.393,0,0,0,14.375-14.374,14.391,14.391,0,0,0-14.375-14.374A14.39,14.39,0,0,0-4259.365,1230.009Zm18.854,5.112-5.27-3.952a1.318,1.318,0,0,1-.527-1.055v-7.9a1.316,1.316,0,0,1,1.317-1.318,1.317,1.317,0,0,1,1.318,1.318v7.247l4.743,3.557a1.316,1.316,0,0,1,.263,1.844,1.308,1.308,0,0,1-1.055.528A1.309,1.309,0,0,1-4240.511,1235.12Z"
+          transform="translate(4271 -1207)"
+          fill={inv ? "#FFF" : "#4834D4"}
+        />
+      </g>
+    </svg>
+  );
+
+  const ScaleSvg = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox="0 0 51.086 51.086"
+    >
+      <defs>
+        <filter
+          id="Path_10"
+          x="0"
+          y="0"
+          width="51.086"
+          height="51.086"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+        <filter
+          id="Path_11"
+          x="4.976"
+          y="4.007"
+          width="41.135"
+          height="30.278"
+          filterUnits="userSpaceOnUse"
+        >
+          <feOffset dy="3" input="SourceAlpha" />
+          <feGaussianBlur stdDeviation="3" result="blur-2" />
+          <feFlood floodOpacity="0.161" />
+          <feComposite operator="in" in2="blur-2" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+      <g
+        id="Group_110"
+        data-name="Group 110"
+        transform="translate(-104.005 -159.005)"
+      >
+        <g
+          transform="matrix(1, 0, 0, 1, 104.01, 159.01)"
+          filter="url(#Path_10)"
+        >
+          <path
+            id="Path_10-2"
+            data-name="Path 10"
+            d="M30.178,0H2.908A2.911,2.911,0,0,0,0,2.908v27.27a2.911,2.911,0,0,0,2.908,2.908h27.27a2.911,2.911,0,0,0,2.908-2.908V2.908A2.911,2.911,0,0,0,30.178,0Zm.969,30.178a.971.971,0,0,1-.969.969H2.908a.971.971,0,0,1-.969-.969V2.908a.971.971,0,0,1,.969-.969h27.27a.971.971,0,0,1,.969.969Zm0,0"
+            transform="translate(9 6)"
+            fill={inv ? "#FFF" : "#4834D4"}
+          />
+        </g>
+        <g
+          transform="matrix(1, 0, 0, 1, 104.01, 159.01)"
+          filter="url(#Path_11)"
+        >
+          <path
+            id="Path_11-2"
+            data-name="Path 11"
+            d="M99.747,65.725a18.636,18.636,0,0,0-22.359,0,.969.969,0,0,0-.193,1.358l5.117,6.808a.969.969,0,0,0,1.357.193,8.167,8.167,0,0,1,9.8,0,.969.969,0,0,0,1.356-.193l5.117-6.808a.97.97,0,0,0-.193-1.358Zm-5.919,6.263a9.992,9.992,0,0,0-4.291-1.429V67.6a.969.969,0,1,0-1.939,0v2.954a9.992,9.992,0,0,0-4.291,1.429l-3.963-5.272a16.7,16.7,0,0,1,18.447,0Zm0,0"
+            transform="translate(-63.02 -51.99)"
+            fill={inv ? "#FFF" : "#4834D4"}
+          />
+        </g>
       </g>
     </svg>
   );
@@ -400,6 +507,12 @@ export default function CustomIcon({
   const FoodIcon = (props) => (
     <Icon height={height} width={width} component={FoodSvg} {...props} />
   );
+  const WatchIcon = (props) => (
+    <Icon height={height} width={width} component={WatchSvg} {...props} />
+  );
+  const ScaleIcon = (props) => (
+    <Icon height={height} width={width} component={ScaleSvg} {...props} />
+  );
   const RunningIcon = (props) => (
     <Icon height={height} width={width} component={RunningSvg} {...props} />
   );
@@ -425,7 +538,6 @@ export default function CustomIcon({
     <Icon height={height} width={width} component={CarbSvg} {...props} />
   );
   const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
-  
 
   return (
     <div {...props}>
@@ -439,6 +551,8 @@ export default function CustomIcon({
       {fatIcon && <FatIcon />}
       {carbIcon && <CarbIcon />}
       {heartIcon && <HeartIcon />}
+      {scaleIcon && <ScaleIcon />}
+      {watchIcon && <WatchIcon />}
       {(text || subText) && (
         <div style={{ textAlign: "center", marginTop: "-0.6rem" }}>
           {typeof text !== "undefined" && (

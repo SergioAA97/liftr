@@ -46,13 +46,18 @@ export default function WorkoutDiary() {
 
   const [newWorkoutVisible, setNewWorkoutVisible] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(null);
+  const [modalItem, setModalItem] = useState(null);
 
   const containerStyle = {
     padding: "2rem",
   };
 
-  const { availableWorkouts, previousSessions } = diaryContext;
+  const {
+    availableWorkouts,
+    setAvailableWorkouts,
+    previousSessions,
+  } = diaryContext;
 
   let history = useHistory();
 
@@ -70,20 +75,36 @@ export default function WorkoutDiary() {
   };
 
   const deleteEntry = (workout) => {
-    WorkoutDiaryService.deleteWorkout(workout._id).then((x) => history.go(0));
+    WorkoutDiaryService.deleteWorkout(workout._id).then((x) => {
+      setAvailableWorkouts(
+        availableWorkouts.filter((x) => x._id !== workout._id)
+      );
+      setSelectedWorkout(null);
+    });
   };
 
   const onClickPlay = (workout) => {
     history.push("/workout/session", { ...workout });
   };
 
-  const showModal = () => {
+  const showModal = (item) => {
+    setModalItem(item);
     setModalVisible(true);
   };
 
   return (
     <>
       <div style={containerStyle}>
+        {modalItem && (
+          <DescriptionSessionModal
+            session={modalItem}
+            visible={modalVisible}
+            setVisible={(v) => {
+              setModalVisible(v);
+              setModalItem(null);
+            }}
+          />
+        )}
         <Title level={3} className="text-center">
           Workouts
         </Title>
@@ -165,7 +186,7 @@ export default function WorkoutDiary() {
             </Title>
             <Row justify="space-around">
               <Col span={24}>
-                <NewWorkoutForm />
+                <NewWorkoutForm setVisible={setNewWorkoutVisible} />
               </Col>
             </Row>
           </>
@@ -177,7 +198,10 @@ export default function WorkoutDiary() {
             </Title>
             <Row justify="space-around">
               <Col span={24}>
-                <EditWorkoutForm workout={selectedWorkout} />
+                <EditWorkoutForm
+                  workout={selectedWorkout}
+                  setInvisible={() => setSelectedWorkout(null)}
+                />
               </Col>
             </Row>
           </>
@@ -191,12 +215,13 @@ export default function WorkoutDiary() {
           renderItem={(item) => {
             const ts = new Date(item.timeStart);
             const te = new Date(item.timeEnd);
+
             if (item.workout) {
               return (
                 <List.Item>
                   <List.Item.Meta
                     avatar={
-                      item.workout.type === "Cardio"
+                      item.workout.type === "Aerobic"
                         ? React.createElement(CardioAvatar)
                         : React.createElement(WeightAvatar)
                     }
@@ -212,12 +237,8 @@ export default function WorkoutDiary() {
                         </Col>
                         <Col>
                           <FullscreenOutlined
-                            onClick={showModal}
+                            onClick={() => showModal(item)}
                             style={{ fontSize: "15pt" }}
-                          />
-                          <DescriptionSessionModal
-                            session={item}
-                            visibleState={[modalVisible, setModalVisible]}
                           />
                         </Col>
                       </Row>
@@ -233,8 +254,7 @@ export default function WorkoutDiary() {
   );
 }
 
-const DescriptionSessionModal = ({ session, visibleState }) => {
-  const [visible, setVisible] = visibleState;
+const DescriptionSessionModal = ({ session, visible, setVisible }) => {
   const handleOk = () => {
     setVisible(false);
   };
@@ -244,6 +264,7 @@ const DescriptionSessionModal = ({ session, visibleState }) => {
       visible={visible}
       title={session.title}
       onOk={handleOk}
+      closable={false}
       footer={
         <Button type="primary" onClick={handleOk}>
           Ok

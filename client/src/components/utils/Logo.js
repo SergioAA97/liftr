@@ -1,10 +1,9 @@
 import React from "react";
 
 export default function Logo({
-  fontSize = "90pt",
+  fontSize = "80pt",
   paddingTop = "10vh",
-  marginLeft = "-100%",
-  marginRight = "-100%",
+  width = "100%",
   white = false,
   ...props
 }) {
@@ -14,8 +13,6 @@ export default function Logo({
     fontSize: fontSize,
     fontWeight: "900",
     fontStyle: "italic",
-    marginLeft: marginLeft,
-    marginRight: marginRight,
     textAlign: "center",
     paddingTop: paddingTop,
     color: white ? "white" : "#4A34D4",

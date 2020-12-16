@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
 import WorkoutDiaryService from "../service/WorkoutDiaryService";
@@ -7,10 +7,13 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-export default function NewWorkoutForm() {
+export default function NewWorkoutForm({ setVisible }) {
   const [options, setOptions] = useState(null);
   const [type, setType] = useState("Aerobic");
   const history = useHistory();
+  const diaryContext = useContext(DiaryContext);
+
+  const { availableWorkouts, setAvailableWorkouts } = diaryContext;
 
   const onFinish = (values) => {
     console.log("Received values of form:", values, "Type:", type);
@@ -28,13 +31,20 @@ export default function NewWorkoutForm() {
     if (type !== "Anaerobic") {
       idMap = exerciseData.map((x) => ({ ref: x.id }));
     } else {
-      idMap = exerciseData.map((x, idx) => ({ ref: x.id, sets: (exercises[idx].sets) ? parseInt(exercises[idx].sets) : 1 }));
+      idMap = exerciseData.map((x, idx) => ({
+        ref: x.id,
+        sets: exercises[idx].sets ? parseInt(exercises[idx].sets) : 1,
+      }));
     }
-    console.log(idMap)
+    console.log(idMap);
     WorkoutDiaryService.postWorkout({ name, description, idMap, type }).then(
       (val) => {
         console.log("New workout created:", val);
-        history.go(0);
+        setVisible(false);
+        setAvailableWorkouts([
+          ...availableWorkouts,
+          { name, description, exercises: idMap, type },
+        ]);
       }
     );
   };
@@ -101,7 +111,7 @@ export default function NewWorkoutForm() {
                     fieldKey={[field.fieldKey, "exercise"]}
                     label={"Exercise " + (index + 1).toString()}
                     style={{ flexGrow: 2 }}
-                  // rules={[{ required: true, message: 'Missing first name' }]}
+                    // rules={[{ required: true, message: 'Missing first name' }]}
                   >
                     <AutoComplete
                       options={options.filter((o) => o.type === type)}
@@ -122,8 +132,12 @@ export default function NewWorkoutForm() {
                         name={[field.name, "sets"]}
                         fieldKey={[field.fieldKey, "sets"]}
                         label={"Sets"}
-                        style={{ flexGrow: 1, maxWidth: "20%", padding: "0rem 0.25rem" }}
-                      // rules={[{ required: true, message: 'Missing first name' }]}
+                        style={{
+                          flexGrow: 1,
+                          maxWidth: "20%",
+                          padding: "0rem 0.25rem",
+                        }}
+                        // rules={[{ required: true, message: 'Missing first name' }]}
                       >
                         <Input
                           className="inv-font rounded-corners"

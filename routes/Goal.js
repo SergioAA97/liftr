@@ -3,27 +3,54 @@ const Diary = require("../models/Diary");
 const goalRouter = express.Router();
 const User = require("../models/User");
 
-goalRouter.post("/saveCore", async (req,res) => {
+goalRouter.post("/saveCore", async (req, res) => {
   try {
-    const {calories, protein, fat, carbohydrates} = req.body;
-    const user = await User.findOneAndUpdate({ _id: req.user._id },{goals: {
-      carbohydrates,
-      fat,
-      protein,
-      calories,
-    }});
+    const { calories, protein, fat, carbohydrates } = req.body;
+    const user = await User.findOneAndUpdate(
+      { _id: req.user._id },
+      {
+        goals: {
+          carbohydrates,
+          fat,
+          protein,
+          calories,
+        },
+      }
+    );
     res.status(200).json({
       customGoals: user.customGoals.filter((x) => x.active),
       goals: user.goals,
       authenticated: true,
     });
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
       msg: { msgBody: "error has occured", msgError: true },
       err: err,
     });
   }
-})
+});
+
+goalRouter.post("/saveCustom", async (req, res) => {
+  try {
+    const { goalValue, name, endDate, startDate } = req.body;
+
+    const user = await User.findById({ _id: req.user._id });
+    user.customGoals.push({ goalValue, name, endDate, startDate });
+    await user.save();
+    res.status(200).json({
+      customGoals: user.customGoals.filter(
+        (x) => x.endDate >= new Date(Date.now())
+      ),
+      authenticated: true,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      msg: { msgBody: "error has occured", msgError: true },
+      err: err,
+    });
+  }
+});
 
 goalRouter.get("/today", async (req, res) => {
   try {
@@ -88,15 +115,19 @@ goalRouter.get("/entry", (req, res) => {
 });
 
 goalRouter.get("/delete", async (req, res) => {
-  if (typeof req.query.id === "string") {
-    if (req.query.id.length > 1) {
+  if (typeof req.query.name === "string") {
+    if (req.query.name.length > 1) {
       try {
-        const { id } = req.query;
-        const entry = await Diary.deleteOne({ _id: id });
+        const { name } = req.query;
+        const result = await User.updateOne(
+          { _id: req.user.id },
+          { $pull: { customGoals: { name: name } } }
+        );
         res
           .status(200)
           .json({ msg: "Entry deleted succesfully", authenticated: true });
       } catch (error) {
+        console.log(error);
         res.status(500).json({
           msg: { msgBody: "error has occured", msgError: true },
           err: error,

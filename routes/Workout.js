@@ -38,21 +38,26 @@ workoutRouter.get("/all", (req, res) => {
         });
       else {
         console.log(doc);
-        Workout.find({ def: true }).then((defWorkouts, error) => {
-          if (error) {
-            res.status(500).json({
-              msg: { msgBody: "error has occured", msgError: true },
-              err: err,
+        Workout.find({ def: true })
+          .populate({
+            path: "exercises.ref",
+            model: "Exercise",
+          })
+          .then((defWorkouts, error) => {
+            if (error) {
+              res.status(500).json({
+                msg: { msgBody: "error has occured", msgError: true },
+                err: err,
+              });
+            }
+            console.log(defWorkouts);
+            let mergedWorkouts = [...defWorkouts, ...doc.workouts];
+            res.status(200).json({
+              sessions: doc.sessions,
+              workouts: mergedWorkouts,
+              authenticated: true,
             });
-          }
-          console.log(defWorkouts);
-          let mergedWorkouts = [...defWorkouts, ...doc.workouts];
-          res.status(200).json({
-            sessions: doc.sessions,
-            workouts: mergedWorkouts,
-            authenticated: true,
           });
-        });
       }
     });
 });
@@ -173,13 +178,9 @@ workoutRouter.post("/post/workout", async (req, res) => {
   const { _id, type, name, description, idMap, def } = req.body;
   if (_id) {
     try {
-      let update = { name, description, idMap };
-      let entry = await Workout.findById(_id);
-      entry.name = name;
-      entry.description = description;
-      entry.idMap = idMap;
-      let result = await entry.save();
-      console.log("Doc found, editing...");
+      let update = { name, description, exercises: idMap };
+      let entry = await Workout.findOneAndUpdate({ _id: _id }, update);
+      console.log("Doc found, editing...", entry);
       res.status(200).json({
         message: {
           msgBody: "Successfully edited entry",

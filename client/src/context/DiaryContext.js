@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import FoodDiaryService from "../service/FoodDiaryService.js";
 import GoalService from "../service/GoalService.js";
 import WorkoutDiaryService from "../service/WorkoutDiaryService.js";
+import { CardioWeekGoal, WeightGoal } from "../components/utils/GoalStrategies";
 
 export const DiaryContext = createContext();
 
@@ -15,6 +16,10 @@ export default ({ children }) => {
   const [previousSessions, setPreviousSessions] = useState();
   const [goals, setGoals] = useState();
   const [customGoals, setCustomGoals] = useState();
+  const [biometrics, setBiometrics] = useState({
+    weight: 70,
+    height: 178,
+  });
   const [isLoaded, setIsLoaded] = useState(false);
 
   const calculateItemEnergy = (entries) => {
@@ -30,13 +35,9 @@ export default ({ children }) => {
       if (foodEntries) {
         calculateItemEnergy(foodEntries);
         var statObj = {
-          energyGoal: 2400,
           protein: 0,
-          proteinGoal: 180,
           carbs: 0,
-          carbsGoal: 200,
           fat: 0,
-          fatGoal: 75,
           energy: 0,
         };
 
@@ -61,6 +62,7 @@ export default ({ children }) => {
 
         setFoodStats(statObj);
         setFoodEntries(foodEntries);
+        return [statObj, foodEntries];
       } else {
         setFoodStats({});
         setFoodEntries([]);
@@ -70,17 +72,20 @@ export default ({ children }) => {
 
   const fetchWorkouts = () => {
     return WorkoutDiaryService.getAll().then((data) => {
-      console.log(data);
+      // console.log(data);
       setAvailableWorkouts(data.workouts);
       setPreviousSessions(data.sessions);
+      return [data.workouts, data.sessions];
     });
   };
 
   const fetchGoals = () => {
     return GoalService.getAll().then((data) => {
-      console.log(data);
+      // console.log(data);
       setGoals(data.goals);
+
       setCustomGoals(data.customGoals);
+      return [data.goals, data.customGoals];
     });
   };
 
@@ -89,15 +94,14 @@ export default ({ children }) => {
   };
 
   const fetchAll = () => {
-    fetchWorkouts()
-      .then((val) => {
-        fetchFoodEntries().then(() =>{
-          return fetchGoals();
+    fetchWorkouts().then((w) => {
+      fetchFoodEntries().then((e) => {
+        return fetchGoals().then((g) => {
+          console.log("Data Loaded!");
+          setIsLoaded(true);
         });
-      })
-      .then((val) => {
-        setIsLoaded(true);
       });
+    });
   };
 
   useEffect(() => {
@@ -127,6 +131,11 @@ export default ({ children }) => {
               setAvailableWorkouts,
               previousSessions,
               setPreviousSessions,
+              goals,
+              setGoals,
+              customGoals,
+              setCustomGoals,
+              biometrics,
             }}
           >
             {children}

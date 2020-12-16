@@ -2,9 +2,20 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import AuthService from "../service/AuthService";
-import { Form, Input, Row, Col, Button, Checkbox, message as Msg } from "antd";
+import {
+  Form,
+  Input,
+  Row,
+  Col,
+  Button,
+  Checkbox,
+  message as Msg,
+  Layout,
+} from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../components/utils/Logo";
+
+const { Content } = Layout;
 
 const Login = (props) => {
   const [message, setMessage] = useState(null);
@@ -46,14 +57,18 @@ const Login = (props) => {
   };
 
   return (
-    <div style={{ paddingTop: "2rem", textAlign: "center" }}>
-      <Row justify="center">
-        <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={4}>
-          <Logo />
-          <LoginForm onFinish={onSubmit} error={error} />
-        </Col>
-      </Row>
-    </div>
+    <Layout>
+      <Content>
+        <div style={{ paddingTop: "2rem", textAlign: "center" }}>
+          <Row justify="center">
+            <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={4}>
+              <Logo />
+              <LoginForm onFinish={onSubmit} error={error} />
+            </Col>
+          </Row>
+        </div>
+      </Content>
+    </Layout>
   );
 };
 
@@ -68,7 +83,7 @@ const LoginForm = ({ onFinish, error }) => {
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your Username!" }]}
-        className = "gradient-primary rounded-corners"
+        className="gradient-primary rounded-corners"
       >
         <Input
           prefix={<UserOutlined className="site-form-item-icon bk-primary" />}
@@ -79,7 +94,7 @@ const LoginForm = ({ onFinish, error }) => {
       <Form.Item
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
-        className = "gradient-primary rounded-corners"
+        className="gradient-primary rounded-corners"
       >
         <Input
           prefix={<LockOutlined className="site-form-item-icon bk-primary" />}
@@ -98,11 +113,7 @@ const LoginForm = ({ onFinish, error }) => {
         </a>
       </Form.Item>
       <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
+        <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
         {"  "}Or <Link to="/register">register now!</Link>

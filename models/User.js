@@ -20,8 +20,19 @@ const UserSchema = new mongoose.Schema({
   entries: [{ type: mongoose.Schema.Types.ObjectId, ref: "Diary" }],
   sessions: [{ type: mongoose.Schema.Types.ObjectId, ref: "WorkoutSession" }],
   workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workout" }],
-  goals: 
-  {
+  biometrics: {
+    weight: {
+      type: mongoose.Schema.Types.Number,
+      min: 30,
+      max: 300,
+    },
+    height: {
+      type: mongoose.Schema.Types.Number,
+      min: 60,
+      max: 300,
+    },
+  },
+  goals: {
     calories: mongoose.Schema.Types.Number,
     protein: mongoose.Schema.Types.Number,
     carbohydrates: mongoose.Schema.Types.Number,
@@ -29,23 +40,10 @@ const UserSchema = new mongoose.Schema({
   },
   customGoals: [
     {
-      name: {
-        type: mongoose.Schema.Types.Number,
-        required: true,
-      },
-      property: {
-        type: mongoose.Schema.Types.String,
-        enum: ["dailyExercise", "sodiumIntake"],
-        required: true,
-      },
-      goalValue: {
-        type: mongoose.Schema.Types.Number,
-        required: true,
-      },
-      active: {
-        type: mongoose.Schema.Types.Boolean,
-        required: true,
-      },
+      name: mongoose.Schema.Types.String,
+      startDate: mongoose.Schema.Types.Date,
+      endDate: mongoose.Schema.Types.Date,
+      goalValue: mongoose.Schema.Types.Number,
     },
   ],
 });

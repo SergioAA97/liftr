@@ -16,6 +16,7 @@ import Model from "./components/utils/Model";
 
 import "antd/dist/antd.less";
 import "./App.less";
+import UserSettings from "./components/UserSettings";
 
 function App() {
   const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
@@ -74,6 +75,13 @@ function App() {
           roles={["user", "admin"]}
           diaryContext
         />
+        <PrivateRoute
+          exact
+          path="/settings"
+          component={SettingsView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
         <UnPrivateRoute exact path="/login" component={Login} />
         <UnPrivateRoute exact path="/register" component={Register} />
       </Switch>
@@ -107,6 +115,12 @@ const GoalsView = () => (
 const WorkoutSessionView = () => (
   <Model gradient>
     <WorkoutSession></WorkoutSession>
+  </Model>
+);
+
+const SettingsView = () => (
+  <Model gradient>
+    <UserSettings></UserSettings>
   </Model>
 );
 

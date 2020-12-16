@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
 import WorkoutDiaryService from "../service/WorkoutDiaryService";
@@ -14,9 +14,12 @@ export default function EditWorkoutForm(props) {
 
   const [form] = Form.useForm();
 
+  const diaryContext = useContext(DiaryContext);
+
+  const { availableWorkouts, setAvailableWorkouts } = diaryContext;
+
   const { workout } = props;
   const { _id, name, description, exercises } = workout;
-
 
   useEffect(() => {
     WorkoutDiaryService.getExercises().then((val) => {
@@ -30,8 +33,8 @@ export default function EditWorkoutForm(props) {
   }, [workout.type]);
 
   useEffect(() => {
-    form.resetFields()
-    console.log("Reset form!")
+    form.resetFields();
+    console.log("Reset form!");
   }, [props.workout]);
 
   const onFinish = (values) => {
@@ -50,15 +53,33 @@ export default function EditWorkoutForm(props) {
     if (type !== "Anaerobic") {
       idMap = exerciseData.map((x) => ({ ref: x.id }));
     } else {
-      idMap = exerciseData.map((x, idx) => ({ ref: x.id, sets: (exercises[idx].sets) ? parseInt(exercises[idx].sets) : 1 }));
+      idMap = exerciseData.map((x, idx) => ({
+        ref: x.id,
+        sets: exercises[idx].sets ? parseInt(exercises[idx].sets) : 1,
+      }));
     }
-    console.log(idMap)
-    WorkoutDiaryService.postWorkout({ _id, name, description, idMap, type }).then(
-      (val) => {
-        console.log("Workout updated:", val);
-        history.go(0);
-      }
-    );
+
+    WorkoutDiaryService.postWorkout({
+      _id,
+      name,
+      description,
+      idMap,
+      type,
+    }).then((val) => {
+      let update = [...availableWorkouts];
+      update = update.filter((x) => x.name !== name);
+
+      update.push({
+        _id,
+        name,
+        description,
+        exercises: exercises,
+        type,
+      });
+      console.log(update);
+      setAvailableWorkouts(update);
+      props.setInvisible();
+    });
   };
 
   const onTypeChange = (val) => {
@@ -77,20 +98,32 @@ export default function EditWorkoutForm(props) {
     console.log(exerciseType);
   };
 
-  let exercisesListFields = exercises.map(x => {
-    if (x.hasOwnProperty("sets")) {
-      //Anaerobic
-      return ({ exercise: x.ref.exercise, sets: x.sets })
+  let exercisesListFields = exercises.map((x) => {
+    if (!x.hasOwnProperty("ref")) {
+      return x;
     } else {
-      //Aerobic
-      return ({ exercise: x.ref.exercise })
+      if (x.hasOwnProperty("sets")) {
+        //Anaerobic
+        return { exercise: x.ref.exercise, sets: x.sets };
+      } else {
+        //Aerobic
+        return { exercise: x.ref.exercise };
+      }
     }
   });
 
-  let initialValues = { name, description, type: (type === "Aerobic") ? true : false, exercises: exercisesListFields }
+  let initialValues = {
+    name,
+    description,
+    type: type === "Aerobic" ? true : false,
+    exercises: exercisesListFields,
+  };
   if (Array.isArray(options)) {
     return (
-      <Form layout="vertical" onFinish={onFinish} style={{ minWidth: "50%" }}
+      <Form
+        layout="vertical"
+        onFinish={onFinish}
+        style={{ minWidth: "50%" }}
         initialValues={initialValues}
         form={form}
       >
@@ -98,20 +131,22 @@ export default function EditWorkoutForm(props) {
           <Input className="rounded-corners" defaultValue={name} />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <TextArea rows={4} className="rounded-corners" defaultValue={description} />
+          <TextArea
+            rows={4}
+            className="rounded-corners"
+            defaultValue={description}
+          />
         </Form.Item>
         <Form.Item name="type" label="Type">
           <Switch
             checkedChildren="Cardio"
             unCheckedChildren="Weight"
             onChange={onTypeChange}
-            checked={(type === "Aerobic") ? true : false}
+            checked={type === "Aerobic" ? true : false}
           />
         </Form.Item>
         <Form.List name="exercises">
-
           {(fields, { add, remove }) => {
-            console.log(fields)
             return (
               <>
                 {fields.map((field, index) => (
@@ -130,7 +165,7 @@ export default function EditWorkoutForm(props) {
                       fieldKey={[field.fieldKey, "exercise"]}
                       label={"Exercise " + (index + 1).toString()}
                       style={{ flexGrow: 2 }}
-                    // rules={[{ required: true, message: 'Missing first name' }]}
+                      // rules={[{ required: true, message: 'Missing first name' }]}
                     >
                       <AutoComplete
                         options={options.filter((o) => o.type === type)}
@@ -151,8 +186,12 @@ export default function EditWorkoutForm(props) {
                           name={[field.name, "sets"]}
                           fieldKey={[field.fieldKey, "sets"]}
                           label={"Sets"}
-                          style={{ flexGrow: 1, maxWidth: "20%", padding: "0rem 0.25rem" }}
-                        // rules={[{ required: true, message: 'Missing first name' }]}
+                          style={{
+                            flexGrow: 1,
+                            maxWidth: "20%",
+                            padding: "0rem 0.25rem",
+                          }}
+                          // rules={[{ required: true, message: 'Missing first name' }]}
                         >
                           <Input
                             className="inv-font rounded-corners"
@@ -189,8 +228,6 @@ export default function EditWorkoutForm(props) {
       </Form>
     );
   } else {
-    return (<></>)
+    return <></>;
   }
-
-
 }

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../service/AuthService";
 import { Avatar, Row, Col, Button } from "antd";
@@ -7,7 +8,7 @@ import Logo from "../../components/utils/Logo";
 import NavButton from "../utils/NavButton";
 
 import { Layout, Dropdown, Menu } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { SettingFilled, UserOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 
@@ -53,13 +54,9 @@ export default function Model({ children, gradient = false, ...props }) {
             </Dropdown>
           </Col>
           <Col xs={8} sm={14} md={12} lg={8} xl={20}>
-            <Logo
-              fontSize="24pt"
-              paddingTop="0"
-              marginLeft="0"
-              marginRight="0"
-              white
-            />
+            <Link to="/">
+              <Logo fontSize="24pt" paddingTop="0" white />
+            </Link>
           </Col>
           <Col xs={8} sm={5} md={6} lg={8} xl={2}></Col>
         </Row>
@@ -97,7 +94,15 @@ const HeaderMenu = ({ setUser, setIsAuthenticated }) => {
     <Menu>
       <Menu.Item key="0">
         {" "}
-        <Button block type="primary" onClick={logout}>
+        <Button block type="primary">
+          <Link to="/settings">
+            <SettingFilled className="inv-font" style={{ margin: 0 }} />
+          </Link>
+        </Button>
+      </Menu.Item>
+      <Menu.Item key="1">
+        {" "}
+        <Button block type="default" onClick={logout}>
           Logout
         </Button>
       </Menu.Item>

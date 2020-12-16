@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import AuthService from "../service/AuthService";
 import { Form, Input, Row, Col, Button } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import Logo from "./utils/Logo";
+import { Link } from "react-router-dom";
+
+const { Title } = Typography;
 
 const Register = (props) => {
   const [user, setUser] = useState({ username: "", password: "" });
@@ -39,15 +44,15 @@ const Register = (props) => {
 
   console.log(user);
   return (
-    <div style={{ marginTop: "25rem" }}>
-      <Row>
-        <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
-        <Col xs={20} sm={16} md={12} lg={8} xl={4}>
-          <ResigerForm onFinish={onSubmit} />
-        </Col>
-        <Col xs={2} sm={4} md={6} lg={8} xl={10}></Col>
-      </Row>
-    </div>
+    <Row justify="center" align="middle" style={{ height: "100vh" }}>
+      <Col xs={20} sm={16} md={12} lg={8} xl={4}>
+        <Link to="/login">
+          <Logo paddingTop="2vh" />
+        </Link>
+
+        <ResigerForm onFinish={onSubmit} />
+      </Col>
+    </Row>
   );
 };
 
@@ -55,7 +60,6 @@ const ResigerForm = ({ onFinish }) => {
   return (
     <Form
       name="normal_login"
-      className="login-form"
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
@@ -66,6 +70,7 @@ const ResigerForm = ({ onFinish }) => {
         <Input
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="Username"
+          className="rounded-corners"
           name="username"
         />
       </Form.Item>
@@ -77,11 +82,18 @@ const ResigerForm = ({ onFinish }) => {
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           name="password"
+          className="rounded-corners"
           placeholder="Password"
         />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button
+          block
+          type="primary"
+          htmlType="submit"
+          size="large"
+          className="rounded-corners"
+        >
           Register
         </Button>
       </Form.Item>

@@ -12,51 +12,48 @@ export default function FoodDiary() {
   const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
 
-  const { foodEntries, foodStats } = diaryContext;
+  const { foodEntries, foodStats, goals } = diaryContext;
 
   let history = useHistory();
-
+  const numberFormatter = new Intl.NumberFormat();
   const editEntry = ({ _id }) => {
     history.push("/diary/edit/", { id: _id });
   };
 
-  let {
-    energy = 0,
-    protein = 0,
-    fat = 0,
-    carbs = 0,
-    energyGoal = 0,
-  } = foodStats;
+  let { energy = 0, protein = 0, fat = 0, carbs = 0 } = foodStats;
 
   return (
     <>
       <BlockCard title="Quick Stats">
         <CustomIcon
-          text={+(energyGoal - energy).toFixed(2) + " kcal"}
+          text={
+            numberFormatter.format((goals.calories - energy).toFixed(2)) +
+            " kcal"
+          }
           subText="left"
           block
           goalIcon
         ></CustomIcon>
         <CustomIcon
-          text={energy.toFixed(2) + " kcal"}
+          text={numberFormatter.format(energy) + " kcal"}
           subText="consumed"
           block
           foodIcon
         ></CustomIcon>
         <CustomIcon
-          text={+protein.toFixed(2) + " g"}
+          text={numberFormatter.format(protein) + " g"}
           subText="protein"
           block
           proteinIcon
         ></CustomIcon>
         <CustomIcon
-          text={+carbs.toFixed(2) + " g"}
+          text={numberFormatter.format(carbs) + " g"}
           subText="carbs"
           block
           carbIcon
         ></CustomIcon>
         <CustomIcon
-          text={+fat.toFixed(2) + " g"}
+          text={numberFormatter.format(fat) + " g"}
           subText="fat"
           block
           fatIcon
@@ -101,7 +98,6 @@ const DiarySection = ({ name = "Breakfast", data, editEntry }) => {
     totalEnergy = 0;
 
   if (data) {
-    console.log(data);
     if (data.length !== 0) {
       entries = data.filter((x) => x.type.toLowerCase() === name.toLowerCase());
     }
