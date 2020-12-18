@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Link,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -9,6 +14,7 @@ import WorkoutDiary from "./components/WorkoutDiary";
 import NewDiaryEntry from "./components/NewDiaryEntry";
 import EditDiaryEntry from "./components/EditDiaryEntry";
 import Goals from "./components/Goals";
+import ShowArticle from "./components/ShowArticle";
 import WorkoutSession from "./components/WorkoutSession";
 import PrivateRoute from "./hocs/PrivateRoute";
 import UnPrivateRoute from "./hocs/UnPrivateRoute";
@@ -17,11 +23,15 @@ import Model from "./components/utils/Model";
 import "antd/dist/antd.less";
 import "./App.less";
 import UserSettings from "./components/UserSettings";
+import { Button, Result } from "antd";
 
 function App() {
   const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
     AuthContext
   );
+  if (user.error) {
+    return <Result status="500" title="500" subTitle="Something went wrong!" />;
+  }
 
   return (
     <Router>
@@ -82,6 +92,13 @@ function App() {
           roles={["user", "admin"]}
           diaryContext
         />
+        <PrivateRoute
+          exact
+          path="/article/:slug"
+          component={ArticleView}
+          roles={["user", "admin"]}
+          diaryContext
+        />
         <UnPrivateRoute exact path="/login" component={Login} />
         <UnPrivateRoute exact path="/register" component={Register} />
       </Switch>
@@ -130,12 +147,10 @@ const EditFoodDiaryEntryView = () => (
   <EditDiaryEntry mode="food"></EditDiaryEntry>
 );
 
-const NewWorkoutDiaryEntryView = () => (
-  <NewDiaryEntry mode="exercise"></NewDiaryEntry>
-);
-
-const EditWorkoutDiaryEntryView = () => (
-  <EditDiaryEntry mode="exercise"></EditDiaryEntry>
+const ArticleView = () => (
+  <Model gradient>
+    <ShowArticle></ShowArticle>
+  </Model>
 );
 
 export default App;

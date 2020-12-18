@@ -75,8 +75,9 @@ export default function Goals() {
       };
       console.log(newGoal);
       const res = await GoalService.postCustomGoal(newGoal);
-
-      setCustomGoals([...customGoals, newGoal]);
+      let newGoals = [...customGoals, newGoal];
+      setCustomFields(newGoals);
+      setCustomGoals(newGoals);
     } catch (err) {
       console.error(err);
     }
@@ -110,10 +111,7 @@ export default function Goals() {
     if (program.length > 0) setWorkoutProgram(program[0]);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    if (!customGoals) return;
-    if (!Array.isArray(customGoals)) return;
+  const setCustomFields = (customGoals) => {
     customGoals.forEach((x) => {
       switch (x.name) {
         case "Weight goal":
@@ -130,6 +128,14 @@ export default function Goals() {
           break;
       }
     });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (!customGoals) return;
+    if (!Array.isArray(customGoals)) return;
+    console.log("loading");
+    setCustomFields(customGoals);
     setLoading(false);
   }, [customGoals.length]);
 
@@ -151,6 +157,7 @@ export default function Goals() {
               handleChange={handleChange}
               availablePrograms={availablePrograms}
               setGoals={setGoals}
+              biometrics={biometrics}
             />
           </>
         </CoreGoals>
@@ -161,6 +168,7 @@ export default function Goals() {
         <Row justify="center" className="text-center">
           {customGoals.map((x) => {
             let val = x.currentValue;
+            if (!val) return <></>;
             let daysLeft =
               (new Date(x.endDate).getTime() -
                 new Date(x.startDate).getTime()) /
@@ -254,17 +262,20 @@ export default function Goals() {
   );
 }
 
-const CoreGoalsForm = ({ workoutProgram, availablePrograms, setGoals }) => {
+const CoreGoalsForm = ({
+  workoutProgram,
+  availablePrograms,
+  setGoals,
+  biometrics,
+}) => {
   // const weight, units, gender, height, years, activity, bodyFat;
 
   // 0 = Male, 1 = Female
-  const [gender, setGender] = useState(0);
-  const [genderLabel, setGenderLabel] = useState("Male");
-  const [height, setHeight] = useState(179);
-  const [mass, setMass] = useState(70);
+  const { gender, height, age, weight } = biometrics;
+  console.log(biometrics);
+  const [mass, setMass] = useState(weight ? weight : 70);
   const [activityLevel, setActivityLevel] = useState(4);
   const [goal, setGoal] = useState("mantain");
-  const [age, setAge] = useState(23);
   const [result, setResult] = useState();
 
   function activityLevelFormatter(value) {
@@ -335,17 +346,8 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms, setGoals }) => {
     }
   };
 
-  const onChangeGender = (checked) => {
-    setGender(checked ? 1 : 0);
-    setGenderLabel(checked ? "Female" : "Male");
-  };
-
   const onChangeMass = (value) => {
     setMass(value);
-  };
-
-  const onChangeHeight = (value) => {
-    setHeight(value);
   };
 
   const onChangeActivityLevel = (value) => {
@@ -387,7 +389,7 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms, setGoals }) => {
     console.log(finalTDEE({ gender, height, mass, activityLevel, age }));
     let finalTdee = finalTDEE({ gender, height, mass, activityLevel, age });
     let finalBmr = calculateBMR({ mass, height, age, gender });
-    let protein, fat, carbohydrates;
+
     const [proteinMul, fatMul, carbMul] = getMacros(goal);
     setResult({
       tdee: finalTdee,
@@ -418,29 +420,6 @@ const CoreGoalsForm = ({ workoutProgram, availablePrograms, setGoals }) => {
       </Form.Item>
       <Form.Item label="Weight (Kg)" name="mass">
         <Slider min={40} max={150} onChange={onChangeMass} />
-      </Form.Item>
-      <Form.Item label={"Gender"} name="gender">
-        <div className="flex-st-md">
-          <Switch
-            onChange={onChangeGender}
-            style={{ display: "inline-block" }}
-            className="inv"
-            defaultChecked={gender === 1 ? true : false}
-          />
-          <span style={{ padding: "0rem 0.5rem" }}>{genderLabel}</span>
-        </div>
-      </Form.Item>
-      <Form.Item label="Height (cm)" name="height">
-        <div className="flex-st-md">
-          <Slider
-            min={75}
-            max={230}
-            onChange={onChangeHeight}
-            style={{ width: "100%" }}
-            defaultValue={height}
-          />
-          <span style={{ padding: "0rem 0.5rem" }}>{height}</span>
-        </div>
       </Form.Item>
       <Form.Item label="Activity Level (hr per week)" name="activityLevel">
         <div className="flex-st-md">

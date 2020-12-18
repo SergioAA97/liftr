@@ -19,7 +19,7 @@ const signToken = (userID) => {
 };
 
 userRouter.post("/signup", (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, role, biometrics } = req.body;
   User.findOne({ username }, (err, user) => {
     if (err)
       res
@@ -32,7 +32,7 @@ userRouter.post("/signup", (req, res) => {
           .json({ msg: { body: "Username already exists", msgError: true } });
       else {
         //No error, create user
-        let newUser = new User({ username, password, role });
+        let newUser = new User({ username, password, role, biometrics });
         newUser.save((error) => {
           if (error)
             res.status(500).json({

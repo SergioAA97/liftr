@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import AuthService from "../service/AuthService";
@@ -11,6 +11,7 @@ import {
   Checkbox,
   message as Msg,
   Layout,
+  Result,
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../components/utils/Logo";
@@ -18,42 +19,37 @@ import Logo from "../components/utils/Logo";
 const { Content } = Layout;
 
 const Login = (props) => {
-  const [message, setMessage] = useState(null);
+  const [status, setStatus] = useState(null);
   const authContext = useContext(AuthContext);
+  let timerID = useRef(null);
 
-  const error = () => {
-    if (message) {
-      if (message.msgError) {
-        Msg.config({
-          duration: 1,
-          maxCount: 1,
-        });
-        Msg.error({
-          content: "Wrong username or password",
-          className: "",
-          style: {
-            marginTop: "20vh",
-          },
-        });
-      }
-    }
-  };
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerID);
+    };
+  });
 
   const onSubmit = (values) => {
     const user = {
       username: values.username,
       password: values.password,
     };
-    AuthService.login(user).then((data) => {
-      const { isAuthenticated, user, message } = data;
-      if (isAuthenticated) {
-        authContext.setUser(user);
-        authContext.setIsAuthenticated(isAuthenticated);
-        props.history.push("/");
-      } else {
-        setMessage(message);
-      }
-    });
+    setStatus("validating");
+    setTimeout(() => {
+      AuthService.login(user).then((data) => {
+        const { isAuthenticated, user, message: status } = data;
+        if (isAuthenticated) {
+          setStatus("success");
+          timerID = setTimeout(() => {
+            authContext.setUser(user);
+            authContext.setIsAuthenticated(isAuthenticated);
+            props.history.push("/");
+          }, 750);
+        } else {
+          setStatus("error");
+        }
+      });
+    }, 500);
   };
 
   return (
@@ -63,7 +59,7 @@ const Login = (props) => {
           <Row justify="center">
             <Col xs={20} sm={16} md={12} lg={8} xl={6} xxl={4}>
               <Logo />
-              <LoginForm onFinish={onSubmit} error={error} />
+              <LoginForm onFinish={onSubmit} status={status} />
             </Col>
           </Row>
         </div>
@@ -72,22 +68,28 @@ const Login = (props) => {
   );
 };
 
-const LoginForm = ({ onFinish, error }) => {
+const LoginForm = ({ onFinish, status }) => {
   return (
-    <Form
-      name="normal_login"
-      className="login-form "
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-    >
+    <Form name="normal_login" onFinish={onFinish}>
       <Form.Item
         name="username"
-        rules={[{ required: true, message: "Please input your Username!" }]}
+        help={status === "error" ? "Please input the correct username" : ""}
+        hasFeedback={status}
+        rules={[
+          { required: true, message: "Please input your username!" },
+          {
+            type: "string",
+            pattern: "^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$",
+            message: "Please input a valid username!",
+          },
+        ]}
         className="gradient-primary rounded-corners"
+        validateStatus={status}
       >
         <Input
           prefix={<UserOutlined className="site-form-item-icon bk-primary" />}
           placeholder="Username"
+          type="text"
           name="username"
         />
       </Form.Item>
@@ -95,28 +97,23 @@ const LoginForm = ({ onFinish, error }) => {
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
         className="gradient-primary rounded-corners"
+        help={status === "error" ? "Please input the correct password" : ""}
+        hasFeedback={status}
+        validateStatus={status}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon bk-primary" />}
           type="password"
           name="password"
           placeholder="Password"
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
 
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
-      </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-        {"  "}Or <Link to="/register">register now!</Link>
+        {"   "}Or <Link to="/register">register now!</Link>
       </Form.Item>
     </Form>
   );

@@ -35,19 +35,18 @@ export const BlockCard = ({ title, inv = false, children }) => {
         <b>{title}</b>
       </h2>
       <Row justify="center" style={{ marginTop: "1rem" }}>
-        {children &&
-          children.map((child) => (
-            <Col
-              key={key++}
-              xs={xsSpan}
-              sm={smSpan}
-              md={mdSpan}
-              lg={lgSpan}
-              style={colStyle}
-            >
-              {child}
-            </Col>
-          ))}
+        {React.Children.map(children, (child) => (
+          <Col
+            key={key++}
+            xs={xsSpan}
+            sm={smSpan}
+            md={mdSpan}
+            lg={lgSpan}
+            style={colStyle}
+          >
+            {child}
+          </Col>
+        ))}
       </Row>
     </div>
   );

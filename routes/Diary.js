@@ -32,7 +32,6 @@ diaryRouter.get("/today", (req, res) => {
 });
 
 diaryRouter.get("/entry", (req, res) => {
-
   if (typeof req.query.id === "string") {
     if (req.query.id.length > 1) {
       User.findById({ _id: req.user._id })
@@ -63,7 +62,6 @@ diaryRouter.get("/entry", (req, res) => {
 });
 
 diaryRouter.get("/delete", async (req, res) => {
-
   if (typeof req.query.id === "string") {
     if (req.query.id.length > 1) {
       try {
@@ -73,7 +71,6 @@ diaryRouter.get("/delete", async (req, res) => {
           .status(200)
           .json({ msg: "Entry deleted succesfully", authenticated: true });
       } catch (error) {
-
         res.status(500).json({
           msg: { msgBody: "error has occured", msgError: true },
           err: error,
@@ -122,7 +119,7 @@ diaryRouter.post("/post", async (req, res) => {
         },
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).json({
         message: { msgBody: "Error has occured", msgError: true },
       });
@@ -173,4 +170,41 @@ diaryRouter.post("/searchFood", (req, res) => {
     }
   );
 });
+
+diaryRouter.get("/getUserSettings", async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.user._id });
+
+    if (user.biometrics) {
+      res.status(200).json({ data: user.biometrics });
+    } else {
+      res.status(404).json({
+        msg: { msgBody: "not found", msgError: true },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      msg: { msgBody: "error has occured", msgError: true },
+      err: err,
+    });
+  }
+});
+
+diaryRouter.post("/updateUserSettings", async (req, res) => {
+  try {
+    const { gender, weight, height, age } = req.body;
+    await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { biometrics: { gender, weight, height, age } }
+    );
+    res.status(200).json({ authenticated: true });
+  } catch (err) {
+    res.status(500).json({
+      msg: { msgBody: "error has occured", msgError: true },
+      err: err,
+    });
+  }
+});
+
 module.exports = diaryRouter;

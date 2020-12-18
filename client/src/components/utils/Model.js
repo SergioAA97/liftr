@@ -38,7 +38,7 @@ export default function Model({ children, gradient = false, ...props }) {
       ></div>
       <Header className="header gradient-primary " style={{ padding: 0 }}>
         <Row>
-          <Col xs={8} sm={5} md={6} lg={8} xl={2}>
+          <Col xs={8} sm={5} md={4} lg={4} xl={2}>
             <Dropdown
               overlay={
                 <HeaderMenu
@@ -53,12 +53,12 @@ export default function Model({ children, gradient = false, ...props }) {
               </div>
             </Dropdown>
           </Col>
-          <Col xs={8} sm={14} md={12} lg={8} xl={20}>
+          <Col xs={8} sm={14} md={16} lg={8} xl={20}>
             <Link to="/">
               <Logo fontSize="24pt" paddingTop="0" white />
             </Link>
           </Col>
-          <Col xs={8} sm={5} md={6} lg={8} xl={2}></Col>
+          <Col xs={8} sm={5} md={4} lg={4} xl={2}></Col>
         </Row>
       </Header>
       <Layout>
@@ -92,17 +92,15 @@ const HeaderMenu = ({ setUser, setIsAuthenticated }) => {
 
   return (
     <Menu>
-      <Menu.Item key="0">
+      <Menu.Item key="0" className="text-center">
         {" "}
-        <Button block type="primary">
-          <Link to="/settings">
-            <SettingFilled className="inv-font" style={{ margin: 0 }} />
-          </Link>
-        </Button>
+        <Link to="/settings">
+          <SettingFilled className="inv-font" style={{ margin: 0 }} />
+        </Link>
       </Menu.Item>
       <Menu.Item key="1">
         {" "}
-        <Button block type="default" onClick={logout}>
+        <Button block style={{ color: "white" }} type="link" onClick={logout}>
           Logout
         </Button>
       </Menu.Item>

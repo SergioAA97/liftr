@@ -25,6 +25,7 @@ export default function NavButton(props) {
         color: "white",
         height: "5rem",
         padding: "1rem",
+        zIndex: 1000,
       }}
     >
       <Row justify="center">

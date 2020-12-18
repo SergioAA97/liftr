@@ -1,9 +1,16 @@
 import React, { useContext } from "react";
-import { Menu, Dropdown } from "antd";
+import { Menu, Dropdown, Card, Row, Col, Space, Carousel } from "antd";
 import CustomIcon from "./utils/CustomIcon";
 import { BlockCard } from "./utils/Layout-Components";
 import { Link } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
+import Article from "./Article";
+
+import articles from "../articles/articles.json";
+import Title from "antd/lib/typography/Title";
+
+// import blackWhiteCurlImg from "../img/static/articles/Black-white-curl.jpg";
+// import curlSeatedImg from "../img/static/articles/Curl-seated-color.jpg";
 
 export default function Home() {
   const diaryContext = useContext(DiaryContext);
@@ -18,7 +25,7 @@ export default function Home() {
         previousSessions={previousSessions}
         currentWeight={biometrics.weight}
       />
-      <QuickActions />
+      <NewsFeed articles={articles} />
     </div>
   );
 }
@@ -70,25 +77,38 @@ const TodaysStats = ({ caloriesConsumed, previousSessions, currentWeight }) => {
   );
 };
 
-const QuickActions = (props) => {
-  const iconStyle = { color: "white", cursor: "pointer" };
-  const textStyle = { color: "white", fontWeight: 800, fontSize: "" };
+const NewsFeed = ({ articles = [{}] }) => {
   return (
-    <BlockCard title="Quick Actions" inv>
-      <Link to="/workout">
-        <CustomIcon text="New Workout" workoutIcon inv></CustomIcon>
-      </Link>
-      <Dropdown overlay={AddFoodOverlay} className="pointer-cursor">
-        <CustomIcon text="Add Food" drumStickIcon inv></CustomIcon>
-      </Dropdown>
-      <Link to="/">
-        <CustomIcon text="Add Goal" goalIcon inv></CustomIcon>
-      </Link>
-    </BlockCard>
+    <div className="text-center inf-font">
+      <Title level={3} className="mb-2">
+        <b>News Feed</b>
+      </Title>
+      <Row justify="space-around" align="top" className="gradient-primary">
+        <Col xs={24} sm={24} md={16} style={{ margin: "2rem 0rem" }}>
+          <Carousel autoplay dotPosition="bottom">
+            {articles.map((x, idx) => (
+              <div
+                key={idx}
+                style={{ padding: "2rem 1rem" }}
+                className="gradient-primary"
+              >
+                <Article
+                  title={x.title}
+                  description={x.description}
+                  img={x.img}
+                  author={x.author}
+                  date={x.date}
+                  avatar={1}
+                  link={x.link}
+                />
+              </div>
+            ))}
+          </Carousel>
+        </Col>
+      </Row>
+    </div>
   );
 };
-
-const NewsFeed = () => {};
 
 const AddFoodOverlay = (
   <Menu className="inv-font li-hover">

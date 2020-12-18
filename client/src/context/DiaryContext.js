@@ -1,8 +1,10 @@
-import React, { createContext, useState, useEffect } from "react";
+import { Col, Row } from "antd";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import Spinner from "../components/utils/Spinner.js";
 import FoodDiaryService from "../service/FoodDiaryService.js";
 import GoalService from "../service/GoalService.js";
+import UtilService from "../service/UtilService.js";
 import WorkoutDiaryService from "../service/WorkoutDiaryService.js";
-import { CardioWeekGoal, WeightGoal } from "../components/utils/GoalStrategies";
 
 export const DiaryContext = createContext();
 
@@ -16,10 +18,7 @@ export default ({ children }) => {
   const [previousSessions, setPreviousSessions] = useState();
   const [goals, setGoals] = useState();
   const [customGoals, setCustomGoals] = useState();
-  const [biometrics, setBiometrics] = useState({
-    weight: 70,
-    height: 178,
-  });
+  const [biometrics, setBiometrics] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   const calculateItemEnergy = (entries) => {
@@ -89,6 +88,12 @@ export default ({ children }) => {
     });
   };
 
+  const fetchBiometrics = () => {
+    return UtilService.getUserSettings().then(({ data }) => {
+      setBiometrics(data);
+    });
+  };
+
   const refreshEntries = () => {
     fetchAll();
   };
@@ -96,9 +101,11 @@ export default ({ children }) => {
   const fetchAll = () => {
     fetchWorkouts().then((w) => {
       fetchFoodEntries().then((e) => {
-        return fetchGoals().then((g) => {
-          console.log("Data Loaded!");
-          setIsLoaded(true);
+        fetchGoals().then((g) => {
+          return fetchBiometrics().then((b) => {
+            console.log("Data Loaded!");
+            setIsLoaded(true);
+          });
         });
       });
     });
@@ -112,7 +119,16 @@ export default ({ children }) => {
     return (
       <div>
         {!isLoaded ? (
-          <>Loading</>
+          <Row
+            justify="center"
+            className="text-center"
+            align="middle"
+            style={{ height: "100vh" }}
+          >
+            <Col xs={24} md={8} xl={4}>
+              <Spinner />
+            </Col>
+          </Row>
         ) : (
           <DiaryContext.Provider
             value={{
@@ -136,6 +152,7 @@ export default ({ children }) => {
               customGoals,
               setCustomGoals,
               biometrics,
+              setBiometrics,
             }}
           >
             {children}

@@ -31,6 +31,15 @@ const UserSchema = new mongoose.Schema({
       min: 60,
       max: 300,
     },
+    age: {
+      type: mongoose.Schema.Types.Number,
+      min: 13,
+      max: 150,
+    },
+    gender: {
+      type: mongoose.Schema.Types.String,
+      enum: ["Male", "Female"],
+    },
   },
   goals: {
     calories: mongoose.Schema.Types.Number,

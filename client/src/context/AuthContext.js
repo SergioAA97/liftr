@@ -1,4 +1,6 @@
+import { Row, Col } from "antd";
 import React, { createContext, useState, useEffect } from "react";
+import Spinner from "../components/utils/Spinner";
 import AuthService from "../service/AuthService";
 
 export const AuthContext = createContext();
@@ -19,7 +21,16 @@ export default ({ children }) => {
   return (
     <div>
       {!isLoaded ? (
-        <>Loading</>
+        <Row
+          justify="center"
+          align="middle"
+          className="text-center"
+          style={{ height: "100vh" }}
+        >
+          <Col xs={24} md={8} xl={4}>
+            <Spinner />
+          </Col>
+        </Row>
       ) : (
         <AuthContext.Provider
           value={{ user, setUser, isAuthenticated, setIsAuthenticated }}

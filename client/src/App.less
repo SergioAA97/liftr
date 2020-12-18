@@ -23,6 +23,18 @@
   background-color: white;
 }
 
+.ant-form-item-has-error .ant-form-item-explain,
+.ant-form-item-explain,
+.ant-form-item-extra,
+.ant-form-item-has-error .ant-form-item-split {
+  background-color: white;
+  padding: 0.5rem;
+}
+
+.ant-input-password span.ant-input-suffix span svg {
+  fill: white;
+}
+
 .ant-input-prefix {
   background: transparent !important;
 }
@@ -33,6 +45,34 @@
 
 .ant-select-item {
   color: white;
+}
+
+.ant-card-cover {
+  width: 100%;
+  max-width: 100%;
+  max-height: 65%;
+  height: 100%;
+}
+.ant-card-cover img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 225px;
+  height: 100%;
+}
+
+.ant-card {
+  border: 0;
+}
+
+.ant-card-bordered .ant-card-cover {
+  margin: 0;
+}
+.ant-card-bordered {
+  border-color: rgba(0, 0, 0, 0);
+}
+
+.ant-card-bordered:hover {
+  border-color: rgba(250, 250, 250, 0.8);
 }
 
 .ant-form.inv * > * > label {
@@ -203,7 +243,7 @@
     rgba(36, 26, 106, 1) 100%
   ) !important;
   border-radius: 7px;
-  border-color: transparent !important;
+  border-color: rgb(72, 52, 212) !important;
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
 }
@@ -216,7 +256,8 @@
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
 }
-
+.ant-input-password.inv,
+.ant-input-password.inv input,
 .ant-input.inv {
   background: rgb(255, 255, 255) !important;
   background-image: none !important;
@@ -224,6 +265,7 @@
   border-color: rgba(72, 52, 212, 1) !important;
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
+  color: rgba(72, 52, 212, 1) !important;
 }
 
 .ant-input-number-handler-up-inner svg,
@@ -269,4 +311,31 @@ li ::before {
 .dynamic-delete-button[disabled] {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #f1c40f !important;
+}
+
+.ant-form-item-is-validating.ant-form-item-has-feedback
+  .ant-form-item-children-icon {
+  fill: white;
+  color: white;
+}
+
+.ant-carousel .slick-dots {
+  bottom: -40px;
+}
+
+.ant-carousel .slick-dots > li > button {
+  border-color: white;
+  background-color: white;
+}
+
+.ant-carousel {
+  padding: 2rem 0.25rem;
 }

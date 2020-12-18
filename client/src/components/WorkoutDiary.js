@@ -215,7 +215,19 @@ export default function WorkoutDiary() {
           renderItem={(item) => {
             const ts = new Date(item.timeStart);
             const te = new Date(item.timeEnd);
+            var delta =
+              Math.abs(new Date(te.getTime() - ts.getTime()).getTime()) / 1000;
 
+            var days = Math.floor(delta / 86400);
+            delta -= days * 86400;
+
+            var hours = Math.floor(delta / 3600) % 24;
+            delta -= hours * 3600;
+
+            var minutes = Math.floor(delta / 60) % 60;
+            delta -= minutes * 60;
+
+            var seconds = Math.round(delta % 60);
             if (item.workout) {
               return (
                 <List.Item>
@@ -229,11 +241,14 @@ export default function WorkoutDiary() {
                     description={
                       <Row justify="space-between">
                         <Col>Description</Col>
-                        <Col>
-                          <i>
-                            Start: {ts.toLocaleString()} / End:{" "}
-                            {te.toLocaleString()}
-                          </i>
+                        <Col style={{ fontSize: "10pt" }}>
+                          <p>Start: {ts.toLocaleString()}</p>
+                          <p>
+                            Duration: {days ? days + " days " : ""}{" "}
+                            {hours ? hours + " h" : ""}{" "}
+                            {minutes ? minutes + " m " : ""}{" "}
+                            {seconds ? seconds + " s" : ""}
+                          </p>
                         </Col>
                         <Col>
                           <FullscreenOutlined
