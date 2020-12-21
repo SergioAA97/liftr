@@ -21,7 +21,7 @@ export default {
     const picoGrp = ["vitaminA", "vitaminE"];
 
     let nutrients = Object.entries(data).filter((x) => {
-      const [key, value] = x;
+      const [key] = x;
       return filter.indexOf(key) !== -1;
     });
     return nutrients.map((x) => {

@@ -3,11 +3,11 @@ import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import articles from "../articles/articles.json";
 
-export default function ShowArticle({}) {
+export default function ShowArticle() {
   const { slug } = useParams();
   const history = useHistory();
   const article = articles.filter((x) => x.link.includes(slug))[0];
-  const { title, img, link, description, content, date, author } = article;
+  const { title, img,  description, content, date, author } = article;
   console.log(article);
   const containerStyle = {
     padding: "1rem 5rem",

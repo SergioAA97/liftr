@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
-  Link,
   Switch,
-  useHistory,
 } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import Login from "./components/Login";
@@ -23,10 +21,10 @@ import Model from "./components/utils/Model";
 import "antd/dist/antd.less";
 import "./App.less";
 import UserSettings from "./components/UserSettings";
-import { Button, Result } from "antd";
+import { Result } from "antd";
 
 function App() {
-  const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
+  const { user } = useContext(
     AuthContext
   );
   if (user.error) {

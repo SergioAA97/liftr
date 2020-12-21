@@ -13,7 +13,7 @@ class CustomGoal {
   getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+      diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
     let ret = new Date(d.setDate(diff));
     ret.setHours(0);
     ret.setMinutes(0);

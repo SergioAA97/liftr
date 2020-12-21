@@ -13,7 +13,7 @@ import { SettingFilled, UserOutlined } from "@ant-design/icons";
 const { Header, Content } = Layout;
 
 export default function Model({ children, gradient = false, ...props }) {
-  const { isAuthenticated, user, setIsAuthenticated, setUser } = useContext(
+  const { setIsAuthenticated, setUser } = useContext(
     AuthContext
   );
 

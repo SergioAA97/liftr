@@ -1,16 +1,12 @@
 import React, { useContext } from "react";
-import { Menu, Dropdown, Card, Row, Col, Space, Carousel } from "antd";
+import { Row, Col, Carousel } from "antd";
 import CustomIcon from "./utils/CustomIcon";
 import { BlockCard } from "./utils/Layout-Components";
-import { Link } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
 import Article from "./Article";
 
 import articles from "../articles/articles.json";
 import Title from "antd/lib/typography/Title";
-
-// import blackWhiteCurlImg from "../img/static/articles/Black-white-curl.jpg";
-// import curlSeatedImg from "../img/static/articles/Curl-seated-color.jpg";
 
 export default function Home() {
   const diaryContext = useContext(DiaryContext);
@@ -79,12 +75,12 @@ const TodaysStats = ({ caloriesConsumed, previousSessions, currentWeight }) => {
 
 const NewsFeed = ({ articles = [{}] }) => {
   return (
-    <div className="text-center inf-font">
-      <Title level={3} className="mb-2">
+    <div className="text-center">
+      <Title level={3} style={{marginBottom: "0.5rem"}}>
         <b>News Feed</b>
       </Title>
-      <Row justify="space-around" align="top" className="gradient-primary">
-        <Col xs={24} sm={24} md={16} style={{ margin: "2rem 0rem" }}>
+      <Row justify="space-around" align="top" >
+        <Col xs={24} sm={24} md={24} lg={16} style={{ margin: "0.5rem 0rem" }}>
           <Carousel autoplay dotPosition="bottom">
             {articles.map((x, idx) => (
               <div
@@ -110,19 +106,3 @@ const NewsFeed = ({ articles = [{}] }) => {
   );
 };
 
-const AddFoodOverlay = (
-  <Menu className="inv-font li-hover">
-    <Menu.Item>
-      <Link to="/diary/new/breakfast">Breakfast</Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Link to="/diary/new/lunch">Lunch</Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Link to="/diary/new/dinner">Dinner</Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Link to="/diary/new/snack">Snack</Link>
-    </Menu.Item>
-  </Menu>
-);

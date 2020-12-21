@@ -1,7 +1,6 @@
 import React from "react";
-import { Row, Col, Switch, Typography, Slider } from "antd";
+import { Row, Col,  } from "antd";
 
-const { Title } = Typography;
 
 export const BlockCard = ({ title, inv = false, children }) => {
   let divStyle = {

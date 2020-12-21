@@ -35,7 +35,7 @@ export default () => {
 
   const workout = location.state;
 
-  const { type, _id, description, def, exercises } = workout;
+  const { _id } = workout;
 
   const onUpValues = (item) => {
     console.log("onUpValues", item, items);
@@ -111,13 +111,8 @@ const WorkoutExercise = ({ item, onUpValues }) => {
 
   const {
     _id,
-    equipment,
     exercise,
-    exerciseType,
-    majorMuscle,
-    minorMuscle,
-    modifications,
-    notes,
+    exerciseType
   } = item.ref;
 
   const onAerobicSubmit = ({ min = 0, sec = 1 }) => {
@@ -185,14 +180,6 @@ const WorkoutExercise = ({ item, onUpValues }) => {
 
   const onClickReps = (isUp) => {
     handleOnClick(isUp, setReps, reps + 1, reps - 1 > 0 ? reps - 1 : reps);
-  };
-
-  const onClickDuration = (isUp, part) => {
-    handleOnClick(isUp, setDuration, duration + 1);
-  };
-
-  const onChangeDuration = (e) => {
-    console.log(e.target.value);
   };
 
   const onChangeWeight = (e) => {
@@ -354,7 +341,6 @@ const WorkoutSetInputModal = ({
   children,
   visible,
   setModalVisible,
-  handleOk,
 }) => {
   return (
     <>
@@ -433,7 +419,6 @@ const AerobicForm = ({ onAerobicSubmit, values }) => {
   let [el] = values;
   const { label, value } = el;
   console.log(label, value);
-  const labelStyle = {};
   return (
     <>
       <Title level={4} className="inv-font text-center">
@@ -447,7 +432,13 @@ const AerobicForm = ({ onAerobicSubmit, values }) => {
       >
         <Row justify="center" align="middle">
           <Col span={10} className="flex-md-bl">
-            <Form.Item name="min" className="flex-md-md">
+            <Form.Item 
+              name="min" 
+              className="flex-md-md" 
+              rules={[
+                {type:"integer", message:"Please enter a valid number!"}
+              ]}
+            >
               <InputNumber className="transparent" min={0} defaultValue={0} />
             </Form.Item>
             <div className="inv-font ml-1"> min</div>
@@ -459,6 +450,9 @@ const AerobicForm = ({ onAerobicSubmit, values }) => {
                 min={0}
                 max={59}
                 defaultValue={1}
+                rules={[
+                  {type:"integer", message:"Please enter a valid number!"}
+                ]}
               />
             </Form.Item>
             <div className="inv-font ml-1"> sec</div>

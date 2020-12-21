@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
 import WorkoutDiaryService from "../service/WorkoutDiaryService";
-import { Form, Input, Button, Space, AutoComplete, Switch } from "antd";
+import { Form, Input, InputNumber, Button,  AutoComplete, Switch } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
@@ -10,7 +10,6 @@ const { TextArea } = Input;
 export default function NewWorkoutForm({ setVisible }) {
   const [options, setOptions] = useState(null);
   const [type, setType] = useState("Aerobic");
-  const history = useHistory();
   const diaryContext = useContext(DiaryContext);
 
   const { availableWorkouts, setAvailableWorkouts } = diaryContext;
@@ -77,10 +76,28 @@ export default function NewWorkoutForm({ setVisible }) {
 
   return (
     <Form layout="vertical" onFinish={onFinish} style={{ minWidth: "50%" }}>
-      <Form.Item name="name" label="Name">
+      <Form.Item 
+        name="name" label="Name" 
+        rules={[
+          { required: true, message: "Enter a name!" },
+          {
+            type: "string",
+            message: "Please input a valid name!",
+          },
+        ]} 
+      >
         <Input className="rounded-corners" placeholder="New Workout..." />
       </Form.Item>
-      <Form.Item name="description" label="Description">
+      <Form.Item 
+        name="description" 
+        label="Description"
+        rules={[
+          {
+            type: "string",
+            message: "Please input a valid description!",
+          },
+        ]}
+      >
         <TextArea rows={4} className="rounded-corners" />
       </Form.Item>
       <Form.Item name="type" label="Type">
@@ -111,7 +128,7 @@ export default function NewWorkoutForm({ setVisible }) {
                     fieldKey={[field.fieldKey, "exercise"]}
                     label={"Exercise " + (index + 1).toString()}
                     style={{ flexGrow: 2 }}
-                    // rules={[{ required: true, message: 'Missing first name' }]}
+                    rules={[{ required: true, message: 'Missing exercise!' }]}
                   >
                     <AutoComplete
                       options={options.filter((o) => o.type === type)}
@@ -137,12 +154,16 @@ export default function NewWorkoutForm({ setVisible }) {
                           maxWidth: "20%",
                           padding: "0rem 0.25rem",
                         }}
-                        // rules={[{ required: true, message: 'Missing first name' }]}
+                        rules={[
+                          { required: true, message: 'Missing sets!' },
+                          {type:"integer", message:"Please enter a valid number!"}
+                        ]}
                       >
-                        <Input
-                          className="inv-font rounded-corners"
-                          defaultValue={1}
-                        />
+                        <InputNumber
+                            className="inv-font rounded-corners"
+                            defaultValue={1}
+                            style={{width: "100%"}}
+                          />
                       </Form.Item>
                     </>
                   )}

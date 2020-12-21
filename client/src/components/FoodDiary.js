@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
-import { AuthContext } from "../context/AuthContext";
 import { Row, Col } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import CustomIcon from "./utils/CustomIcon";
@@ -9,7 +8,6 @@ import { DiarySection as Section } from "./utils/Diary-components";
 import { BlockCard } from "./utils/Layout-Components";
 
 export default function FoodDiary() {
-  const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
 
   const { foodEntries, foodStats, goals } = diaryContext;

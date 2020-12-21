@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
 import CustomIcon from "./utils/CustomIcon";
 import {
   Row,
@@ -11,19 +10,15 @@ import {
   Form,
   Select,
   Slider,
-  Switch,
   Statistic,
   Button,
-  Space,
   Input,
 } from "antd";
 import {
   PlusOutlined,
   DeliveredProcedureOutlined,
-  EllipsisOutlined,
   RollbackOutlined,
   CloseOutlined,
-  LoadingOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
 import { DiaryContext } from "../context/DiaryContext";
@@ -34,13 +29,11 @@ import {
 } from "./utils/GoalStrategies";
 import GoalService from "../service/GoalService";
 import Spinner from "./utils/Spinner";
-import { useHistory } from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 export default function Goals() {
-  const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
   const {
     workoutProgram,
@@ -54,8 +47,6 @@ export default function Goals() {
     foodStats,
     biometrics,
   } = diaryContext;
-
-  const history = useHistory();
 
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [loading, setLoading] = useState(null);
@@ -74,7 +65,7 @@ export default function Goals() {
         goalValue: parseInt(values.goalValue),
       };
       console.log(newGoal);
-      const res = await GoalService.postCustomGoal(newGoal);
+      await GoalService.postCustomGoal(newGoal);
       let newGoals = [...customGoals, newGoal];
       setCustomFields(newGoals);
       setCustomGoals(newGoals);
@@ -86,7 +77,7 @@ export default function Goals() {
   const deleteGoal = async (name) => {
     try {
       console.log(name);
-      const res = await GoalService.deleteCustomGoal(name);
+      await GoalService.deleteCustomGoal(name);
       setCustomGoals(customGoals.filter((x) => x.name !== name));
     } catch (err) {
       console.error(err);
@@ -126,6 +117,8 @@ export default function Goals() {
           const weightGoal = new WeightWeekGoal(x);
           x.currentValue = weightGoal.currentValue(previousSessions);
           break;
+        default:
+          return null;
       }
     });
   };
@@ -164,7 +157,7 @@ export default function Goals() {
       </Col>
       <Col sm={24} xl={12} style={{ padding: "2rem" }} className="text-center">
         <StandardGoals goals={goals} currentStats={foodStats} />
-        <Title level={3}>Custom Goals</Title>
+        <Title level={3}>LIFTR Goals</Title>
         <Row justify="center" className="text-center">
           {customGoals.map((x) => {
             let val = x.currentValue;
@@ -513,6 +506,7 @@ const CoreGoalsForm = ({
               />
             </Col>
           </Row>
+          <Row><Col span={24}><i>All calculated values are purely for reference and should not be considered medical advice, consult your doctor before submitting youself to any kind of dietary change.</i></Col></Row>
           <Row justify="center" className="text-center mt-1">
             <Col flex={1}>
               <Button
@@ -688,10 +682,28 @@ const NewGoalCard = ({ name, onSubmit, onDelete, data }) => {
                 setEditView(false);
               }}
             >
-              <Form.Item name="deadline">
+              <Form.Item 
+                name="deadline" 
+                rules={[
+                  { required: true, message: "Enter a deadline!" },
+                  {
+                    type: "integer",
+                    message: "Please input a valid number!",
+                  },
+                ]}
+              >
                 <Input placeholder="Days" className="text-center" />
               </Form.Item>
-              <Form.Item name="goalValue">
+              <Form.Item 
+                name="goalValue"
+                rules={[
+                  { required: true, message: "Enter a goal!" },
+                  {
+                    type: "integer",
+                    message: "Please input a valid number!",
+                  },
+                ]}
+              >
                 <Input placeholder="Goal Value" className="text-center" />
               </Form.Item>
               <Form.Item>

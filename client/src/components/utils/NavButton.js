@@ -31,19 +31,19 @@ export default function NavButton(props) {
       <Row justify="center">
         <Space size={40}>
           <Link to="/">
-            <img src={iHome} style={iconStyle} />
+            <img alt="home icon" src={iHome} style={iconStyle} />
             <div style={textStyle}>Home</div>
           </Link>
           <Link to="/goals">
-            <img src={iGoal} style={iconStyle} />
+            <img alt="Goal icon" src={iGoal} style={iconStyle} />
             <div style={textStyle}>Goals</div>
           </Link>
           <Link to="/workout">
-            <img src={iWorkout} style={iconStyle} />
+            <img alt="workout icon" src={iWorkout} style={iconStyle} />
             <div style={textStyle}>Workout</div>
           </Link>
           <Link to="/diary">
-            <img src={iFood} style={iconStyle} />
+            <img alt="food icon" src={iFood} style={iconStyle} />
             <div style={textStyle}>Food</div>
           </Link>
         </Space>

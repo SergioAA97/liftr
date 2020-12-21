@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { DiaryContext } from "../context/DiaryContext";
-import { AuthContext } from "../context/AuthContext";
+
 import {
   List,
   Space,
@@ -41,7 +41,6 @@ const WeightAvatar = () => (
 );
 
 export default function WorkoutDiary() {
-  const authContext = useContext(AuthContext);
   const diaryContext = useContext(DiaryContext);
 
   const [newWorkoutVisible, setNewWorkoutVisible] = useState(false);
@@ -113,8 +112,9 @@ export default function WorkoutDiary() {
           dataSource={availableWorkouts}
           renderItem={(item) => {
             let deleteButton = () => <></>;
+            let editButton = () => <></>;
             if (selectedWorkout) {
-              if (selectedWorkout._id === item._id) {
+              if (selectedWorkout._id === item._id && !selectedWorkout.def) {
                 deleteButton = () => (
                   <DeleteOutlined
                     style={{ fontSize: "15pt", marginRight: "2rem" }}
@@ -129,6 +129,14 @@ export default function WorkoutDiary() {
                 item.type === "Aerobic"
                   ? React.createElement(CardioAvatar)
                   : React.createElement(WeightAvatar);
+            }
+            if(!item.def){
+              editButton = () => (
+                <EditOutlined
+                          style={{ fontSize: "15pt", marginRight: "2rem" }}
+                          onClick={() => editEntry(item)}
+                        />
+              )
             }
             return (
               <List.Item>
@@ -152,10 +160,7 @@ export default function WorkoutDiary() {
                       </Col>
                       <Col>
                         {deleteButton()}
-                        <EditOutlined
-                          style={{ fontSize: "15pt", marginRight: "2rem" }}
-                          onClick={() => editEntry(item)}
-                        />
+                        {editButton()}
                         <PlayCircleOutlined
                           style={{ fontSize: "15pt" }}
                           onClick={() => onClickPlay(item)}

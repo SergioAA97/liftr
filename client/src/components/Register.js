@@ -2,11 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import AuthService from "../service/AuthService";
 import { Form, Input, Row, Col, Button, Switch, InputNumber } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Typography } from "antd";
 import Logo from "./utils/Logo";
 import { Link } from "react-router-dom";
 
-const { Title } = Typography;
 
 const Register = (props) => {
   const [user, setUser] = useState({ username: "", password: "" });
@@ -55,7 +53,7 @@ const Register = (props) => {
 
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <Col xs={20} sm={16} md={12} lg={8} xl={4}>
+      <Col xs={20} sm={18} md={18} lg={8} xl={6}>
         <Link to="/login">
           <Logo paddingTop="0vh" />
         </Link>

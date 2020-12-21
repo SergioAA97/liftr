@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import Spinner from "../components/utils/Spinner.js";
 import FoodDiaryService from "../service/FoodDiaryService.js";
 import GoalService from "../service/GoalService.js";

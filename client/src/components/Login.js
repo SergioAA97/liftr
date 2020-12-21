@@ -8,10 +8,8 @@ import {
   Row,
   Col,
   Button,
-  Checkbox,
-  message as Msg,
   Layout,
-  Result,
+
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../components/utils/Logo";
@@ -37,7 +35,7 @@ const Login = (props) => {
     setStatus("validating");
     setTimeout(() => {
       AuthService.login(user).then((data) => {
-        const { isAuthenticated, user, message: status } = data;
+        const { isAuthenticated, user } = data;
         if (isAuthenticated) {
           setStatus("success");
           timerID = setTimeout(() => {
@@ -83,11 +81,11 @@ const LoginForm = ({ onFinish, status }) => {
             message: "Please input a valid username!",
           },
         ]}
-        className="gradient-primary rounded-corners"
+        className="gradient-primary "
         validateStatus={status}
       >
         <Input
-          prefix={<UserOutlined className="site-form-item-icon bk-primary" />}
+          prefix={<UserOutlined className="site-form-item-icon bk-primary rounded-corners" />}
           placeholder="Username"
           type="text"
           name="username"
@@ -102,7 +100,7 @@ const LoginForm = ({ onFinish, status }) => {
         validateStatus={status}
       >
         <Input.Password
-          prefix={<LockOutlined className="site-form-item-icon bk-primary" />}
+          prefix={<LockOutlined className="site-form-item-icon bk-primary rounded-corners" />}
           type="password"
           name="password"
           placeholder="Password"

@@ -1,7 +1,7 @@
 import { Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { LoadingOutlined } from "@ant-design/icons";
-export default function Spinner(props) {
+export default function Spinner() {
   return (
     <Spin
       tip="Loading..."

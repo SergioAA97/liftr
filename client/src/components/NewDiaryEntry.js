@@ -8,17 +8,15 @@ import {
   Space,
   Divider,
   Empty,
-  Descriptions,
   Form,
   Button,
-  Select,
+  InputNumber,
 } from "antd";
 import {
   PlusOutlined,
   ArrowLeftOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
-import { AuthContext } from "../context/AuthContext";
 import { DiaryContext } from "../context/DiaryContext";
 import FoodDiaryService from "../service/FoodDiaryService";
 import CustomIcon from "./utils/CustomIcon";
@@ -26,11 +24,9 @@ import { useHistory, useParams } from "react-router-dom";
 import UtilService from "../service/UtilService";
 
 const { Title } = Typography;
-const { Option } = Select;
 const { Search } = Input;
 
 export default function NewDiaryEntry(props) {
-  const authContext = useContext(AuthContext);
   const [value, setValue] = useState("");
   const [data, setData] = useState([]);
   const [food, setFood] = useState(null);
@@ -142,9 +138,12 @@ const EntryForm = ({ food }) => {
         <b>Quantity</b>
         <Form.Item
           name="quantity"
-          rules={[{ required: true, message: "Please enter a quantity!" }]}
+          rules={[
+            { required: true, message: "Please enter a quantity!" },
+            { type: "number", message: "Please enter a valid number!" }
+          ]}
         >
-          <Input addonAfter="(g)" placeholder="0" />
+          <InputNumber className="rounded-corners" style={{width:"100%"}} placeholder="0 g" />
         </Form.Item>
         <Row>
           <Col flex={2}>
@@ -163,10 +162,11 @@ const EntryForm = ({ food }) => {
         ))}
         <Button
           type="primary"
-          shape="round"
           htmlType="submit"
+          className="rounded-corners"
           block
           icon={<CheckOutlined />}
+          className="mt-1"
         >
           Done
         </Button>

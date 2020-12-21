@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "antd";
-import { Link, useHistory } from "react-router-dom";
-import { EyeOutlined, HeartOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -12,9 +11,7 @@ export default function Article({
   link,
   date,
   author,
-  avatar,
-  saveButton = true,
-  optionsButton = true,
+  avatar
 }) {
   const history = useHistory();
 
@@ -39,8 +36,8 @@ export default function Article({
             src={img}
           />
         ) : (
-          <></>
-        )
+            <></>
+          )
       }
       onClick={() => onClick(link)}
     >

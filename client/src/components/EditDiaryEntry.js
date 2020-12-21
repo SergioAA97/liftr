@@ -3,30 +3,22 @@ import {
   Typography,
   Row,
   Col,
-  Card,
   Input,
-  Space,
-  Divider,
   Empty,
-  Descriptions,
   Form,
   Button,
-  Select,
 } from "antd";
 import {
-  PlusOutlined,
   ArrowLeftOutlined,
   CheckOutlined,
   DeleteFilled,
 } from "@ant-design/icons";
 import { DiaryContext } from "../context/DiaryContext";
 import FoodDiaryService from "../service/FoodDiaryService";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import UtilService from "../service/UtilService";
 
 const { Title } = Typography;
-const { Option } = Select;
-const { Search } = Input;
 
 export default function EditDiaryEntry(props) {
   const [entry, setEntry] = useState(null);
