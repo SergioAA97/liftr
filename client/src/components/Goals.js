@@ -13,6 +13,7 @@ import {
   Statistic,
   Button,
   Input,
+  InputNumber,
 } from "antd";
 import {
   PlusOutlined,
@@ -161,7 +162,6 @@ export default function Goals() {
         <Row justify="center" className="text-center">
           {customGoals.map((x) => {
             let val = x.currentValue;
-            if (!val) return <></>;
             let daysLeft =
               (new Date(x.endDate).getTime() -
                 new Date(x.startDate).getTime()) /
@@ -692,7 +692,7 @@ const NewGoalCard = ({ name, onSubmit, onDelete, data }) => {
                   },
                 ]}
               >
-                <Input placeholder="Days" className="text-center" />
+                <InputNumber placeholder="Days" className="text-center" style={{width:"100%"}} />
               </Form.Item>
               <Form.Item 
                 name="goalValue"
@@ -704,7 +704,7 @@ const NewGoalCard = ({ name, onSubmit, onDelete, data }) => {
                   },
                 ]}
               >
-                <Input placeholder="Goal Value" className="text-center" />
+                <InputNumber placeholder="Goal Value" className="text-center" style={{width:"100%"}} />
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">

@@ -190,8 +190,8 @@ const FoodResults = ({ data, onFoodClick }) => {
               actions={[<PlusOutlined onClick={() => onFoodClick(item)} />]}
               className="inv-font gradient-primary result-card"
             >
-              <Row>
-                <Col span={16}>
+              <Row justify="space-between">
+                <Col sm={14} md={16}>
                   <p style={{ marginBottom: "0.2rem" }}>
                     <b>{item.description}</b>
                   </p>
@@ -200,7 +200,7 @@ const FoodResults = ({ data, onFoodClick }) => {
                   </p>
                   <p>(100 - g)</p>
                 </Col>
-                <Col span={8} style={{ textAlign: "right" }}>
+                <Col sm={10} md={8} style={{ textAlign: "right" }}>
                   <NutrientGraph
                     carbs={item.carbohydrate}
                     protein={item.protein}
