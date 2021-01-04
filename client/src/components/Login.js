@@ -2,15 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import AuthService from "../service/AuthService";
-import {
-  Form,
-  Input,
-  Row,
-  Col,
-  Button,
-  Layout,
-
-} from "antd";
+import { Form, Input, Row, Col, Button, Layout } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../components/utils/Logo";
 
@@ -66,12 +58,12 @@ const Login = (props) => {
   );
 };
 
-const LoginForm = ({ onFinish, status }) => {
+const LoginForm = ({ onFinish, status = null }) => {
   return (
     <Form name="normal_login" onFinish={onFinish}>
       <Form.Item
         name="username"
-        help={status === "error" ? "Please input the correct username" : ""}
+        help={status === "error" ? "Please input the correct username" : null}
         hasFeedback={status}
         rules={[
           { required: true, message: "Please input your username!" },
@@ -81,29 +73,32 @@ const LoginForm = ({ onFinish, status }) => {
             message: "Please input a valid username!",
           },
         ]}
-        className="gradient-primary "
         validateStatus={status}
       >
         <Input
-          prefix={<UserOutlined className="site-form-item-icon bk-primary rounded-corners" />}
+          prefix={<UserOutlined className="site-form-item-icon bk-primary " />}
           placeholder="Username"
           type="text"
           name="username"
+          className="rounded-corners"
         />
       </Form.Item>
       <Form.Item
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
         className="gradient-primary rounded-corners"
-        help={status === "error" ? "Please input the correct password" : ""}
+        help={status === "error" ? "Please input the correct password" : null}
         hasFeedback={status}
         validateStatus={status}
       >
         <Input.Password
-          prefix={<LockOutlined className="site-form-item-icon bk-primary rounded-corners" />}
+          prefix={
+            <LockOutlined className="site-form-item-icon bk-primary rounded-corners" />
+          }
           type="password"
           name="password"
           placeholder="Password"
+          className="rounded-corners"
         />
       </Form.Item>
 
