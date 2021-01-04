@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
+const path = require("path");
 const PORT = process.env.PORT || 5000;
 
 //Create express app
