@@ -3,13 +3,14 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 //Create express app
 const app = express();
 //Use modules
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "build")));
 // app.use(session({ secret: "SomeGreatS3cre3tLIFTr" }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,6 +50,9 @@ app.use(
 const goalRouter = require("./routes/Goal");
 app.use("/goal", passport.authenticate("jwt", { session: false }), goalRouter);
 
-app.listen(PORT, () => {
-  console.log(`Express server started on ${PORT}`);
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
+
+console.log("server started on port:", PORT);
+app.listen(PORT);
