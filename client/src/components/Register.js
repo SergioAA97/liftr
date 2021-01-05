@@ -109,10 +109,22 @@ const RegisterForm = ({ onFinish, status }) => {
         rules={[
           { required: true, message: "Please input your password!" },
           {
-            type: "string",
-            pattern: "^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$",
-            message: "Please input a valid password! (more than 8 characters)",
+            pattern: ".*[0-9].*",
+            message: "Password must contain at least one number",
           },
+          {
+            pattern: ".*[A-Z].*",
+            message: "Password must contain at least one capital letter",
+          },
+          {
+            min: 8,
+            message: "Password must be at least 8 characters"
+          },
+          {
+            max: 16,
+            message: "Password must be less than 16 characters"
+          }
+
         ]}
         hasFeedback={status}
         validateStatus={status}
