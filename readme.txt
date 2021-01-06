@@ -11,11 +11,13 @@ Sergio Alba Alcalde
 1. Fork the repo or download .zip
 2. Extract the.zip to a folder
 3. Open a terminal in the folder
-4. Enter npm start
-5. Open a second terminal
-6. cd client
-7. npm start
-8. Happy hacking!
+4. Enter npm install
+5. Enter npm start
+6. Open a second terminal
+7. cd client
+8. Enter npm install
+9. npm start
+10. Happy hacking!
 
 -----------------------------------------------------
                     Imporovements
